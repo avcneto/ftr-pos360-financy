@@ -47,9 +47,7 @@ describe("useDashboardSummary", () => {
     useQueryMock.mockImplementation(({ queryKey }) => {
       if (queryKey[0] === "categories") {
         return {
-          data: [
-            { id: "cat-1", title: "Food", color: "#1f6f43", icon: "🍔" },
-          ],
+          data: [{ id: "cat-1", title: "Food", color: "#1f6f43", icon: "🍔" }],
           isLoading: false,
         };
       }

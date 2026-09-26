@@ -53,7 +53,11 @@ export function TransactionHistoryList({
                   {formatCurrency(Number(transaction.amount))}
                 </span>
                 <div className="mt-2 flex gap-2">
-                  <Button variant="ghost" type="button" onClick={() => onEdit(transaction)}>
+                  <Button
+                    variant="ghost"
+                    type="button"
+                    onClick={() => onEdit(transaction)}
+                  >
                     Edit
                   </Button>
                   <Button

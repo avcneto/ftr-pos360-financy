@@ -8,7 +8,8 @@ import { TransactionHistoryList } from "../transactions/TransactionHistoryList";
 import { TransactionMetrics } from "../transactions/TransactionMetrics";
 
 export function TransactionsPage() {
-  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transaction | null>(null);
   const { categories } = useCategories();
   const {
     transactions,

@@ -25,7 +25,9 @@ describe("buildContext", () => {
   });
 
   it("returns an anonymous context without an authorization header", async () => {
-    const context = await buildContext({ request: new Request("http://localhost") });
+    const context = await buildContext({
+      request: new Request("http://localhost"),
+    });
 
     expect(context.user).toBeNull();
     expect(prismaMock.user.findUnique).not.toHaveBeenCalled();

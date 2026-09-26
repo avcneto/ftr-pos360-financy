@@ -49,7 +49,11 @@ export function CategoryList({
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button variant="ghost" type="button" onClick={() => onEdit(category)}>
+                <Button
+                  variant="ghost"
+                  type="button"
+                  onClick={() => onEdit(category)}
+                >
                   Edit
                 </Button>
                 <Button

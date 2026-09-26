@@ -26,12 +26,17 @@ describe("shared service guards", () => {
   });
 
   it("returns the category when ownership matches", async () => {
-    prismaMock.category.findUnique.mockResolvedValueOnce({ id: "cat-1", userId: "user-1" });
-
-    await expect(assertCategoryOwnedByUser("cat-1", "user-1")).resolves.toEqual({
+    prismaMock.category.findUnique.mockResolvedValueOnce({
       id: "cat-1",
       userId: "user-1",
     });
+
+    await expect(assertCategoryOwnedByUser("cat-1", "user-1")).resolves.toEqual(
+      {
+        id: "cat-1",
+        userId: "user-1",
+      },
+    );
   });
 
   it("throws when the category is missing", async () => {
@@ -43,9 +48,14 @@ describe("shared service guards", () => {
   });
 
   it("returns the transaction when ownership matches", async () => {
-    prismaMock.transaction.findUnique.mockResolvedValueOnce({ id: "tx-1", userId: "user-1" });
+    prismaMock.transaction.findUnique.mockResolvedValueOnce({
+      id: "tx-1",
+      userId: "user-1",
+    });
 
-    await expect(assertTransactionOwnedByUser("tx-1", "user-1")).resolves.toEqual({
+    await expect(
+      assertTransactionOwnedByUser("tx-1", "user-1"),
+    ).resolves.toEqual({
       id: "tx-1",
       userId: "user-1",
     });
@@ -54,8 +64,8 @@ describe("shared service guards", () => {
   it("throws when the transaction is missing", async () => {
     prismaMock.transaction.findUnique.mockResolvedValueOnce(null);
 
-    await expect(assertTransactionOwnedByUser("tx-1", "user-1")).rejects.toThrow(
-      "Transaction not found",
-    );
+    await expect(
+      assertTransactionOwnedByUser("tx-1", "user-1"),
+    ).rejects.toThrow("Transaction not found");
   });
 });

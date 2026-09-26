@@ -60,55 +60,57 @@ describe("AuthProvider", () => {
   });
 
   it("signs in, signs up and signs out", async () => {
-    requestGraphQLMock.mockImplementation(async (query: string, _variables?: unknown, token?: string) => {
-      if (query.includes("SignIn")) {
-        return {
-          signIn: {
-            token: "token-sign-in",
-            user: {
-              id: "user-1",
-              name: "Ada Lovelace",
-              email: "ada@example.com",
-            },
-          },
-        };
-      }
-
-      if (query.includes("SignUp")) {
-        return {
-          signUp: {
-            token: "token-sign-up",
-            user: {
-              id: "user-2",
-              name: "Grace Hopper",
-              email: "grace@example.com",
-            },
-          },
-        };
-      }
-
-      if (query.includes("GetMe")) {
-        if (token === "token-sign-up") {
+    requestGraphQLMock.mockImplementation(
+      async (query: string, _variables?: unknown, token?: string) => {
+        if (query.includes("SignIn")) {
           return {
-            me: {
-              id: "user-2",
-              name: "Grace Hopper",
-              email: "grace@example.com",
+            signIn: {
+              token: "token-sign-in",
+              user: {
+                id: "user-1",
+                name: "Ada Lovelace",
+                email: "ada@example.com",
+              },
             },
           };
         }
 
-        return {
-          me: {
-            id: "user-1",
-            name: "Ada Lovelace",
-            email: "ada@example.com",
-          },
-        };
-      }
+        if (query.includes("SignUp")) {
+          return {
+            signUp: {
+              token: "token-sign-up",
+              user: {
+                id: "user-2",
+                name: "Grace Hopper",
+                email: "grace@example.com",
+              },
+            },
+          };
+        }
 
-      throw new Error(`Unexpected query: ${query}`);
-    });
+        if (query.includes("GetMe")) {
+          if (token === "token-sign-up") {
+            return {
+              me: {
+                id: "user-2",
+                name: "Grace Hopper",
+                email: "grace@example.com",
+              },
+            };
+          }
+
+          return {
+            me: {
+              id: "user-1",
+              name: "Ada Lovelace",
+              email: "ada@example.com",
+            },
+          };
+        }
+
+        throw new Error(`Unexpected query: ${query}`);
+      },
+    );
 
     const view = render(
       <AuthProvider>

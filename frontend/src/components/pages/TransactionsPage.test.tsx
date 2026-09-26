@@ -60,7 +60,9 @@ describe("TransactionsPage", () => {
       new Error("Could not delete transaction"),
     );
 
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
 
     const { getByRole, getByLabelText } = render(<TransactionsPage />);
 
@@ -71,12 +73,18 @@ describe("TransactionsPage", () => {
 
     await waitFor(() => {
       expect(transactionHooks.createTransaction).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "Bonus", amount: 300, type: "INCOME" }),
+        expect.objectContaining({
+          title: "Bonus",
+          amount: 300,
+          type: "INCOME",
+        }),
       );
     });
 
     fireEvent.click(getByRole("button", { name: "Edit" }));
-    fireEvent.change(getByLabelText("Title"), { target: { value: "Updated salary" } });
+    fireEvent.change(getByLabelText("Title"), {
+      target: { value: "Updated salary" },
+    });
     fireEvent.click(getByRole("button", { name: "Update transaction" }));
 
     await waitFor(() => {

@@ -14,6 +14,8 @@ describe("PageHeader", () => {
 
     expect(getByText("Overview")).not.toBeNull();
     expect(getByRole("heading", { name: "Dashboard" })).not.toBeNull();
-    expect(getByText("Track your financial health in one place.")).not.toBeNull();
+    expect(
+      getByText("Track your financial health in one place."),
+    ).not.toBeNull();
   });
 });

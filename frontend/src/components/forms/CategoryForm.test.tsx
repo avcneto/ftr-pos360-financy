@@ -30,15 +30,20 @@ describe("CategoryForm", () => {
       />,
     );
 
-    expect((container.querySelector('input[name="title"]') as HTMLInputElement).value).toBe(
-      "Food",
-    );
     expect(
-      (container.querySelector('textarea[name="description"]') as HTMLTextAreaElement).value,
+      (container.querySelector('input[name="title"]') as HTMLInputElement)
+        .value,
+    ).toBe("Food");
+    expect(
+      (
+        container.querySelector(
+          'textarea[name="description"]',
+        ) as HTMLTextAreaElement
+      ).value,
     ).toBe("Meals");
-    expect((container.querySelector('input[name="icon"]') as HTMLInputElement).value).toBe(
-      "🍔",
-    );
+    expect(
+      (container.querySelector('input[name="icon"]') as HTMLInputElement).value,
+    ).toBe("🍔");
   });
 
   it("shows validation errors and submits a valid category", async () => {
@@ -48,7 +53,9 @@ describe("CategoryForm", () => {
       <CategoryForm editingCategory={null} onSave={onSave} />,
     );
 
-    fireEvent.submit(getByRole("button", { name: "Create category" }).closest("form")!);
+    fireEvent.submit(
+      getByRole("button", { name: "Create category" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(getByText("Title is required")).not.toBeNull();
@@ -63,7 +70,9 @@ describe("CategoryForm", () => {
     fireEvent.change(container.querySelector('input[name="icon"]')!, {
       target: { value: "🍔" },
     });
-    fireEvent.submit(getByRole("button", { name: "Create category" }).closest("form")!);
+    fireEvent.submit(
+      getByRole("button", { name: "Create category" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(onSave).toHaveBeenCalledWith({
@@ -76,7 +85,9 @@ describe("CategoryForm", () => {
   });
 
   it("shows submit failures when saving a category", async () => {
-    const onSave = vi.fn().mockRejectedValue(new Error("Could not save category"));
+    const onSave = vi
+      .fn()
+      .mockRejectedValue(new Error("Could not save category"));
 
     const { container, getByRole, getByText } = render(
       <CategoryForm editingCategory={null} onSave={onSave} />,
@@ -85,7 +96,9 @@ describe("CategoryForm", () => {
     fireEvent.change(container.querySelector('input[name="title"]')!, {
       target: { value: "Food" },
     });
-    fireEvent.submit(getByRole("button", { name: "Create category" }).closest("form")!);
+    fireEvent.submit(
+      getByRole("button", { name: "Create category" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(getByText("Could not save category")).not.toBeNull();

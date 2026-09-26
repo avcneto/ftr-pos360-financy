@@ -18,7 +18,11 @@ vi.mock("../src/services/auth.service", () => ({
   hashPassword: hashPasswordMock,
 }));
 
-import { createUser, findUserByEmail, getUserById } from "../src/services/user.service";
+import {
+  createUser,
+  findUserByEmail,
+  getUserById,
+} from "../src/services/user.service";
 
 describe("user.service", () => {
   beforeEach(() => {
@@ -28,8 +32,12 @@ describe("user.service", () => {
   it("finds a user by email", async () => {
     prismaMock.user.findUnique.mockResolvedValueOnce({ id: "user-1" });
 
-    await expect(findUserByEmail("ada@example.com")).resolves.toEqual({ id: "user-1" });
-    expect(prismaMock.user.findUnique).toHaveBeenCalledWith({ where: { email: "ada@example.com" } });
+    await expect(findUserByEmail("ada@example.com")).resolves.toEqual({
+      id: "user-1",
+    });
+    expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
+      where: { email: "ada@example.com" },
+    });
   });
 
   it("creates a user with a hashed password", async () => {
@@ -54,6 +62,8 @@ describe("user.service", () => {
     prismaMock.user.findUnique.mockResolvedValueOnce({ id: "user-1" });
 
     await expect(getUserById("user-1")).resolves.toEqual({ id: "user-1" });
-    expect(prismaMock.user.findUnique).toHaveBeenCalledWith({ where: { id: "user-1" } });
+    expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
+      where: { id: "user-1" },
+    });
   });
 });

@@ -41,16 +41,29 @@ export function AppShell({ children }: { children: ReactNode }) {
             className="flex items-center gap-1 max-[980px]:w-full max-[980px]:flex-wrap max-[980px]:justify-center"
             aria-label="Main navigation"
           >
-            <NavLink to="/" end className={({ isActive }) => getLinkClassName(isActive)}>
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) => getLinkClassName(isActive)}
+            >
               Dashboard
             </NavLink>
-            <NavLink to="/transactions" className={({ isActive }) => getLinkClassName(isActive)}>
+            <NavLink
+              to="/transactions"
+              className={({ isActive }) => getLinkClassName(isActive)}
+            >
               Transactions
             </NavLink>
-            <NavLink to="/categories" className={({ isActive }) => getLinkClassName(isActive)}>
+            <NavLink
+              to="/categories"
+              className={({ isActive }) => getLinkClassName(isActive)}
+            >
               Categories
             </NavLink>
-            <NavLink to="/profile" className={({ isActive }) => getLinkClassName(isActive)}>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) => getLinkClassName(isActive)}
+            >
               Profile
             </NavLink>
           </nav>

@@ -23,14 +23,15 @@ describe("db index", () => {
 
     expect(PrismaClientMock).toHaveBeenCalledWith({ log: ["warn", "error"] });
     expect(prisma).toBe(prismaClient);
-    expect((globalThis as typeof globalThis & { prisma?: unknown }).prisma).toBe(
-      prismaClient,
-    );
+    expect(
+      (globalThis as typeof globalThis & { prisma?: unknown }).prisma,
+    ).toBe(prismaClient);
   });
 
   it("reuses an existing global Prisma client", async () => {
     const existingClient = { client: "existing" };
-    (globalThis as typeof globalThis & { prisma?: unknown }).prisma = existingClient;
+    (globalThis as typeof globalThis & { prisma?: unknown }).prisma =
+      existingClient;
     vi.stubEnv("NODE_ENV", "production");
 
     const { prisma } = await import("../src/db/index");

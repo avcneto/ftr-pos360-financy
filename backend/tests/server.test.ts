@@ -48,7 +48,9 @@ vi.mock("../src/schema", () => ({
 }));
 
 describe("server", () => {
-  const consoleLog = vi.spyOn(console, "log").mockImplementation(() => undefined);
+  const consoleLog = vi
+    .spyOn(console, "log")
+    .mockImplementation(() => undefined);
 
   beforeEach(() => {
     vi.resetModules();

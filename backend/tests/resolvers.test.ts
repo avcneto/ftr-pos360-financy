@@ -1,29 +1,33 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { authServiceMocks, categoryServiceMocks, transactionServiceMocks, userServiceMocks } =
-  vi.hoisted(() => ({
-    authServiceMocks: {
-      comparePasswords: vi.fn(),
-      generateToken: vi.fn(),
-    },
-    categoryServiceMocks: {
-      createCategory: vi.fn(),
-      deleteCategory: vi.fn(),
-      listCategoriesByUser: vi.fn(),
-      updateCategory: vi.fn(),
-    },
-    transactionServiceMocks: {
-      createTransaction: vi.fn(),
-      deleteTransaction: vi.fn(),
-      listTransactionsByUser: vi.fn(),
-      updateTransaction: vi.fn(),
-    },
-    userServiceMocks: {
-      createUser: vi.fn(),
-      findUserByEmail: vi.fn(),
-      getUserById: vi.fn(),
-    },
-  }));
+const {
+  authServiceMocks,
+  categoryServiceMocks,
+  transactionServiceMocks,
+  userServiceMocks,
+} = vi.hoisted(() => ({
+  authServiceMocks: {
+    comparePasswords: vi.fn(),
+    generateToken: vi.fn(),
+  },
+  categoryServiceMocks: {
+    createCategory: vi.fn(),
+    deleteCategory: vi.fn(),
+    listCategoriesByUser: vi.fn(),
+    updateCategory: vi.fn(),
+  },
+  transactionServiceMocks: {
+    createTransaction: vi.fn(),
+    deleteTransaction: vi.fn(),
+    listTransactionsByUser: vi.fn(),
+    updateTransaction: vi.fn(),
+  },
+  userServiceMocks: {
+    createUser: vi.fn(),
+    findUserByEmail: vi.fn(),
+    getUserById: vi.fn(),
+  },
+}));
 
 vi.mock("../src/services/auth.service", () => authServiceMocks);
 vi.mock("../src/services/category.service", () => categoryServiceMocks);
@@ -38,15 +42,19 @@ describe("resolvers", () => {
   });
 
   it("rejects anonymous access to protected queries", async () => {
-    await expect(resolvers.Query.me({}, {}, { user: null } as never)).rejects.toThrow(
-      "Unauthorized",
-    );
+    await expect(
+      resolvers.Query.me({}, {}, { user: null } as never),
+    ).rejects.toThrow("Unauthorized");
   });
 
   it("returns the current user and owned data for authenticated queries", async () => {
     userServiceMocks.getUserById.mockResolvedValueOnce({ id: "user-1" });
-    categoryServiceMocks.listCategoriesByUser.mockResolvedValueOnce([{ id: "cat-1" }]);
-    transactionServiceMocks.listTransactionsByUser.mockResolvedValueOnce([{ id: "tx-1" }]);
+    categoryServiceMocks.listCategoriesByUser.mockResolvedValueOnce([
+      { id: "cat-1" },
+    ]);
+    transactionServiceMocks.listTransactionsByUser.mockResolvedValueOnce([
+      { id: "tx-1" },
+    ]);
 
     await expect(
       resolvers.Query.me({}, {}, { user: { id: "user-1" } } as never),
@@ -67,7 +75,10 @@ describe("resolvers", () => {
     authServiceMocks.generateToken.mockReturnValueOnce("token-1");
 
     await expect(
-      resolvers.Mutation.signUp({}, { name: "Ada", email: "ada@example.com", password: "secret" }),
+      resolvers.Mutation.signUp(
+        {},
+        { name: "Ada", email: "ada@example.com", password: "secret" },
+      ),
     ).resolves.toEqual({ token: "token-1", user });
 
     userServiceMocks.findUserByEmail.mockResolvedValueOnce(user);
@@ -75,12 +86,18 @@ describe("resolvers", () => {
     authServiceMocks.generateToken.mockReturnValueOnce("token-1");
 
     await expect(
-      resolvers.Mutation.signIn({}, { email: "ada@example.com", password: "secret" }),
+      resolvers.Mutation.signIn(
+        {},
+        { email: "ada@example.com", password: "secret" },
+      ),
     ).resolves.toEqual({ token: "token-1", user });
 
     userServiceMocks.findUserByEmail.mockResolvedValueOnce(user);
     await expect(
-      resolvers.Mutation.signUp({}, { name: "Ada", email: "ada@example.com", password: "secret" }),
+      resolvers.Mutation.signUp(
+        {},
+        { name: "Ada", email: "ada@example.com", password: "secret" },
+      ),
     ).rejects.toThrow("User already exists");
   });
 
@@ -88,14 +105,23 @@ describe("resolvers", () => {
     userServiceMocks.findUserByEmail.mockResolvedValueOnce(null);
 
     await expect(
-      resolvers.Mutation.signIn({}, { email: "ada@example.com", password: "secret" }),
+      resolvers.Mutation.signIn(
+        {},
+        { email: "ada@example.com", password: "secret" },
+      ),
     ).rejects.toThrow("Invalid credentials");
 
-    userServiceMocks.findUserByEmail.mockResolvedValueOnce({ id: "user-1", password: "hash" });
+    userServiceMocks.findUserByEmail.mockResolvedValueOnce({
+      id: "user-1",
+      password: "hash",
+    });
     authServiceMocks.comparePasswords.mockResolvedValueOnce(false);
 
     await expect(
-      resolvers.Mutation.signIn({}, { email: "ada@example.com", password: "secret" }),
+      resolvers.Mutation.signIn(
+        {},
+        { email: "ada@example.com", password: "secret" },
+      ),
     ).rejects.toThrow("Invalid credentials");
   });
 
@@ -113,15 +139,15 @@ describe("resolvers", () => {
     ).resolves.toEqual({ id: "cat-1" });
 
     await expect(
-      resolvers.Mutation.updateCategory(
-        {},
-        { id: "cat-1", title: "Updated" },
-        { user: { id: "user-1" } } as never,
-      ),
+      resolvers.Mutation.updateCategory({}, { id: "cat-1", title: "Updated" }, {
+        user: { id: "user-1" },
+      } as never),
     ).resolves.toEqual({ id: "cat-1" });
 
     await expect(
-      resolvers.Mutation.deleteCategory({}, { id: "cat-1" }, { user: { id: "user-1" } } as never),
+      resolvers.Mutation.deleteCategory({}, { id: "cat-1" }, {
+        user: { id: "user-1" },
+      } as never),
     ).resolves.toBe(true);
 
     expect(categoryServiceMocks.createCategory).toHaveBeenCalledWith({
@@ -134,8 +160,12 @@ describe("resolvers", () => {
   });
 
   it("forwards transaction mutations to the service layer", async () => {
-    transactionServiceMocks.createTransaction.mockResolvedValueOnce({ id: "tx-1" });
-    transactionServiceMocks.updateTransaction.mockResolvedValueOnce({ id: "tx-1" });
+    transactionServiceMocks.createTransaction.mockResolvedValueOnce({
+      id: "tx-1",
+    });
+    transactionServiceMocks.updateTransaction.mockResolvedValueOnce({
+      id: "tx-1",
+    });
     transactionServiceMocks.deleteTransaction.mockResolvedValueOnce(true);
 
     await expect(
@@ -170,7 +200,9 @@ describe("resolvers", () => {
     ).resolves.toEqual({ id: "tx-1" });
 
     await expect(
-      resolvers.Mutation.deleteTransaction({}, { id: "tx-1" }, { user: { id: "user-1" } } as never),
+      resolvers.Mutation.deleteTransaction({}, { id: "tx-1" }, {
+        user: { id: "user-1" },
+      } as never),
     ).resolves.toBe(true);
 
     expect(transactionServiceMocks.createTransaction).toHaveBeenCalledWith({

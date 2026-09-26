@@ -64,14 +64,16 @@ describe("useTransactions", () => {
         },
       }),
     ).rejects.toThrow("Unauthorized");
-    await expect(useMutationMock.mock.calls[2][0].mutationFn("tx-1")).rejects.toThrow(
-      "Unauthorized",
-    );
+    await expect(
+      useMutationMock.mock.calls[2][0].mutationFn("tx-1"),
+    ).rejects.toThrow("Unauthorized");
 
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 
     expect(transactions.transactions).toEqual([]);
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["transactions"] });
+    expect(invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ["transactions"],
+    });
   });
 
   it("wires transaction operations and queries", async () => {
@@ -112,9 +114,9 @@ describe("useTransactions", () => {
         },
       }),
     ).resolves.toEqual({ transactions: [{ id: "tx-1" }] });
-    await expect(useMutationMock.mock.calls[2][0].mutationFn("tx-1")).resolves.toEqual(
-      { transactions: [{ id: "tx-1" }] },
-    );
+    await expect(
+      useMutationMock.mock.calls[2][0].mutationFn("tx-1"),
+    ).resolves.toEqual({ transactions: [{ id: "tx-1" }] });
 
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 

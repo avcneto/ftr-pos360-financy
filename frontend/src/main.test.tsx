@@ -21,7 +21,9 @@ describe("main", () => {
   it("mounts the application into the root element", async () => {
     await import("./main");
 
-    expect(createRootMock).toHaveBeenCalledWith(document.getElementById("root"));
+    expect(createRootMock).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
     expect(renderMock).toHaveBeenCalledTimes(1);
   });
 });

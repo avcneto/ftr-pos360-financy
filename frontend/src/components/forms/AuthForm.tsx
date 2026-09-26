@@ -69,7 +69,11 @@ export function AuthForm({
           return;
         }
 
-        await onSignUp(parsed.data.name, parsed.data.email, parsed.data.password);
+        await onSignUp(
+          parsed.data.name,
+          parsed.data.email,
+          parsed.data.password,
+        );
       }
     } catch (error) {
       setSubmitError(
@@ -85,14 +89,24 @@ export function AuthForm({
           {isLogin ? "Fazer login" : "Criar conta"}
         </h1>
         <p className="mt-2 text-[15px] text-[#6b7280]">
-          {isLogin ? "Entre na sua conta para continuar" : "Preencha seus dados para continuar"}
+          {isLogin
+            ? "Entre na sua conta para continuar"
+            : "Preencha seus dados para continuar"}
         </p>
       </div>
 
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex flex-col gap-5"
+      >
         {!isLogin && (
           <FormField label="Nome" error={form.formState.errors.name?.message}>
-            <input type="text" placeholder="Seu nome completo" className={INPUT_BASE} {...form.register("name")} />
+            <input
+              type="text"
+              placeholder="Seu nome completo"
+              className={INPUT_BASE}
+              {...form.register("name")}
+            />
           </FormField>
         )}
 
@@ -113,7 +127,10 @@ export function AuthForm({
           </div>
         </FormField>
 
-        <FormField label="Senha" error={form.formState.errors.password?.message}>
+        <FormField
+          label="Senha"
+          error={form.formState.errors.password?.message}
+        >
           <div className="relative">
             <img
               src="/Icon/lock.svg"
@@ -146,17 +163,25 @@ export function AuthForm({
         {isLogin ? (
           <div className="flex items-center justify-between gap-4 text-[14px]">
             <label className="flex items-center gap-2 text-[#374151]">
-              <input type="checkbox" className="h-4 w-4 rounded border-[#d1d5db] text-[#1f6f43] accent-[#1f6f43]" />
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-[#d1d5db] text-[#1f6f43] accent-[#1f6f43]"
+              />
               <span>Lembrar-me</span>
             </label>
 
-            <button type="button" className="font-medium text-[#1f6f43] hover:underline">
+            <button
+              type="button"
+              className="font-medium text-[#1f6f43] hover:underline"
+            >
               Recuperar senha
             </button>
           </div>
         ) : null}
 
-        {submitError && <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>}
+        {submitError && (
+          <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>
+        )}
 
         <Button type="submit" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting
@@ -176,14 +201,21 @@ export function AuthForm({
 
         {isLogin ? (
           <div className="flex flex-col items-center gap-4 pt-1">
-            <p className="text-[15px] text-[#6b7280]">Ainda não tem uma conta?</p>
+            <p className="text-[15px] text-[#6b7280]">
+              Ainda não tem uma conta?
+            </p>
             <Button
               type="button"
               variant="ghost"
               className="h-12 w-full gap-2 border-[#cbd5e1] text-[15px] font-medium text-[#111827]"
               onClick={onToggleMode}
             >
-              <img src="/Icon/user-round-plus.svg" alt="" aria-hidden="true" className="h-4 w-4" />
+              <img
+                src="/Icon/user-round-plus.svg"
+                alt=""
+                aria-hidden="true"
+                className="h-4 w-4"
+              />
               Criar conta
             </Button>
           </div>

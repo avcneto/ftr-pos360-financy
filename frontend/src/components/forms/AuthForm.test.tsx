@@ -28,7 +28,9 @@ describe("AuthForm", () => {
     await waitFor(() => {
       expect(getByText("Enter a valid email")).not.toBeNull();
     });
-    expect(getByText("Password must contain at least 6 characters")).not.toBeNull();
+    expect(
+      getByText("Password must contain at least 6 characters"),
+    ).not.toBeNull();
     expect(onSignIn).not.toHaveBeenCalled();
   });
 
@@ -45,10 +47,18 @@ describe("AuthForm", () => {
       />,
     );
 
-    fireEvent.change(getByLabelText("Nome"), { target: { value: "Ada Lovelace" } });
-    fireEvent.change(getByLabelText("E-mail"), { target: { value: "ada@example.com" } });
-    fireEvent.change(getByLabelText("Senha"), { target: { value: "secret123" } });
-    fireEvent.submit(getByRole("button", { name: "Criar conta" }).closest("form")!);
+    fireEvent.change(getByLabelText("Nome"), {
+      target: { value: "Ada Lovelace" },
+    });
+    fireEvent.change(getByLabelText("E-mail"), {
+      target: { value: "ada@example.com" },
+    });
+    fireEvent.change(getByLabelText("Senha"), {
+      target: { value: "secret123" },
+    });
+    fireEvent.submit(
+      getByRole("button", { name: "Criar conta" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(onSignUp).toHaveBeenCalledWith(
@@ -58,13 +68,17 @@ describe("AuthForm", () => {
       );
     });
 
-    fireEvent.click(getByRole("button", { name: "Já tem uma conta? Fazer login" }));
+    fireEvent.click(
+      getByRole("button", { name: "Já tem uma conta? Fazer login" }),
+    );
 
     expect(onToggleMode).toHaveBeenCalledTimes(1);
   });
 
   it("shows submit failures from the authentication handlers", async () => {
-    const onSignIn = vi.fn().mockRejectedValue(new Error("Authentication failed"));
+    const onSignIn = vi
+      .fn()
+      .mockRejectedValue(new Error("Authentication failed"));
 
     const { getByLabelText, getByRole, getByText } = render(
       <AuthForm
@@ -75,8 +89,12 @@ describe("AuthForm", () => {
       />,
     );
 
-    fireEvent.change(getByLabelText("E-mail"), { target: { value: "ada@example.com" } });
-    fireEvent.change(getByLabelText("Senha"), { target: { value: "secret123" } });
+    fireEvent.change(getByLabelText("E-mail"), {
+      target: { value: "ada@example.com" },
+    });
+    fireEvent.change(getByLabelText("Senha"), {
+      target: { value: "secret123" },
+    });
     fireEvent.submit(getByRole("button", { name: "Entrar" }).closest("form")!);
 
     await waitFor(() => {

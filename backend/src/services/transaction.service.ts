@@ -1,5 +1,8 @@
 import { prisma } from "../db";
-import { assertCategoryOwnedByUser, assertTransactionOwnedByUser } from "./shared";
+import {
+  assertCategoryOwnedByUser,
+  assertTransactionOwnedByUser,
+} from "./shared";
 
 export async function listTransactionsByUser(userId: string) {
   return prisma.transaction.findMany({

@@ -49,14 +49,20 @@ describe("CategoriesPage", () => {
   it("creates, edits and deletes categories", async () => {
     categoryHooks.createCategory.mockResolvedValue(undefined);
     categoryHooks.updateCategory.mockResolvedValue(undefined);
-    categoryHooks.deleteCategory.mockRejectedValue(new Error("Could not delete category"));
+    categoryHooks.deleteCategory.mockRejectedValue(
+      new Error("Could not delete category"),
+    );
 
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
 
     const { getByRole, getByLabelText } = render(<CategoriesPage />);
 
     fireEvent.change(getByLabelText("Title"), { target: { value: "Travel" } });
-    fireEvent.change(getByLabelText("Description"), { target: { value: "Trips" } });
+    fireEvent.change(getByLabelText("Description"), {
+      target: { value: "Trips" },
+    });
     fireEvent.click(getByRole("button", { name: "Create category" }));
 
     await waitFor(() => {
@@ -66,7 +72,9 @@ describe("CategoriesPage", () => {
     });
 
     fireEvent.click(getByRole("button", { name: "Edit" }));
-    fireEvent.change(getByLabelText("Title"), { target: { value: "Updated food" } });
+    fireEvent.change(getByLabelText("Title"), {
+      target: { value: "Updated food" },
+    });
     fireEvent.click(getByRole("button", { name: "Update category" }));
 
     await waitFor(() => {

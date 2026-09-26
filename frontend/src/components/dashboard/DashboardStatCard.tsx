@@ -6,7 +6,11 @@ type DashboardStatCardProps = {
   tone: "income" | "expense" | "neutral";
 };
 
-export function DashboardStatCard({ label, value, tone }: DashboardStatCardProps) {
+export function DashboardStatCard({
+  label,
+  value,
+  tone,
+}: DashboardStatCardProps) {
   const toneClass =
     tone === "income"
       ? "text-[#16a34a]"

@@ -69,7 +69,10 @@ export function CategoryForm({ editingCategory, onSave }: CategoryFormProps) {
 
   return (
     <Surface className="p-6">
-      <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <div className="mb-1 flex items-center justify-between">
           <h2 className="m-0 text-[#111827]">
             {editingCategory ? "Edit category" : "New category"}
@@ -81,7 +84,11 @@ export function CategoryForm({ editingCategory, onSave }: CategoryFormProps) {
         </FormField>
 
         <FormField label="Description">
-          <textarea rows={3} className={INPUT_BASE} {...form.register("description")} />
+          <textarea
+            rows={3}
+            className={INPUT_BASE}
+            {...form.register("description")}
+          />
         </FormField>
 
         <div className="grid grid-cols-2 gap-[14px] max-[980px]:grid-cols-1">
@@ -94,11 +101,17 @@ export function CategoryForm({ editingCategory, onSave }: CategoryFormProps) {
           </FormField>
 
           <FormField label="Icon">
-            <input maxLength={2} className={INPUT_BASE} {...form.register("icon")} />
+            <input
+              maxLength={2}
+              className={INPUT_BASE}
+              {...form.register("icon")}
+            />
           </FormField>
         </div>
 
-        {submitError && <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>}
+        {submitError && (
+          <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>
+        )}
 
         <Button type="submit">
           {editingCategory ? "Update category" : "Create category"}

@@ -60,15 +60,19 @@ describe("useCategories", () => {
         },
       }),
     ).rejects.toThrow("Unauthorized");
-    await expect(useMutationMock.mock.calls[2][0].mutationFn("cat-1")).rejects.toThrow(
-      "Unauthorized",
-    );
+    await expect(
+      useMutationMock.mock.calls[2][0].mutationFn("cat-1"),
+    ).rejects.toThrow("Unauthorized");
 
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 
     expect(categories.categories).toEqual([]);
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["categories"] });
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ["transactions"] });
+    expect(invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ["categories"],
+    });
+    expect(invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ["transactions"],
+    });
   });
 
   it("loads categories and performs mutations with a token", async () => {
@@ -105,7 +109,9 @@ describe("useCategories", () => {
         },
       }),
     ).resolves.toEqual({ categories: [{ id: "cat-1" }] });
-    await expect(useMutationMock.mock.calls[2][0].mutationFn("cat-1")).resolves.toEqual({
+    await expect(
+      useMutationMock.mock.calls[2][0].mutationFn("cat-1"),
+    ).resolves.toEqual({
       categories: [{ id: "cat-1" }],
     });
 

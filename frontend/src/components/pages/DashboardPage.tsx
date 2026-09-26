@@ -5,8 +5,14 @@ import { DashboardOverviewPanels } from "../dashboard/DashboardOverviewPanels";
 import { DashboardStatCard } from "../dashboard/DashboardStatCard";
 
 export function DashboardPage() {
-  const { categories, recentTransactions, income, expense, balance, isLoading } =
-    useDashboardSummary();
+  const {
+    categories,
+    recentTransactions,
+    income,
+    expense,
+    balance,
+    isLoading,
+  } = useDashboardSummary();
 
   return (
     <div className="flex flex-col gap-8">

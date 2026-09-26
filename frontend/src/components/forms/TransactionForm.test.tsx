@@ -13,7 +13,11 @@ describe("TransactionForm", () => {
     const categories: Category[] = [{ id: "cat-1", title: "Food" } as Category];
 
     const { container, rerender } = render(
-      <TransactionForm categories={categories} editingTransaction={null} onSave={vi.fn()} />,
+      <TransactionForm
+        categories={categories}
+        editingTransaction={null}
+        onSave={vi.fn()}
+      />,
     );
 
     fireEvent.change(container.querySelector('input[name="title"]')!, {
@@ -23,28 +27,36 @@ describe("TransactionForm", () => {
     rerender(
       <TransactionForm
         categories={categories}
-        editingTransaction={{
-          id: "tx-1",
-          title: "Salary",
-          amount: 2500,
-          type: "INCOME",
-          date: "2025-01-02T00:00:00.000Z",
-          description: "Monthly payment",
-          categoryId: "cat-1",
-        } as never}
+        editingTransaction={
+          {
+            id: "tx-1",
+            title: "Salary",
+            amount: 2500,
+            type: "INCOME",
+            date: "2025-01-02T00:00:00.000Z",
+            description: "Monthly payment",
+            categoryId: "cat-1",
+          } as never
+        }
         onSave={vi.fn()}
       />,
     );
 
-    expect((container.querySelector('input[name="title"]') as HTMLInputElement).value).toBe(
-      "Salary",
-    );
-    expect((container.querySelector('input[name="amount"]') as HTMLInputElement).value).toBe(
-      "2500",
-    );
-    expect((container.querySelector('select[name="categoryId"]') as HTMLSelectElement).value).toBe(
-      "cat-1",
-    );
+    expect(
+      (container.querySelector('input[name="title"]') as HTMLInputElement)
+        .value,
+    ).toBe("Salary");
+    expect(
+      (container.querySelector('input[name="amount"]') as HTMLInputElement)
+        .value,
+    ).toBe("2500");
+    expect(
+      (
+        container.querySelector(
+          'select[name="categoryId"]',
+        ) as HTMLSelectElement
+      ).value,
+    ).toBe("cat-1");
   });
 
   it("shows validation errors and submits a valid transaction", async () => {
@@ -52,10 +64,16 @@ describe("TransactionForm", () => {
     const onSave = vi.fn().mockResolvedValue(undefined);
 
     const { container, getByRole, getByText } = render(
-      <TransactionForm categories={categories} editingTransaction={null} onSave={onSave} />,
+      <TransactionForm
+        categories={categories}
+        editingTransaction={null}
+        onSave={onSave}
+      />,
     );
 
-    fireEvent.submit(getByRole("button", { name: "Create transaction" }).closest("form")!);
+    fireEvent.submit(
+      getByRole("button", { name: "Create transaction" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(getByText("Title is required")).not.toBeNull();
@@ -74,7 +92,9 @@ describe("TransactionForm", () => {
     fireEvent.change(container.querySelector('textarea[name="description"]')!, {
       target: { value: "" },
     });
-    fireEvent.submit(getByRole("button", { name: "Create transaction" }).closest("form")!);
+    fireEvent.submit(
+      getByRole("button", { name: "Create transaction" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(onSave).toHaveBeenCalledWith({
@@ -90,10 +110,16 @@ describe("TransactionForm", () => {
 
   it("shows submit failures when saving a transaction", async () => {
     const categories: Category[] = [{ id: "cat-1", title: "Food" } as Category];
-    const onSave = vi.fn().mockRejectedValue(new Error("Could not save transaction"));
+    const onSave = vi
+      .fn()
+      .mockRejectedValue(new Error("Could not save transaction"));
 
     const { container, getByRole, getByText } = render(
-      <TransactionForm categories={categories} editingTransaction={null} onSave={onSave} />,
+      <TransactionForm
+        categories={categories}
+        editingTransaction={null}
+        onSave={onSave}
+      />,
     );
 
     fireEvent.change(container.querySelector('input[name="title"]')!, {
@@ -102,7 +128,9 @@ describe("TransactionForm", () => {
     fireEvent.change(container.querySelector('input[name="amount"]')!, {
       target: { value: "2500" },
     });
-    fireEvent.submit(getByRole("button", { name: "Create transaction" }).closest("form")!);
+    fireEvent.submit(
+      getByRole("button", { name: "Create transaction" }).closest("form")!,
+    );
 
     await waitFor(() => {
       expect(getByText("Could not save transaction")).not.toBeNull();

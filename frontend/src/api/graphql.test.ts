@@ -14,7 +14,9 @@ describe("requestGraphQL", () => {
 
     vi.stubGlobal("fetch", fetchMock);
 
-    await expect(requestGraphQL<{ me: { id: string } }>("query Me { me { id } }", {})).resolves.toEqual({
+    await expect(
+      requestGraphQL<{ me: { id: string } }>("query Me { me { id } }", {}),
+    ).resolves.toEqual({
       me: { id: "user-1" },
     });
 

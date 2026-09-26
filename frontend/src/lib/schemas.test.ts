@@ -3,9 +3,9 @@ import { categorySchema, signInSchema, transactionSchema } from "./schemas";
 
 describe("schemas", () => {
   it("validates sign in payloads", () => {
-    expect(signInSchema.safeParse({ email: "a@b.com", password: "123456" }).success).toBe(
-      true,
-    );
+    expect(
+      signInSchema.safeParse({ email: "a@b.com", password: "123456" }).success,
+    ).toBe(true);
   });
 
   it("rejects invalid transaction payloads", () => {

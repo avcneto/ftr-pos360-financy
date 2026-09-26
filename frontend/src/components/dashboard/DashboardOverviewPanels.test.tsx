@@ -30,7 +30,9 @@ describe("DashboardOverviewPanels", () => {
       />,
     );
 
-    expect(getByRole("heading", { name: "Recent transactions" })).not.toBeNull();
+    expect(
+      getByRole("heading", { name: "Recent transactions" }),
+    ).not.toBeNull();
     expect(getByText("Salary")).not.toBeNull();
     expect(getByText(/Food/)).not.toBeNull();
   });

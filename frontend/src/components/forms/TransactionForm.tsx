@@ -101,7 +101,10 @@ export function TransactionForm({
 
   return (
     <Surface className="p-6">
-      <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <div className="mb-1 flex items-center justify-between">
           <h2 className="m-0 text-[#111827]">
             {editingTransaction ? "Edit transaction" : "New transaction"}
@@ -110,7 +113,9 @@ export function TransactionForm({
 
         <TransactionTypeToggle
           selectedType={selectedType}
-          onChange={(type) => form.setValue("type", type, { shouldDirty: true })}
+          onChange={(type) =>
+            form.setValue("type", type, { shouldDirty: true })
+          }
         />
 
         <FormField label="Title" error={form.formState.errors.title?.message}>
@@ -119,10 +124,17 @@ export function TransactionForm({
 
         <div className="grid grid-cols-2 gap-[14px] max-[980px]:grid-cols-1">
           <FormField label="Date">
-            <input type="date" className={INPUT_BASE} {...form.register("date")} />
+            <input
+              type="date"
+              className={INPUT_BASE}
+              {...form.register("date")}
+            />
           </FormField>
 
-          <FormField label="Amount" error={form.formState.errors.amount?.message}>
+          <FormField
+            label="Amount"
+            error={form.formState.errors.amount?.message}
+          >
             <input
               type="number"
               step="0.01"
@@ -144,12 +156,20 @@ export function TransactionForm({
         </FormField>
 
         <FormField label="Description">
-          <textarea rows={3} className={INPUT_BASE} {...form.register("description")} />
+          <textarea
+            rows={3}
+            className={INPUT_BASE}
+            {...form.register("description")}
+          />
         </FormField>
 
-        {submitError && <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>}
+        {submitError && (
+          <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>
+        )}
 
-        <Button type="submit">{editingTransaction ? "Update transaction" : "Create transaction"}</Button>
+        <Button type="submit">
+          {editingTransaction ? "Update transaction" : "Create transaction"}
+        </Button>
       </form>
     </Surface>
   );
