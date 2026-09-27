@@ -7,7 +7,7 @@ describe("Button", () => {
     const { getByRole } = render(<Button>Save</Button>);
 
     const button = getByRole("button", { name: "Save" });
-    expect(button.className).toContain("bg-gradient-to-b");
+    expect(button.className).toContain("bg-[#1f6f43]");
   });
 
   it("renders alternative variants", () => {

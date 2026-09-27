@@ -12,6 +12,7 @@ vi.mock("../providers/AuthProvider", () => ({
 
 vi.mock("@tanstack/react-query", () => ({
   useQuery: (options: { queryKey: string[] }) => useQueryMock(options),
+  useQueryClient: () => ({ invalidateQueries: vi.fn().mockResolvedValue(undefined) }),
 }));
 
 vi.mock("../api/graphql", () => ({
@@ -43,7 +44,7 @@ describe("useDashboardSummary", () => {
   });
 
   it("creates category and transaction queries and calculates the summary", async () => {
-    useAuthMock.mockReturnValue({ token: "token-1" });
+    useAuthMock.mockReturnValue({ token: "token-1", user: { id: "user-1" } });
     useQueryMock.mockImplementation(({ queryKey }) => {
       if (queryKey[0] === "categories") {
         return {

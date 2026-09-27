@@ -48,9 +48,9 @@ describe("TransactionsPage", () => {
   it("renders transaction management content", () => {
     const { getByRole, getByText } = render(<TransactionsPage />);
 
-    expect(getByRole("heading", { name: "Transactions" })).not.toBeNull();
+    expect(getByRole("heading", { name: "Transações" })).not.toBeNull();
     expect(getByText("Salary")).not.toBeNull();
-    expect(getByRole("button", { name: "Create transaction" })).not.toBeNull();
+    expect(getByRole("button", { name: "Nova transação" })).not.toBeNull();
   });
 
   it("creates, edits and deletes transactions", async () => {
@@ -60,16 +60,13 @@ describe("TransactionsPage", () => {
       new Error("Could not delete transaction"),
     );
 
-    const consoleError = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
-
     const { getByRole, getByLabelText } = render(<TransactionsPage />);
 
-    fireEvent.change(getByLabelText("Title"), { target: { value: "Bonus" } });
-    fireEvent.change(getByLabelText("Amount"), { target: { value: "300" } });
-    fireEvent.click(getByRole("button", { name: "Income" }));
-    fireEvent.click(getByRole("button", { name: "Create transaction" }));
+    fireEvent.click(getByRole("button", { name: "Nova transação" }));
+    fireEvent.change(getByLabelText("Descrição"), { target: { value: "Bonus" } });
+    fireEvent.change(getByLabelText("Valor"), { target: { value: "300" } });
+    fireEvent.click(getByRole("button", { name: "Receita" }));
+    fireEvent.click(getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => {
       expect(transactionHooks.createTransaction).toHaveBeenCalledWith(
@@ -81,11 +78,11 @@ describe("TransactionsPage", () => {
       );
     });
 
-    fireEvent.click(getByRole("button", { name: "Edit" }));
-    fireEvent.change(getByLabelText("Title"), {
+    fireEvent.click(getByRole("button", { name: "Editar Salary" }));
+    fireEvent.change(getByLabelText("Descrição"), {
       target: { value: "Updated salary" },
     });
-    fireEvent.click(getByRole("button", { name: "Update transaction" }));
+    fireEvent.click(getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => {
       expect(transactionHooks.updateTransaction).toHaveBeenCalledWith({
@@ -94,10 +91,10 @@ describe("TransactionsPage", () => {
       });
     });
 
-    fireEvent.click(getByRole("button", { name: "Delete" }));
+    fireEvent.click(getByRole("button", { name: "Excluir Salary" }));
 
     await waitFor(() => {
-      expect(consoleError).toHaveBeenCalledWith("Could not delete transaction");
+      expect(getByRole("alert").textContent).toBe("Could not delete transaction");
     });
   });
 });

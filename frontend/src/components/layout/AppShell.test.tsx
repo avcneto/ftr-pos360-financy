@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -43,11 +43,11 @@ describe("AppShell", () => {
     );
 
     expect(getByText("Dashboard")).not.toBeNull();
-    expect(getByText("Ada")).not.toBeNull();
+    expect(getByText("A")).not.toBeNull();
     expect(getByText("Content")).not.toBeNull();
   });
 
-  it("logs the user out", () => {
+  it("links the avatar to the profile", () => {
     const { getByRole } = render(
       <MemoryRouter>
         <AppShell>
@@ -56,9 +56,6 @@ describe("AppShell", () => {
       </MemoryRouter>,
     );
 
-    fireEvent.click(getByRole("button", { name: "Sign out" }));
-
-    expect(authState.signOut).toHaveBeenCalledTimes(1);
-    expect(navigate).toHaveBeenCalledWith("/auth");
+    expect(getByRole("link", { name: "Perfil" }).getAttribute("href")).toBe("/profile");
   });
 });

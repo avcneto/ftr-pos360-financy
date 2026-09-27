@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 export const signInSchema = z.object({
-  email: z.email("Enter a valid email"),
-  password: z.string().min(6, "Password must contain at least 6 characters"),
+  email: z.email("Informe um e-mail válido"),
+  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
 
 export const signUpSchema = z.object({
-  name: z.string().min(2, "Name must contain at least 2 characters"),
-  email: z.email("Enter a valid email"),
-  password: z.string().min(6, "Password must contain at least 6 characters"),
+  name: z.string().min(2, "Informe um nome com pelo menos 2 caracteres"),
+  email: z.email("Informe um e-mail válido"),
+  password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
 });
 
 export const categorySchema = z.object({

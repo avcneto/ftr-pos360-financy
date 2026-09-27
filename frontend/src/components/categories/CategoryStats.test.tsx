@@ -5,11 +5,11 @@ import { CategoryStats } from "./CategoryStats";
 describe("CategoryStats", () => {
   it("renders the summary values", () => {
     const { getByText } = render(
-      <CategoryStats total={2} withDescription={1} withCustomColor={1} />,
+      <CategoryStats total={2} transactionTotal={1} mostUsedCategory="Food (1)" />,
     );
 
-    expect(getByText("Total categories")).not.toBeNull();
-    expect(getByText("With description")).not.toBeNull();
-    expect(getByText("Custom colors")).not.toBeNull();
+    expect(getByText("Total de categorias")).not.toBeNull();
+    expect(getByText("Total de transações")).not.toBeNull();
+    expect(getByText("Categoria mais utilizada")).not.toBeNull();
   });
 });

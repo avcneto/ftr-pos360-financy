@@ -1,81 +1,27 @@
+import { Link } from "react-router-dom";
 import type { Category, Transaction } from "../../types";
 import { formatCurrency, formatDate } from "../../utils/formatters";
 import { Surface } from "../ui/Surface";
 
-type DashboardOverviewPanelsProps = {
-  categories: Category[];
-  recentTransactions: Transaction[];
-};
+type Props = { categories: Category[]; recentTransactions: Transaction[]; transactions?: Transaction[] };
 
-export function DashboardOverviewPanels({
-  categories,
-  recentTransactions,
-}: DashboardOverviewPanelsProps) {
-  return (
-    <section className="grid grid-cols-[2fr_1fr] gap-6 max-[980px]:grid-cols-1">
-      <Surface className="p-6">
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="m-0 text-[#111827]">Recent transactions</h2>
-        </div>
-        <ul className="m-0 flex list-none flex-col gap-3 p-0">
-          {recentTransactions.length === 0 ? (
-            <li className="text-[#6b7280]">No transactions yet.</li>
-          ) : (
-            recentTransactions.map((transaction) => (
-              <li
-                key={transaction.id}
-                className="flex items-center justify-between gap-3 rounded-[8px] border border-[#e5e7eb] p-[14px]"
-              >
-                <div>
-                  <strong>{transaction.title}</strong>
-                  <small className="text-[#6b7280]">
-                    {transaction.category?.title ?? "General"}
-                  </small>
-                </div>
-                <div className="flex flex-col items-end gap-1.5">
-                  <span
-                    className={
-                      transaction.type === "EXPENSE"
-                        ? "text-[#dc2626]"
-                        : "text-[#16a34a]"
-                    }
-                  >
-                    {transaction.type === "EXPENSE" ? "-" : "+"}
-                    {formatCurrency(Number(transaction.amount))}
-                  </span>
-                  <small className="text-[#6b7280]">
-                    {formatDate(transaction.date)}
-                  </small>
-                </div>
-              </li>
-            ))
-          )}
-        </ul>
-      </Surface>
-
-      <Surface className="p-6">
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="m-0 text-[#111827]">Categories</h2>
-          <span className="grid h-[26px] min-w-[26px] place-items-center rounded-full bg-[#e0fae9] px-1 text-xs font-semibold text-[#124b2b]">
-            {categories.length}
-          </span>
-        </div>
-        <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
-          {categories.length === 0 ? (
-            <li className="text-[#6b7280]">No categories available.</li>
-          ) : (
-            categories.map((category) => (
-              <li
-                key={category.id}
-                className="inline-flex items-center gap-2 rounded-full px-2.5 py-2 text-xs font-semibold text-[#111827]"
-                style={{ background: category.color || "#e2e8f0" }}
-              >
-                {category.icon || "•"} {category.title}
-              </li>
-            ))
-          )}
-        </ul>
-      </Surface>
-    </section>
-  );
+export function DashboardOverviewPanels({ categories, recentTransactions, transactions = recentTransactions }: Props) {
+  return <section className="grid grid-cols-[2fr_1fr] gap-6 max-[900px]:grid-cols-1">
+    <Surface className="overflow-hidden">
+      <div className="flex items-center justify-between border-b border-[#e5e7eb] px-6 py-5"><h2 className="m-0 text-base font-semibold text-[#111827]">Transações recentes</h2><Link to="/transactions" className="text-sm font-medium text-[#1f6f43]">Ver todas →</Link></div>
+      <div className="divide-y divide-[#e5e7eb]">
+        {recentTransactions.length === 0 ? <p className="px-6 py-8 text-sm text-[#6b7280]">Nenhuma transação cadastrada.</p> : recentTransactions.map((transaction) => <div key={transaction.id} className="flex items-center justify-between gap-4 px-6 py-4">
+          <div className="flex min-w-0 items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#f3f4f6]"><img src={`/Icon/${transaction.type === "INCOME" ? "circle-arrow-up" : "circle-arrow-down"}.svg`} alt="" className="h-5 w-5" /></span><div className="min-w-0"><p className="truncate font-medium text-[#111827]">{transaction.title}</p><p className="text-xs text-[#6b7280]">{transaction.category?.title ?? "Sem categoria"} · {formatDate(transaction.date)}</p></div></div>
+          <span className={`shrink-0 text-sm font-semibold ${transaction.type === "EXPENSE" ? "text-[#dc2626]" : "text-[#16a34a]"}`}>{transaction.type === "EXPENSE" ? "−" : "+"}{formatCurrency(Number(transaction.amount))}</span>
+        </div>)}
+      </div>
+    </Surface>
+    <Surface className="self-start overflow-hidden">
+      <div className="flex items-center justify-between border-b border-[#e5e7eb] px-6 py-5"><h2 className="m-0 text-base font-semibold text-[#111827]">Categorias</h2><Link to="/categories" className="text-sm font-medium text-[#1f6f43]">Gerenciar →</Link></div>
+      <div className="divide-y divide-[#e5e7eb]">{categories.length === 0 ? <p className="px-6 py-8 text-sm text-[#6b7280]">Nenhuma categoria cadastrada.</p> : categories.slice(0, 5).map((category) => {
+        const count = transactions.filter((transaction) => transaction.categoryId === category.id).length;
+        return <div key={category.id} className="flex items-center justify-between gap-3 px-6 py-4"><div className="flex min-w-0 items-center gap-3"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg" style={{ backgroundColor: `${category.color ?? "#1f6f43"}20` }}><img src={`/Icon/${category.icon || "tag"}.svg`} alt="" className="h-5 w-5" onError={(event) => { event.currentTarget.src = "/Icon/tag.svg"; }} /></span><span className="truncate text-sm font-medium text-[#111827]">{category.title}</span></div><span className="text-xs text-[#6b7280]">{count}</span></div>;
+      })}</div>
+    </Surface>
+  </section>;
 }

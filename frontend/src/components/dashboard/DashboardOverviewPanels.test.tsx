@@ -2,6 +2,7 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import type { Category, Transaction } from "../../types";
 import { DashboardOverviewPanels } from "./DashboardOverviewPanels";
+import { MemoryRouter } from "react-router-dom";
 
 describe("DashboardOverviewPanels", () => {
   afterEach(() => {
@@ -24,14 +25,14 @@ describe("DashboardOverviewPanels", () => {
     ];
 
     const { getByRole, getByText } = render(
-      <DashboardOverviewPanels
+      <MemoryRouter><DashboardOverviewPanels
         categories={categories}
         recentTransactions={recentTransactions}
-      />,
+      /></MemoryRouter>,
     );
 
     expect(
-      getByRole("heading", { name: "Recent transactions" }),
+      getByRole("heading", { name: "Transações recentes" }),
     ).not.toBeNull();
     expect(getByText("Salary")).not.toBeNull();
     expect(getByText(/Food/)).not.toBeNull();
@@ -39,7 +40,7 @@ describe("DashboardOverviewPanels", () => {
 
   it("renders empty states and expense transactions", () => {
     const { getByText } = render(
-      <DashboardOverviewPanels
+      <MemoryRouter><DashboardOverviewPanels
         categories={[]}
         recentTransactions={[
           {
@@ -50,16 +51,16 @@ describe("DashboardOverviewPanels", () => {
             date: "2025-01-03",
           },
         ]}
-      />,
+      /></MemoryRouter>,
     );
 
-    expect(getByText("-$120.00")).not.toBeNull();
-    expect(getByText("No categories available.")).not.toBeNull();
+    expect(getByText(/−R\$\s*120,00/)).not.toBeNull();
+    expect(getByText("Nenhuma categoria cadastrada.")).not.toBeNull();
   });
 
   it("renders fallback category badges", () => {
     const { getByText } = render(
-      <DashboardOverviewPanels
+      <MemoryRouter><DashboardOverviewPanels
         categories={[
           {
             id: "cat-1",
@@ -69,9 +70,9 @@ describe("DashboardOverviewPanels", () => {
           },
         ]}
         recentTransactions={[]}
-      />,
+      /></MemoryRouter>,
     );
 
-    expect(getByText("• General")).not.toBeNull();
+    expect(getByText("General")).not.toBeNull();
   });
 });

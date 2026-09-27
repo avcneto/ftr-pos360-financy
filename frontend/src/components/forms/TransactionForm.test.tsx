@@ -72,7 +72,7 @@ describe("TransactionForm", () => {
     );
 
     fireEvent.submit(
-      getByRole("button", { name: "Create transaction" }).closest("form")!,
+      getByRole("button", { name: "Salvar" }).closest("form")!,
     );
 
     await waitFor(() => {
@@ -85,15 +85,12 @@ describe("TransactionForm", () => {
     fireEvent.change(container.querySelector('input[name="amount"]')!, {
       target: { value: "2500" },
     });
-    fireEvent.click(getByRole("button", { name: "Income" }));
+    fireEvent.click(getByRole("button", { name: "Receita" }));
     fireEvent.change(container.querySelector('input[name="date"]')!, {
       target: { value: "2025-01-02" },
     });
-    fireEvent.change(container.querySelector('textarea[name="description"]')!, {
-      target: { value: "" },
-    });
     fireEvent.submit(
-      getByRole("button", { name: "Create transaction" }).closest("form")!,
+      getByRole("button", { name: "Salvar" }).closest("form")!,
     );
 
     await waitFor(() => {
@@ -129,7 +126,7 @@ describe("TransactionForm", () => {
       target: { value: "2500" },
     });
     fireEvent.submit(
-      getByRole("button", { name: "Create transaction" }).closest("form")!,
+      getByRole("button", { name: "Salvar" }).closest("form")!,
     );
 
     await waitFor(() => {

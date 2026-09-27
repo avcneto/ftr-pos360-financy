@@ -15,19 +15,19 @@ export function TransactionMetrics({
   return (
     <section className="grid grid-cols-3 gap-4 max-[980px]:grid-cols-1">
       <Surface className="flex flex-col gap-2 px-[18px] py-5">
-        <span className="text-[13px] text-[#6b7280]">Entries</span>
+        <span className="text-[13px] text-[#6b7280]">Entradas</span>
         <strong className="text-2xl leading-tight text-[#111827]">
           {formatCurrency(income)}
         </strong>
       </Surface>
       <Surface className="flex flex-col gap-2 px-[18px] py-5">
-        <span className="text-[13px] text-[#6b7280]">Outflows</span>
+        <span className="text-[13px] text-[#6b7280]">Saídas</span>
         <strong className="text-2xl leading-tight text-[#111827]">
           {formatCurrency(expense)}
         </strong>
       </Surface>
       <Surface className="flex flex-col gap-2 px-[18px] py-5">
-        <span className="text-[13px] text-[#6b7280]">Total records</span>
+        <span className="text-[13px] text-[#6b7280]">Total de registros</span>
         <strong className="text-2xl leading-tight text-[#111827]">
           {total}
         </strong>

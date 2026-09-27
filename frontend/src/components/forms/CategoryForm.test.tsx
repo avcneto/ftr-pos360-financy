@@ -24,7 +24,7 @@ describe("CategoryForm", () => {
           title: "Food",
           description: "Meals",
           color: "#123456",
-          icon: "🍔",
+          icon: "utensils",
         }}
         onSave={vi.fn()}
       />,
@@ -41,9 +41,7 @@ describe("CategoryForm", () => {
         ) as HTMLTextAreaElement
       ).value,
     ).toBe("Meals");
-    expect(
-      (container.querySelector('input[name="icon"]') as HTMLInputElement).value,
-    ).toBe("🍔");
+    expect((container.querySelector('button[aria-label="utensils"]') as HTMLButtonElement).getAttribute("aria-pressed")).toBe("true");
   });
 
   it("shows validation errors and submits a valid category", async () => {
@@ -54,7 +52,7 @@ describe("CategoryForm", () => {
     );
 
     fireEvent.submit(
-      getByRole("button", { name: "Create category" }).closest("form")!,
+      getByRole("button", { name: "Salvar" }).closest("form")!,
     );
 
     await waitFor(() => {
@@ -67,11 +65,9 @@ describe("CategoryForm", () => {
     fireEvent.change(container.querySelector('textarea[name="description"]')!, {
       target: { value: "Meals" },
     });
-    fireEvent.change(container.querySelector('input[name="icon"]')!, {
-      target: { value: "🍔" },
-    });
+    fireEvent.click(getByRole("button", { name: "utensils" }));
     fireEvent.submit(
-      getByRole("button", { name: "Create category" }).closest("form")!,
+      getByRole("button", { name: "Salvar" }).closest("form")!,
     );
 
     await waitFor(() => {
@@ -79,7 +75,7 @@ describe("CategoryForm", () => {
         title: "Food",
         description: "Meals",
         color: "#1f6f43",
-        icon: "🍔",
+        icon: "utensils",
       });
     });
   });
@@ -97,7 +93,7 @@ describe("CategoryForm", () => {
       target: { value: "Food" },
     });
     fireEvent.submit(
-      getByRole("button", { name: "Create category" }).closest("form")!,
+      getByRole("button", { name: "Salvar" }).closest("form")!,
     );
 
     await waitFor(() => {

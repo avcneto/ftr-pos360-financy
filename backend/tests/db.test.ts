@@ -15,17 +15,16 @@ describe("db index", () => {
   });
 
   it("creates and caches a Prisma client outside production", async () => {
-    const prismaClient = { client: true };
-    PrismaClientMock.mockReturnValueOnce(prismaClient);
+    PrismaClientMock.mockImplementation(class { client = true; });
     vi.stubEnv("NODE_ENV", "development");
 
     const { prisma } = await import("../src/db/index");
 
     expect(PrismaClientMock).toHaveBeenCalledWith({ log: ["warn", "error"] });
-    expect(prisma).toBe(prismaClient);
+    expect(prisma).toEqual({ client: true });
     expect(
       (globalThis as typeof globalThis & { prisma?: unknown }).prisma,
-    ).toBe(prismaClient);
+    ).toBe(prisma);
   });
 
   it("reuses an existing global Prisma client", async () => {

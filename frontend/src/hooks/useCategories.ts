@@ -5,12 +5,12 @@ import type { Category } from "../types";
 import type { CategoryFormInput } from "../types/forms";
 
 export function useCategories() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const queryClient = useQueryClient();
 
   const categoriesQuery = useQuery({
-    queryKey: ["categories"],
-    enabled: !!token,
+    queryKey: ["categories", user?.id],
+    enabled: !!token && !!user,
     queryFn: async () => {
       if (!token) {
         return [] as Category[];
@@ -93,6 +93,7 @@ export function useCategories() {
   return {
     categories: categoriesQuery.data ?? [],
     isLoading: categoriesQuery.isLoading,
+    error: categoriesQuery.error,
     createCategory: createMutation.mutateAsync,
     updateCategory: updateMutation.mutateAsync,
     deleteCategory: deleteMutation.mutateAsync,

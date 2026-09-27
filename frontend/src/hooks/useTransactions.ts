@@ -5,12 +5,12 @@ import type { Transaction } from "../types";
 import type { TransactionFormInput } from "../types/forms";
 
 export function useTransactions() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const queryClient = useQueryClient();
 
   const transactionsQuery = useQuery({
-    queryKey: ["transactions"],
-    enabled: !!token,
+    queryKey: ["transactions", user?.id],
+    enabled: !!token && !!user,
     queryFn: async () => {
       if (!token) {
         return [] as Transaction[];
@@ -92,6 +92,7 @@ export function useTransactions() {
   return {
     transactions: transactionsQuery.data ?? [],
     isLoading: transactionsQuery.isLoading,
+    error: transactionsQuery.error,
     createTransaction: createMutation.mutateAsync,
     updateTransaction: updateMutation.mutateAsync,
     deleteTransaction: deleteMutation.mutateAsync,

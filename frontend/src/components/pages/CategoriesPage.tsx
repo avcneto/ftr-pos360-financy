@@ -5,78 +5,85 @@ import { PageHeader } from "../ui/PageHeader";
 import { CategoryList } from "../categories/CategoryList";
 import { CategoryStats } from "../categories/CategoryStats";
 import { CategoryForm } from "../forms/CategoryForm";
+import { Button } from "../ui/Button";
+import { Dialog } from "../ui/Dialog";
+import { useTransactions } from "../../hooks/useTransactions";
 
 export function CategoriesPage() {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [actionError, setActionError] = useState("");
   const {
     categories,
     isLoading,
+    error,
     createCategory,
     updateCategory,
     deleteCategory,
     deletePending,
   } = useCategories();
-
-  const categoriesWithDescription = categories.filter(
-    (category) => category.description,
-  ).length;
-  const categoriesWithCustomColor = categories.filter(
-    (category) => category.color && category.color !== "#1f6f43",
-  ).length;
+  const { transactions, isLoading: transactionsLoading } = useTransactions();
+  const categoryCounts = Object.fromEntries(categories.map((category) => [category.id, transactions.filter((transaction) => transaction.categoryId === category.id).length]));
+  const mostUsed = [...categories].sort((a, b) => categoryCounts[b.id] - categoryCounts[a.id])[0];
 
   const handleEdit = (category: Category) => {
     setEditingCategory(category);
+    setFormOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     try {
+      setActionError("");
       await deleteCategory(id);
     } catch (error) {
-      console.error(
-        error instanceof Error ? error.message : "Could not delete category",
-      );
+      setActionError(error instanceof Error ? error.message : "Não foi possível excluir a categoria");
     }
   };
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between max-[980px]:flex-col max-[980px]:items-start max-[980px]:gap-3">
-        <PageHeader
-          eyebrow="Manage"
-          title="Categories"
-          description="Organize records with clear groups and visual tags."
-        />
+        <PageHeader eyebrow="Gestão" title="Categorias" description="Organize suas movimentações por categoria." />
+        <Button type="button" onClick={() => { setEditingCategory(null); setFormOpen(true); }}>
+          <img src="/Icon/plus.svg" alt="" className="h-4 w-4 brightness-0 invert" />Nova categoria
+        </Button>
       </div>
 
       <CategoryStats
         total={categories.length}
-        withDescription={categoriesWithDescription}
-        withCustomColor={categoriesWithCustomColor}
+        transactionTotal={transactions.length}
+        mostUsedCategory={mostUsed && categoryCounts[mostUsed.id] > 0 ? `${mostUsed.title} (${categoryCounts[mostUsed.id]})` : "—"}
       />
 
-      <div className="grid grid-cols-[2fr_1fr] gap-6 max-[980px]:grid-cols-1">
-        <CategoryForm
-          editingCategory={editingCategory}
-          onSave={async (values) => {
-            if (editingCategory) {
-              await updateCategory({ id: editingCategory.id, values });
-              setEditingCategory(null);
-              return;
-            }
+      {error && <p role="alert" className="text-[#b91c1c]">Não foi possível carregar as categorias.</p>}
 
-            await createCategory(values);
-            setEditingCategory(null);
-          }}
-        />
-
+      {actionError && <p role="alert" className="text-[#b91c1c]">{actionError}</p>}
+      <div>
         <CategoryList
           categories={categories}
-          isLoading={isLoading}
+          isLoading={isLoading || transactionsLoading}
+          transactionCounts={categoryCounts}
           onEdit={handleEdit}
           onDelete={(id) => void handleDelete(id)}
           deleteDisabled={deletePending}
         />
       </div>
+      {formOpen && (
+        <Dialog title={editingCategory ? "Editar categoria" : "Nova categoria"} onClose={() => setFormOpen(false)}>
+          <CategoryForm
+            editingCategory={editingCategory}
+            onSave={async (values) => {
+              if (editingCategory) {
+                await updateCategory({ id: editingCategory.id, values });
+              } else {
+                await createCategory(values);
+              }
+              setFormOpen(false);
+              setEditingCategory(null);
+            }}
+          />
+        </Dialog>
+      )}
     </div>
   );
 }

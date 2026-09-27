@@ -1,5 +1,6 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 
 const authState = vi.hoisted(() => ({
   defaultUser: {
@@ -15,6 +16,7 @@ const authState = vi.hoisted(() => ({
     updatedAt: "2025-01-02T00:00:00.000Z",
   },
   signOut: vi.fn(),
+  updateProfile: vi.fn(),
 }));
 
 vi.mock("../../providers/AuthProvider", () => ({
@@ -31,17 +33,17 @@ describe("ProfilePage", () => {
   });
 
   it("renders the profile data", () => {
-    const { getByRole, getByText } = render(<ProfilePage />);
+    const { getByRole, getByText } = render(<MemoryRouter><ProfilePage /></MemoryRouter>);
 
-    expect(getByRole("heading", { name: "Profile" })).not.toBeNull();
+    expect(getByRole("heading", { name: "Perfil" })).not.toBeNull();
     expect(getByText("Ada Lovelace")).not.toBeNull();
-    expect(getByText("ada@example.com")).not.toBeNull();
+    expect(getByRole("textbox", { name: "E-mail" })).not.toBeNull();
   });
 
   it("calls sign out when the button is clicked", () => {
-    const { getByRole } = render(<ProfilePage />);
+    const { getByRole } = render(<MemoryRouter><ProfilePage /></MemoryRouter>);
 
-    fireEvent.click(getByRole("button", { name: "Sign out" }));
+    fireEvent.click(getByRole("button", { name: "Sair da conta" }));
 
     expect(authState.signOut).toHaveBeenCalledTimes(1);
   });
@@ -49,9 +51,17 @@ describe("ProfilePage", () => {
   it("renders fallback values when the profile is missing", () => {
     authState.user = null as never;
 
-    const { getByText } = render(<ProfilePage />);
+    const { getByText } = render(<MemoryRouter><ProfilePage /></MemoryRouter>);
 
-    expect(getByText("User")).not.toBeNull();
-    expect(getByText("No email")).not.toBeNull();
+    expect(getByText("Usuário")).not.toBeNull();
+    expect(getByText("Sem e-mail")).not.toBeNull();
+  });
+
+  it("updates the current user's name", async () => {
+    authState.updateProfile.mockResolvedValueOnce(undefined);
+    const { getByLabelText, getByRole } = render(<MemoryRouter><ProfilePage /></MemoryRouter>);
+    fireEvent.change(getByLabelText("Nome completo"), { target: { value: "Ada Byron" } });
+    fireEvent.click(getByRole("button", { name: "Salvar alterações" }));
+    await waitFor(() => expect(authState.updateProfile).toHaveBeenCalledWith("Ada Byron"));
   });
 });

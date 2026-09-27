@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import {
   comparePasswords,
@@ -8,6 +8,7 @@ import {
 } from "../src/services/auth.service";
 
 describe("auth.service", () => {
+  beforeAll(() => { process.env.JWT_SECRET = "test-only-secret"; });
   it("hashes passwords and validates correct/incorrect inputs", async () => {
     const plainPassword = "my-secret-password";
     const hash = await hashPassword(plainPassword);

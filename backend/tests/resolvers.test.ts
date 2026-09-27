@@ -26,6 +26,7 @@ const {
     createUser: vi.fn(),
     findUserByEmail: vi.fn(),
     getUserById: vi.fn(),
+    updateUserName: vi.fn(),
   },
 }));
 
@@ -77,7 +78,7 @@ describe("resolvers", () => {
     await expect(
       resolvers.Mutation.signUp(
         {},
-        { name: "Ada", email: "ada@example.com", password: "secret" },
+        { name: "Ada", email: "ada@example.com", password: "secret123" },
       ),
     ).resolves.toEqual({ token: "token-1", user });
 
@@ -96,9 +97,14 @@ describe("resolvers", () => {
     await expect(
       resolvers.Mutation.signUp(
         {},
-        { name: "Ada", email: "ada@example.com", password: "secret" },
+        { name: "Ada", email: "ada@example.com", password: "secret123" },
       ),
-    ).rejects.toThrow("User already exists");
+    ).rejects.toThrow("Este e-mail já está cadastrado.");
+  });
+
+  it("rejects weak sign-up passwords", async () => {
+    await expect(resolvers.Mutation.signUp({}, { name: "Ada", email: "ada@example.com", password: "secret" })).rejects.toThrow("at least 8 characters");
+    expect(userServiceMocks.createUser).not.toHaveBeenCalled();
   });
 
   it("rejects invalid sign in credentials", async () => {
@@ -109,7 +115,7 @@ describe("resolvers", () => {
         {},
         { email: "ada@example.com", password: "secret" },
       ),
-    ).rejects.toThrow("Invalid credentials");
+    ).rejects.toThrow("E-mail ou senha incorretos.");
 
     userServiceMocks.findUserByEmail.mockResolvedValueOnce({
       id: "user-1",
@@ -122,7 +128,14 @@ describe("resolvers", () => {
         {},
         { email: "ada@example.com", password: "secret" },
       ),
-    ).rejects.toThrow("Invalid credentials");
+    ).rejects.toThrow("E-mail ou senha incorretos.");
+  });
+
+  it("requires authentication to update the profile", async () => {
+    await expect(resolvers.Mutation.updateProfile({}, { name: "Ada" }, { user: null } as never)).rejects.toThrow("Unauthorized");
+    userServiceMocks.updateUserName.mockResolvedValueOnce({ id: "user-1", name: "Ada" });
+    await expect(resolvers.Mutation.updateProfile({}, { name: "Ada" }, { user: { id: "user-1" } } as never)).resolves.toEqual({ id: "user-1", name: "Ada" });
+    expect(userServiceMocks.updateUserName).toHaveBeenCalledWith("user-1", "Ada");
   });
 
   it("forwards category mutations to the service layer", async () => {

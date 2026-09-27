@@ -76,7 +76,7 @@ describe("useCategories", () => {
   });
 
   it("loads categories and performs mutations with a token", async () => {
-    useAuthMock.mockReturnValue({ token: "token-1" });
+    useAuthMock.mockReturnValue({ token: "token-1", user: { id: "user-1" } });
     useQueryMock.mockReturnValue({ data: [{ id: "cat-1" }], isLoading: false });
     useMutationMock.mockImplementation((options: any) => ({
       mutateAsync: options.mutationFn,
@@ -117,10 +117,10 @@ describe("useCategories", () => {
 
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 
-    useAuthMock.mockReturnValue({ token: "token-1" });
+    useAuthMock.mockReturnValue({ token: "token-1", user: { id: "user-1" } });
 
     expect(useQueryMock).toHaveBeenCalledWith(
-      expect.objectContaining({ queryKey: ["categories"] }),
+      expect.objectContaining({ queryKey: ["categories", "user-1"] }),
     );
     expect(categories.categories).toEqual([{ id: "cat-1" }]);
     expect(categories.createPending).toBe(false);

@@ -8,6 +8,7 @@ import { FormField } from "../ui/FormField";
 import { Surface } from "../ui/Surface";
 import { TransactionTypeToggle } from "../transactions/TransactionTypeToggle";
 import { INPUT_BASE } from "./formStyles";
+import { todayForDateInput } from "../../utils/formatters";
 
 type TransactionFormProps = {
   categories: Category[];
@@ -27,7 +28,7 @@ export function TransactionForm({
       title: "",
       amount: 0,
       type: "EXPENSE",
-      date: new Date().toISOString().slice(0, 10),
+      date: todayForDateInput(),
       description: "",
       categoryId: "",
     },
@@ -39,7 +40,7 @@ export function TransactionForm({
         title: "",
         amount: 0,
         type: "EXPENSE",
-        date: new Date().toISOString().slice(0, 10),
+        date: todayForDateInput(),
         description: "",
         categoryId: "",
       });
@@ -88,7 +89,7 @@ export function TransactionForm({
         title: "",
         amount: 0,
         type: "EXPENSE",
-        date: new Date().toISOString().slice(0, 10),
+        date: todayForDateInput(),
         description: "",
         categoryId: "",
       });
@@ -102,13 +103,14 @@ export function TransactionForm({
   return (
     <Surface className="p-6">
       <form
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-5"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <div className="mb-1 flex items-center justify-between">
+        <div className="mb-1 flex flex-col gap-0.5 pr-10">
           <h2 className="m-0 text-[#111827]">
-            {editingTransaction ? "Edit transaction" : "New transaction"}
+            {editingTransaction ? "Editar transação" : "Nova transação"}
           </h2>
+          <p className="text-sm text-[#4b5563]">Registre sua despesa ou receita</p>
         </div>
 
         <TransactionTypeToggle
@@ -118,12 +120,12 @@ export function TransactionForm({
           }
         />
 
-        <FormField label="Title" error={form.formState.errors.title?.message}>
-          <input className={INPUT_BASE} {...form.register("title")} />
+        <FormField label="Descrição" error={form.formState.errors.title?.message}>
+          <input className={INPUT_BASE} placeholder="Ex.: Almoço" {...form.register("title")} />
         </FormField>
 
-        <div className="grid grid-cols-2 gap-[14px] max-[980px]:grid-cols-1">
-          <FormField label="Date">
+        <div className="grid grid-cols-2 gap-[14px]">
+          <FormField label="Data" error={form.formState.errors.date?.message}>
             <input
               type="date"
               className={INPUT_BASE}
@@ -132,7 +134,7 @@ export function TransactionForm({
           </FormField>
 
           <FormField
-            label="Amount"
+            label="Valor"
             error={form.formState.errors.amount?.message}
           >
             <input
@@ -144,9 +146,9 @@ export function TransactionForm({
           </FormField>
         </div>
 
-        <FormField label="Category">
+        <FormField label="Categoria">
           <select className={INPUT_BASE} {...form.register("categoryId")}>
-            <option value="">No category</option>
+            <option value="">Sem categoria</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.title}
@@ -155,20 +157,12 @@ export function TransactionForm({
           </select>
         </FormField>
 
-        <FormField label="Description">
-          <textarea
-            rows={3}
-            className={INPUT_BASE}
-            {...form.register("description")}
-          />
-        </FormField>
-
         {submitError && (
           <p className="m-0 text-sm text-[#b91c1c]">{submitError}</p>
         )}
 
         <Button type="submit">
-          {editingTransaction ? "Update transaction" : "Create transaction"}
+          Salvar
         </Button>
       </form>
     </Surface>

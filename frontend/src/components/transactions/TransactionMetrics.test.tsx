@@ -8,8 +8,8 @@ describe("TransactionMetrics", () => {
       <TransactionMetrics income={100} expense={50} total={3} />,
     );
 
-    expect(getByText("Entries")).not.toBeNull();
-    expect(getByText("Outflows")).not.toBeNull();
-    expect(getByText("Total records")).not.toBeNull();
+    expect(getByText("Entradas")).not.toBeNull();
+    expect(getByText("Saídas")).not.toBeNull();
+    expect(getByText("Total de registros")).not.toBeNull();
   });
 });

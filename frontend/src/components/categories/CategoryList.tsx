@@ -1,74 +1,13 @@
 import type { Category } from "../../types";
-import { Button } from "../ui/Button";
 import { Surface } from "../ui/Surface";
 
-type CategoryListProps = {
-  categories: Category[];
-  isLoading: boolean;
-  onEdit: (category: Category) => void;
-  onDelete: (id: string) => void;
-  deleteDisabled?: boolean;
-};
+type Props = { categories: Category[]; isLoading: boolean; onEdit: (category: Category) => void; onDelete: (id: string) => void; deleteDisabled?: boolean; transactionCounts?: Record<string, number> };
 
-export function CategoryList({
-  categories,
-  isLoading,
-  onEdit,
-  onDelete,
-  deleteDisabled = false,
-}: CategoryListProps) {
-  return (
-    <Surface className="p-6">
-      <div className="mb-5 flex items-center justify-between">
-        <h2 className="m-0 text-[#111827]">Saved categories</h2>
-      </div>
-
-      <ul className="m-0 flex list-none flex-col gap-3 p-0">
-        {isLoading ? (
-          <li className="text-[#6b7280]">Loading categories...</li>
-        ) : categories.length === 0 ? (
-          <li className="text-[#6b7280]">No categories yet.</li>
-        ) : (
-          categories.map((category) => (
-            <li
-              key={category.id}
-              className="flex items-center justify-between gap-3 rounded-[8px] border border-[#e5e7eb] p-[14px]"
-            >
-              <div className="flex items-center gap-3">
-                <span
-                  className="grid h-[38px] w-[38px] place-items-center rounded-[8px] font-bold text-white"
-                  style={{ backgroundColor: category.color || "#1f6f43" }}
-                >
-                  {category.icon || "•"}
-                </span>
-                <div>
-                  <strong>{category.title}</strong>
-                  <small className="text-[#6b7280]">
-                    {category.description || "No description"}
-                  </small>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  type="button"
-                  onClick={() => onEdit(category)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  type="button"
-                  disabled={deleteDisabled}
-                  onClick={() => onDelete(category.id)}
-                >
-                  Delete
-                </Button>
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
-    </Surface>
-  );
+export function CategoryList({ categories, isLoading, onEdit, onDelete, deleteDisabled = false, transactionCounts = {} }: Props) {
+  if (isLoading) return <p className="text-sm text-[#6b7280]">Carregando categorias...</p>;
+  if (categories.length === 0) return <Surface className="p-8 text-sm text-[#6b7280]">Nenhuma categoria cadastrada.</Surface>;
+  return <section aria-label="Categorias cadastradas" className="grid grid-cols-4 gap-4 max-[1100px]:grid-cols-3 max-[800px]:grid-cols-2 max-[500px]:grid-cols-1">{categories.map((category) => <Surface key={category.id} className="flex min-h-[205px] flex-col p-5">
+    <div className="flex items-start justify-between"><span className="grid h-11 w-11 place-items-center rounded-lg" style={{ backgroundColor: `${category.color ?? "#1f6f43"}20` }}><img src={`/Icon/${category.icon || "tag"}.svg`} onError={(event) => { event.currentTarget.src = "/Icon/tag.svg"; }} alt="" className="h-6 w-6" /></span><div className="flex gap-1"><button type="button" aria-label={`Editar ${category.title}`} title="Editar" className="rounded-lg p-2 hover:bg-[#f3f4f6]" onClick={() => onEdit(category)}><img src="/Icon/square-pen.svg" alt="" className="h-4 w-4" /></button><button type="button" aria-label={`Excluir ${category.title}`} title="Excluir" disabled={deleteDisabled} className="rounded-lg p-2 hover:bg-[#fee2e2] disabled:opacity-50" onClick={() => onDelete(category.id)}><img src="/Icon/trash.svg" alt="" className="h-4 w-4" /></button></div></div>
+    <h2 className="mt-5 text-base font-semibold text-[#111827]">{category.title}</h2><p className="mt-1 min-h-[40px] text-sm text-[#6b7280]">{category.description || "Sem descrição"}</p><div className="mt-auto flex items-center justify-between pt-3"><span className="rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: `${category.color ?? "#1f6f43"}20`, color: category.color ?? "#1f6f43" }}>{category.title}</span><span className="text-xs text-[#6b7280]">{transactionCounts[category.id] ?? 0} transações</span></div>
+  </Surface>)}</section>;
 }

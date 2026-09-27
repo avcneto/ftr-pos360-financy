@@ -11,7 +11,7 @@ describe("AuthForm", () => {
   it("renders the sign in form and shows validation errors", async () => {
     const onSignIn = vi.fn();
 
-    const { getByLabelText, getByRole, getByText } = render(
+    const { getByRole, getByText } = render(
       <AuthForm
         isLogin={true}
         onSignIn={onSignIn}
@@ -26,10 +26,10 @@ describe("AuthForm", () => {
     fireEvent.submit(getByRole("button", { name: "Entrar" }).closest("form")!);
 
     await waitFor(() => {
-      expect(getByText("Enter a valid email")).not.toBeNull();
+      expect(getByText("Informe um e-mail válido")).not.toBeNull();
     });
     expect(
-      getByText("Password must contain at least 6 characters"),
+      getByText("A senha deve ter no mínimo 6 caracteres"),
     ).not.toBeNull();
     expect(onSignIn).not.toHaveBeenCalled();
   });
@@ -47,7 +47,7 @@ describe("AuthForm", () => {
       />,
     );
 
-    fireEvent.change(getByLabelText("Nome"), {
+    fireEvent.change(getByLabelText("Nome completo"), {
       target: { value: "Ada Lovelace" },
     });
     fireEvent.change(getByLabelText("E-mail"), {
@@ -57,7 +57,7 @@ describe("AuthForm", () => {
       target: { value: "secret123" },
     });
     fireEvent.submit(
-      getByRole("button", { name: "Criar conta" }).closest("form")!,
+      getByRole("button", { name: "Cadastrar" }).closest("form")!,
     );
 
     await waitFor(() => {
@@ -78,7 +78,7 @@ describe("AuthForm", () => {
   it("shows submit failures from the authentication handlers", async () => {
     const onSignIn = vi
       .fn()
-      .mockRejectedValue(new Error("Authentication failed"));
+      .mockRejectedValue(new Error("E-mail ou senha incorretos."));
 
     const { getByLabelText, getByRole, getByText } = render(
       <AuthForm
@@ -98,7 +98,7 @@ describe("AuthForm", () => {
     fireEvent.submit(getByRole("button", { name: "Entrar" }).closest("form")!);
 
     await waitFor(() => {
-      expect(getByText("Authentication failed")).not.toBeNull();
+      expect(getByText("E-mail ou senha incorretos.")).not.toBeNull();
     });
   });
 });

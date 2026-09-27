@@ -10,7 +10,7 @@ describe("App", () => {
     render(<App />);
 
     expect(
-      await screen.findByRole("heading", { name: "Sign in" }),
+      await screen.findByRole("heading", { name: "Fazer login" }),
     ).toBeTruthy();
   });
 });

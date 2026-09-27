@@ -32,8 +32,8 @@ describe("TransactionHistoryList", () => {
     expect(getByText("Salary")).not.toBeNull();
     expect(getByText("General")).not.toBeNull();
 
-    fireEvent.click(getByRole("button", { name: "Edit" }));
-    fireEvent.click(getByRole("button", { name: "Delete" }));
+    fireEvent.click(getByRole("button", { name: "Editar Salary" }));
+    fireEvent.click(getByRole("button", { name: "Excluir Salary" }));
 
     expect(onEdit).toHaveBeenCalledWith(
       expect.objectContaining({ id: "tx-1", title: "Salary" }),
@@ -51,7 +51,7 @@ describe("TransactionHistoryList", () => {
       />,
     );
 
-    expect(getByText("Loading transactions...")).not.toBeNull();
+    expect(getByText("Carregando transações...")).not.toBeNull();
 
     rerender(
       <TransactionHistoryList
@@ -62,7 +62,7 @@ describe("TransactionHistoryList", () => {
       />,
     );
 
-    expect(getByText("No transactions yet.")).not.toBeNull();
+    expect(getByText("Nenhuma transação cadastrada.")).not.toBeNull();
   });
 
   it("uses fallback values for transaction visuals", () => {
@@ -85,7 +85,7 @@ describe("TransactionHistoryList", () => {
       />,
     );
 
-    expect(getByText("General")).not.toBeNull();
-    expect(getByText("-$120.00")).not.toBeNull();
+    expect(getByText("Sem categoria")).not.toBeNull();
+    expect(getByText(/−R\$\s*120,00/)).not.toBeNull();
   });
 });

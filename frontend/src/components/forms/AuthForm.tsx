@@ -9,7 +9,7 @@ import { INPUT_BASE } from "./formStyles";
 
 type AuthFormProps = {
   isLogin: boolean;
-  onSignIn: (email: string, password: string) => Promise<void>;
+  onSignIn: (email: string, password: string, remember?: boolean) => Promise<void>;
   onSignUp: (name: string, email: string, password: string) => Promise<void>;
   onToggleMode: () => void;
 };
@@ -22,6 +22,7 @@ export function AuthForm({
 }: AuthFormProps) {
   const [submitError, setSubmitError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   const form = useForm<AuthFormInput>({
     defaultValues: {
@@ -55,7 +56,7 @@ export function AuthForm({
           return;
         }
 
-        await onSignIn(parsed.data.email, parsed.data.password);
+        await onSignIn(parsed.data.email, parsed.data.password, remember);
       } else {
         const parsed = signUpSchema.safeParse(values);
 
@@ -76,22 +77,27 @@ export function AuthForm({
         );
       }
     } catch (error) {
+      const message = error instanceof Error ? error.message : "";
       setSubmitError(
-        error instanceof Error ? error.message : "Authentication failed",
+        message === "E-mail ou senha incorretos." || message === "Este e-mail já está cadastrado."
+          ? message
+          : isLogin
+            ? "Não foi possível entrar agora. Tente novamente."
+            : "Não foi possível criar a conta agora. Tente novamente.",
       );
     }
   };
 
   return (
-    <Surface className="w-full max-w-[432px] bg-white p-8 shadow-[0_8px_24px_rgb(17_24_39_/_6%)]">
+    <Surface className="w-full max-w-[448px] bg-white p-8 shadow-[0_8px_24px_rgb(17_24_39_/_6%)]">
       <div className="mb-6 text-center">
-        <h1 className="m-0 text-[1.5rem] font-semibold text-[#111827]">
+        <h1 className="m-0 text-xl font-semibold text-[#111827]">
           {isLogin ? "Fazer login" : "Criar conta"}
         </h1>
         <p className="mt-2 text-[15px] text-[#6b7280]">
           {isLogin
             ? "Entre na sua conta para continuar"
-            : "Preencha seus dados para continuar"}
+            : "Comece a controlar suas finanças ainda hoje"}
         </p>
       </div>
 
@@ -100,7 +106,7 @@ export function AuthForm({
         className="flex flex-col gap-5"
       >
         {!isLogin && (
-          <FormField label="Nome" error={form.formState.errors.name?.message}>
+          <FormField label="Nome completo" error={form.formState.errors.name?.message}>
             <input
               type="text"
               placeholder="Seu nome completo"
@@ -140,6 +146,7 @@ export function AuthForm({
             />
             <input
               type={showPassword ? "text" : "password"}
+              aria-label="Senha"
               placeholder="Digite sua senha"
               className={`${INPUT_BASE} pl-10 pr-10`}
               {...form.register("password")}
@@ -158,6 +165,7 @@ export function AuthForm({
               />
             </button>
           </div>
+          {!isLogin && <p className="mt-1 text-xs text-[#6b7280]">A senha deve ter no mínimo 8 caracteres</p>}
         </FormField>
 
         {isLogin ? (
@@ -165,6 +173,8 @@ export function AuthForm({
             <label className="flex items-center gap-2 text-[#374151]">
               <input
                 type="checkbox"
+                checked={remember}
+                onChange={(event) => setRemember(event.target.checked)}
                 className="h-4 w-4 rounded border-[#d1d5db] text-[#1f6f43] accent-[#1f6f43]"
               />
               <span>Lembrar-me</span>
@@ -173,6 +183,7 @@ export function AuthForm({
             <button
               type="button"
               className="font-medium text-[#1f6f43] hover:underline"
+              onClick={() => setSubmitError("A recuperação de senha ainda não está disponível.")}
             >
               Recuperar senha
             </button>
@@ -188,7 +199,7 @@ export function AuthForm({
             ? "Aguarde..."
             : isLogin
               ? "Entrar"
-              : "Criar conta"}
+              : "Cadastrar"}
         </Button>
 
         {isLogin ? (

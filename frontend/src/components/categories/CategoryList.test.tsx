@@ -28,11 +28,11 @@ describe("CategoryList", () => {
       />,
     );
 
-    expect(getByText("Food")).not.toBeNull();
+    expect(getByRole("heading", { name: "Food" })).not.toBeNull();
     expect(getByText("Meals")).not.toBeNull();
 
-    fireEvent.click(getByRole("button", { name: "Edit" }));
-    fireEvent.click(getByRole("button", { name: "Delete" }));
+    fireEvent.click(getByRole("button", { name: "Editar Food" }));
+    fireEvent.click(getByRole("button", { name: "Excluir Food" }));
 
     expect(onEdit).toHaveBeenCalledWith(
       expect.objectContaining({ id: "cat-1", title: "Food" }),
@@ -50,7 +50,7 @@ describe("CategoryList", () => {
       />,
     );
 
-    expect(getByText("Loading categories...")).not.toBeNull();
+    expect(getByText("Carregando categorias...")).not.toBeNull();
 
     rerender(
       <CategoryList
@@ -61,11 +61,11 @@ describe("CategoryList", () => {
       />,
     );
 
-    expect(getByText("No categories yet.")).not.toBeNull();
+    expect(getByText("Nenhuma categoria cadastrada.")).not.toBeNull();
   });
 
   it("uses fallback visuals when fields are missing", () => {
-    const { getByText } = render(
+    const { getByText, getByRole } = render(
       <CategoryList
         categories={[
           {
@@ -83,7 +83,7 @@ describe("CategoryList", () => {
       />,
     );
 
-    expect(getByText("No description")).not.toBeNull();
-    expect(getByText("•")).not.toBeNull();
+    expect(getByText("Sem descrição")).not.toBeNull();
+    expect(getByRole("heading", { name: "General" })).not.toBeNull();
   });
 });

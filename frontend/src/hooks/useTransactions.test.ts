@@ -77,7 +77,7 @@ describe("useTransactions", () => {
   });
 
   it("wires transaction operations and queries", async () => {
-    useAuthMock.mockReturnValue({ token: "token-1" });
+    useAuthMock.mockReturnValue({ token: "token-1", user: { id: "user-1" } });
     useQueryMock.mockReturnValue({ data: [{ id: "tx-1" }], isLoading: false });
     useMutationMock.mockImplementation((options: any) => ({
       mutateAsync: options.mutationFn,
@@ -121,7 +121,7 @@ describe("useTransactions", () => {
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 
     expect(useQueryMock).toHaveBeenCalledWith(
-      expect.objectContaining({ queryKey: ["transactions"] }),
+      expect.objectContaining({ queryKey: ["transactions", "user-1"] }),
     );
     expect(transactions.transactions).toEqual([{ id: "tx-1" }]);
     expect(transactions.createPending).toBe(false);

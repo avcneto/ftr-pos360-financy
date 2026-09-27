@@ -7,6 +7,14 @@ import { DashboardPage } from "./components/pages/DashboardPage";
 import { CategoriesPage } from "./components/pages/CategoriesPage";
 import { TransactionsPage } from "./components/pages/TransactionsPage";
 import { ProfilePage } from "./components/pages/ProfilePage";
+import { useAuth } from "./providers/AuthProvider";
+
+function HomeRoute() {
+  const { token, loading } = useAuth();
+  if (loading) return <div className="grid min-h-screen place-items-center">Carregando sessão...</div>;
+  if (!token) return <AuthPage />;
+  return <AppShell><DashboardPage /></AppShell>;
+}
 
 function App() {
   return (
@@ -14,16 +22,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <AppShell>
-                  <DashboardPage />
-                </AppShell>
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/" element={<HomeRoute />} />
           <Route
             path="/transactions"
             element={

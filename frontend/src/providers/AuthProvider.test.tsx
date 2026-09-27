@@ -59,6 +59,22 @@ describe("AuthProvider", () => {
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
+  it("clears a token when the user no longer exists", async () => {
+    localStorage.setItem(STORAGE_KEY, "deleted-user-token");
+    requestGraphQLMock.mockResolvedValueOnce({ me: null });
+
+    const view = render(
+      <AuthProvider>
+        <AuthConsumer />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => {
+      expect(view.getByTestId("token").textContent).toBe("none");
+      expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+    });
+  });
+
   it("signs in, signs up and signs out", async () => {
     requestGraphQLMock.mockImplementation(
       async (query: string, _variables?: unknown, token?: string) => {

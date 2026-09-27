@@ -1,4 +1,5 @@
 import { GraphQLContext } from "./context";
+import { GraphQLError } from "graphql";
 import { comparePasswords, generateToken } from "./services/auth.service";
 import {
   createCategory,
@@ -16,6 +17,7 @@ import {
   createUser,
   findUserByEmail,
   getUserById,
+  updateUserName,
 } from "./services/user.service";
 
 const ensureAuth = (context: GraphQLContext) => {
@@ -51,14 +53,22 @@ export const resolvers = {
   },
 
   Mutation: {
+    updateProfile: async (_root: unknown, args: { name: string }, context: GraphQLContext) => {
+      ensureAuth(context);
+      return updateUserName(context.user!.id, args.name);
+    },
     signUp: async (
       _root: unknown,
       args: { name: string; email: string; password: string },
     ) => {
+      if (args.name.trim().length < 2) throw new Error("Name must contain at least 2 characters");
+      if (args.password.length < 8) throw new Error("Password must contain at least 8 characters");
       const existingUser = await findUserByEmail(args.email);
 
       if (existingUser) {
-        throw new Error("User already exists");
+        throw new GraphQLError("Este e-mail já está cadastrado.", {
+          extensions: { code: "EMAIL_ALREADY_EXISTS" },
+        });
       }
 
       const user = await createUser(args);
@@ -76,7 +86,9 @@ export const resolvers = {
       const user = await findUserByEmail(args.email);
 
       if (!user) {
-        throw new Error("Invalid credentials");
+        throw new GraphQLError("E-mail ou senha incorretos.", {
+          extensions: { code: "INVALID_CREDENTIALS" },
+        });
       }
 
       const isValidPassword = await comparePasswords(
@@ -85,7 +97,9 @@ export const resolvers = {
       );
 
       if (!isValidPassword) {
-        throw new Error("Invalid credentials");
+        throw new GraphQLError("E-mail ou senha incorretos.", {
+          extensions: { code: "INVALID_CREDENTIALS" },
+        });
       }
 
       return {

@@ -27,6 +27,7 @@ vi.mock("../../hooks/useCategories", () => ({
     deletePending: false,
   }),
 }));
+vi.mock("../../hooks/useTransactions", () => ({ useTransactions: () => ({ transactions: [], isLoading: false }) }));
 
 import { CategoriesPage } from "./CategoriesPage";
 
@@ -39,11 +40,11 @@ describe("CategoriesPage", () => {
   });
 
   it("renders category management content", () => {
-    const { getByRole, getByText } = render(<CategoriesPage />);
+    const { getByRole } = render(<CategoriesPage />);
 
-    expect(getByRole("heading", { name: "Categories" })).not.toBeNull();
-    expect(getByText("Food")).not.toBeNull();
-    expect(getByRole("button", { name: "Create category" })).not.toBeNull();
+    expect(getByRole("heading", { name: "Categorias" })).not.toBeNull();
+    expect(getByRole("heading", { name: "Food" })).not.toBeNull();
+    expect(getByRole("button", { name: "Nova categoria" })).not.toBeNull();
   });
 
   it("creates, edits and deletes categories", async () => {
@@ -53,17 +54,14 @@ describe("CategoriesPage", () => {
       new Error("Could not delete category"),
     );
 
-    const consoleError = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
-
     const { getByRole, getByLabelText } = render(<CategoriesPage />);
 
-    fireEvent.change(getByLabelText("Title"), { target: { value: "Travel" } });
-    fireEvent.change(getByLabelText("Description"), {
+    fireEvent.click(getByRole("button", { name: "Nova categoria" }));
+    fireEvent.change(getByLabelText("Título"), { target: { value: "Travel" } });
+    fireEvent.change(getByLabelText("Descrição (opcional)"), {
       target: { value: "Trips" },
     });
-    fireEvent.click(getByRole("button", { name: "Create category" }));
+    fireEvent.click(getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => {
       expect(categoryHooks.createCategory).toHaveBeenCalledWith(
@@ -71,11 +69,11 @@ describe("CategoriesPage", () => {
       );
     });
 
-    fireEvent.click(getByRole("button", { name: "Edit" }));
-    fireEvent.change(getByLabelText("Title"), {
+    fireEvent.click(getByRole("button", { name: "Editar Food" }));
+    fireEvent.change(getByLabelText("Título"), {
       target: { value: "Updated food" },
     });
-    fireEvent.click(getByRole("button", { name: "Update category" }));
+    fireEvent.click(getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => {
       expect(categoryHooks.updateCategory).toHaveBeenCalledWith({
@@ -84,10 +82,10 @@ describe("CategoriesPage", () => {
       });
     });
 
-    fireEvent.click(getByRole("button", { name: "Delete" }));
+    fireEvent.click(getByRole("button", { name: "Excluir Food" }));
 
     await waitFor(() => {
-      expect(consoleError).toHaveBeenCalledWith("Could not delete category");
+      expect(getByRole("alert").textContent).toBe("Could not delete category");
     });
   });
 });

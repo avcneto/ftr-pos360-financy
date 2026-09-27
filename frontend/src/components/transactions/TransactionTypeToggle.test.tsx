@@ -13,10 +13,10 @@ describe("TransactionTypeToggle", () => {
       <TransactionTypeToggle selectedType="EXPENSE" onChange={onChange} />,
     );
 
-    expect(getByRole("button", { name: "Expense" })).not.toBeNull();
-    expect(getByRole("button", { name: "Income" })).not.toBeNull();
+    expect(getByRole("button", { name: "Despesa" })).not.toBeNull();
+    expect(getByRole("button", { name: "Receita" })).not.toBeNull();
 
-    fireEvent.click(getByRole("button", { name: "Income" }));
+    fireEvent.click(getByRole("button", { name: "Receita" }));
     expect(onChange).toHaveBeenCalledWith("INCOME");
   });
 
@@ -26,11 +26,11 @@ describe("TransactionTypeToggle", () => {
       <TransactionTypeToggle selectedType="INCOME" onChange={onChange} />,
     );
 
-    fireEvent.click(getByRole("button", { name: "Expense" }));
+    fireEvent.click(getByRole("button", { name: "Despesa" }));
 
     expect(onChange).toHaveBeenCalledWith("EXPENSE");
-    expect(getByRole("button", { name: "Income" }).className).toContain(
-      "bg-[#e0fae9]",
+    expect(getByRole("button", { name: "Receita" }).className).toContain(
+      "border-[#16a34a]",
     );
   });
 });

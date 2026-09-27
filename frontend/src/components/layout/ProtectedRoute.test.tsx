@@ -43,6 +43,6 @@ describe("ProtectedRoute", () => {
       </MemoryRouter>,
     );
 
-    expect(getByText("Loading your session...")).not.toBeNull();
+    expect(getByText("Carregando sessão...")).not.toBeNull();
   });
 });

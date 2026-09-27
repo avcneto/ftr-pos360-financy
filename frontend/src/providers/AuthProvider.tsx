@@ -2,7 +2,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -14,29 +13,32 @@ export type AuthContextValue = {
   token: string | null;
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, remember?: boolean) => Promise<void>;
   signUp: (name: string, email: string, password: string) => Promise<void>;
+  updateProfile: (name: string) => Promise<void>;
   signOut: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem(STORAGE_KEY),
-  );
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY));
+  const [rememberSession, setRememberSession] = useState(() => Boolean(localStorage.getItem(STORAGE_KEY)));
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     if (!token) {
       setUser(null);
       setLoading(false);
       localStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem(STORAGE_KEY);
       return;
     }
 
-    localStorage.setItem(STORAGE_KEY, token);
+    if (rememberSession) { localStorage.setItem(STORAGE_KEY, token); sessionStorage.removeItem(STORAGE_KEY); }
+    else { sessionStorage.setItem(STORAGE_KEY, token); localStorage.removeItem(STORAGE_KEY); }
 
     const fetchUser = async () => {
       try {
@@ -45,19 +47,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           {},
           token,
         );
-        setUser(data.me);
+        if (active) {
+          if (data.me) setUser(data.me);
+          else {
+            setToken(null);
+            setUser(null);
+            localStorage.removeItem(STORAGE_KEY);
+            sessionStorage.removeItem(STORAGE_KEY);
+          }
+        }
       } catch {
-        setToken(null);
-        setUser(null);
+        if (active) {
+          setToken(null);
+          setUser(null);
+          localStorage.removeItem(STORAGE_KEY);
+          sessionStorage.removeItem(STORAGE_KEY);
+        }
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     void fetchUser();
-  }, [token]);
+    return () => { active = false; };
+  }, [token, rememberSession]);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, remember = true) => {
     const data = await requestGraphQL<{
       signIn: { token: string; user: User };
     }>(
@@ -70,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       { email, password },
     );
 
+    setRememberSession(remember);
     setToken(data.signIn.token);
     setUser(data.signIn.user);
   };
@@ -87,19 +103,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       { name, email, password },
     );
 
+    setRememberSession(true);
     setToken(data.signUp.token);
     setUser(data.signUp.user);
   };
 
   const signOut = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(STORAGE_KEY);
     setToken(null);
     setUser(null);
   };
 
-  const value = useMemo<AuthContextValue>(
-    () => ({ token, user, loading, signIn, signUp, signOut }),
-    [token, user, loading],
-  );
+  const updateProfile = async (name: string) => {
+    if (!token) throw new Error("Sessão expirada");
+    const data = await requestGraphQL<{ updateProfile: User }>(
+      `mutation UpdateProfile($name: String!) { updateProfile(name: $name) { id name email createdAt updatedAt } }`,
+      { name }, token,
+    );
+    setUser(data.updateProfile);
+  };
+
+  const value: AuthContextValue = { token, user, loading, signIn, signUp, signOut, updateProfile };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -5,6 +5,7 @@ const { prismaMock, hashPasswordMock } = vi.hoisted(() => ({
     user: {
       findUnique: vi.fn(),
       create: vi.fn(),
+      update: vi.fn(),
     },
   },
   hashPasswordMock: vi.fn(),
@@ -22,6 +23,7 @@ import {
   createUser,
   findUserByEmail,
   getUserById,
+  updateUserName,
 } from "../src/services/user.service";
 
 describe("user.service", () => {
@@ -65,5 +67,12 @@ describe("user.service", () => {
     expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
       where: { id: "user-1" },
     });
+  });
+
+  it("updates only the authenticated user's name", async () => {
+    prismaMock.user.update.mockResolvedValueOnce({ id: "user-1", name: "Ada Byron" });
+    await expect(updateUserName("user-1", "  Ada Byron  ")).resolves.toEqual({ id: "user-1", name: "Ada Byron" });
+    expect(prismaMock.user.update).toHaveBeenCalledWith({ where: { id: "user-1" }, data: { name: "Ada Byron" } });
+    await expect(updateUserName("user-1", "A")).rejects.toThrow("Name must contain at least 2 characters");
   });
 });
