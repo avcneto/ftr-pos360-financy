@@ -8,7 +8,7 @@ const authState = vi.hoisted(() => ({
   signOut: vi.fn(),
 }));
 
-vi.mock("../../providers/AuthProvider", () => ({
+vi.mock("../../providers/useAuth", () => ({
   useAuth: () => authState,
 }));
 

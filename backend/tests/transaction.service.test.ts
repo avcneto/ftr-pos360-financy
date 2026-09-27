@@ -135,6 +135,23 @@ describe("transaction.service", () => {
     });
   });
 
+  it("rejects invalid transaction data before creating records", async () => {
+    const valid = {
+      title: "Salário",
+      amount: 100,
+      type: "INCOME" as const,
+      date: new Date("2026-04-01"),
+      userId: "user-1",
+    };
+
+    await expect(createTransaction({ ...valid, amount: -100 })).rejects.toThrow("O valor deve ser maior que zero.");
+    await expect(createTransaction({ ...valid, amount: Number.POSITIVE_INFINITY })).rejects.toThrow("O valor deve ser maior que zero.");
+    await expect(createTransaction({ ...valid, type: "OTHER" as never })).rejects.toThrow("Tipo de transação inválido.");
+    await expect(createTransaction({ ...valid, title: "  " })).rejects.toThrow("A descrição deve ter pelo menos 2 caracteres.");
+    await expect(createTransaction({ ...valid, date: new Date("invalid") })).rejects.toThrow("Data inválida.");
+    expect(prismaMock.transaction.create).not.toHaveBeenCalled();
+  });
+
   it("rejects update when transaction does not exist", async () => {
     prismaMock.transaction.findUnique.mockResolvedValueOnce(null);
 
@@ -187,6 +204,15 @@ describe("transaction.service", () => {
       data: { categoryId: null },
       include: { category: true },
     });
+  });
+
+  it("rejects invalid transaction edits without updating records", async () => {
+    prismaMock.transaction.findUnique.mockResolvedValue({ id: "tx-1", userId: "user-1" });
+
+    await expect(updateTransaction("tx-1", { amount: 0 }, "user-1")).rejects.toThrow("O valor deve ser maior que zero.");
+    await expect(updateTransaction("tx-1", { type: "OTHER" as never }, "user-1")).rejects.toThrow("Tipo de transação inválido.");
+    await expect(updateTransaction("tx-1", { date: new Date("invalid") }, "user-1")).rejects.toThrow("Data inválida.");
+    expect(prismaMock.transaction.update).not.toHaveBeenCalled();
   });
 
   it("rejects delete when transaction does not belong to user", async () => {

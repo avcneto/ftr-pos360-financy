@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { transactionSchema } from "../../lib/schemas";
 import type { Category, Transaction } from "../../types";
 import type { TransactionFormInput } from "../../types/forms";
@@ -32,9 +32,15 @@ export function TransactionForm({
   onSave,
 }: TransactionFormProps) {
   const [submitError, setSubmitError] = useState("");
-  const [amountText, setAmountText] = useState(() => editingTransaction
-    ? formatCurrencyInput(Number(editingTransaction.amount))
-    : "");
+  const amountSource = editingTransaction ? `${editingTransaction.id}:${editingTransaction.amount}` : "new";
+  const [amountDraft, setAmountDraft] = useState(() => ({
+    source: amountSource,
+    value: editingTransaction ? formatCurrencyInput(Number(editingTransaction.amount)) : "",
+  }));
+  const amountText = amountDraft.source === amountSource
+    ? amountDraft.value
+    : editingTransaction ? formatCurrencyInput(Number(editingTransaction.amount)) : "";
+  const setAmountText = (value: string) => setAmountDraft({ source: amountSource, value });
   const amountInputRef = useRef<HTMLInputElement | null>(null);
   const amountCaretRef = useRef<number | null>(null);
 
@@ -57,7 +63,6 @@ export function TransactionForm({
 
   useEffect(() => {
     if (!editingTransaction) {
-      setAmountText("");
       form.reset({
         title: "",
         amount: 0,
@@ -69,7 +74,6 @@ export function TransactionForm({
       return;
     }
 
-    setAmountText(formatCurrencyInput(Number(editingTransaction.amount)));
     form.reset({
       title: editingTransaction.title,
       amount: Number(editingTransaction.amount),
@@ -80,7 +84,7 @@ export function TransactionForm({
     });
   }, [editingTransaction, form]);
 
-  const selectedType = form.watch("type");
+  const selectedType = useWatch({ control: form.control, name: "type" });
 
   const handleSubmit = async (values: TransactionFormInput) => {
     const parsed = transactionSchema.safeParse(values);

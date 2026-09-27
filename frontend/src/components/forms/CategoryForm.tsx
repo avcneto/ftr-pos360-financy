@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { categorySchema } from "../../lib/schemas";
 import type { Category } from "../../types";
 import type { CategoryFormInput } from "../../types/forms";
@@ -7,7 +7,8 @@ import { Button } from "../ui/Button";
 import { FormField } from "../ui/FormField";
 import { Surface } from "../ui/Surface";
 import { INPUT_BASE } from "./formStyles";
-import { CATEGORY_ICON_NAMES, CategoryIcon } from "../categories/CategoryIcon";
+import { CategoryIcon } from "../categories/CategoryIcon";
+import { CATEGORY_ICON_NAMES } from "../categories/categoryIcons";
 
 const COLORS = ["#16a34a", "#2563eb", "#9333ea", "#db2777", "#dc2626", "#ea580c", "#ca8a04"];
 const DEFAULT_COLOR = COLORS[0];
@@ -28,6 +29,8 @@ export function CategoryForm({ editingCategory, onSave }: CategoryFormProps) {
       icon: CATEGORY_ICON_NAMES[0],
     },
   });
+  const selectedIcon = useWatch({ control: form.control, name: "icon" });
+  const selectedColor = useWatch({ control: form.control, name: "color" });
 
   useEffect(() => {
     if (!editingCategory) {
@@ -105,8 +108,7 @@ export function CategoryForm({ editingCategory, onSave }: CategoryFormProps) {
           <p className="mb-3 text-sm font-medium text-[#374151]">Ícone</p>
           <div role="group" aria-label="Ícone" className="grid grid-cols-8 gap-2">
             {CATEGORY_ICON_NAMES.map((icon) => {
-              const selected = form.watch("icon") === icon;
-              const selectedColor = form.watch("color");
+              const selected = selectedIcon === icon;
               return (
                 <button
                   key={icon}
@@ -127,7 +129,6 @@ export function CategoryForm({ editingCategory, onSave }: CategoryFormProps) {
           <p className="mb-3 text-base font-medium text-[#374151]">Cor</p>
           <div role="group" aria-label="Cor" className="flex flex-wrap gap-2">
             {COLORS.map((color) => {
-              const selectedColor = form.watch("color");
               const selected = selectedColor === color || (color === DEFAULT_COLOR && selectedColor === "#1f6f43");
               return (
                 <button

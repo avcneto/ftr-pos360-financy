@@ -58,7 +58,7 @@ export function TransactionsPage() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between max-[980px]:flex-col max-[980px]:items-start max-[980px]:gap-3">
-        <PageHeader eyebrow="Gestão" title="Transações" description="Acompanhe e organize suas movimentações." />
+        <PageHeader eyebrow="Gestão" title="Transações" description="Gerencie todas as suas transações financeiras" />
         <Button type="button" onClick={() => { setEditingTransaction(null); setFormOpen(true); }}>
           <img src="/Icon/plus.svg" alt="" className="h-4 w-4 brightness-0 invert" />Nova transação
         </Button>

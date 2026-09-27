@@ -56,6 +56,7 @@ describe("TransactionsPage", () => {
     const { getByRole, getByText, queryByText } = render(<TransactionsPage />);
 
     expect(getByRole("heading", { name: "Transações" })).not.toBeNull();
+    expect(getByText("Gerencie todas as suas transações financeiras")).not.toBeNull();
     expect(getByText("Salary")).not.toBeNull();
     expect(getByRole("button", { name: "Nova transação" })).not.toBeNull();
     expect(getByText("1 a 10 | 27 resultados")).not.toBeNull();

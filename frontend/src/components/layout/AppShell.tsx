@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../providers/AuthProvider";
+import { useAuth } from "../../providers/useAuth";
 
 const NAV_LINK_BASE = "text-sm transition";
 

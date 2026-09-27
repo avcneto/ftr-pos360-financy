@@ -205,7 +205,7 @@ export const resolvers = {
         title?: string;
         amount?: number;
         type?: "INCOME" | "EXPENSE";
-        date?: string;
+        date?: string | null;
         description?: string;
         categoryId?: string;
       },
@@ -219,7 +219,7 @@ export const resolvers = {
           title: args.title,
           amount: args.amount,
           type: args.type,
-          date: args.date ? new Date(args.date) : undefined,
+          date: args.date === undefined ? undefined : new Date(args.date ?? ""),
           description: args.description,
           categoryId: args.categoryId,
         },

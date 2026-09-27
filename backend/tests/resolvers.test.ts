@@ -240,4 +240,17 @@ describe("resolvers", () => {
       userId: "user-1",
     });
   });
+
+  it("passes an empty edited date to service validation", async () => {
+    transactionServiceMocks.updateTransaction.mockResolvedValueOnce({ id: "tx-1" });
+
+    await resolvers.Mutation.updateTransaction(
+      {},
+      { id: "tx-1", date: "" },
+      { user: { id: "user-1" } } as never,
+    );
+
+    const passedDate = transactionServiceMocks.updateTransaction.mock.calls[0][1].date as Date;
+    expect(Number.isNaN(passedDate.getTime())).toBe(true);
+  });
 });

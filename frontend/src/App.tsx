@@ -7,7 +7,7 @@ import { DashboardPage } from "./components/pages/DashboardPage";
 import { CategoriesPage } from "./components/pages/CategoriesPage";
 import { TransactionsPage } from "./components/pages/TransactionsPage";
 import { ProfilePage } from "./components/pages/ProfilePage";
-import { useAuth } from "./providers/AuthProvider";
+import { useAuth } from "./providers/useAuth";
 
 function HomeRoute() {
   const { token, loading } = useAuth();

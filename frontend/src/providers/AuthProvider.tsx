@@ -1,37 +1,18 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { requestGraphQL } from "../api/graphql";
 import { STORAGE_KEY } from "../constants/app";
 import type { User } from "../types";
-
-export type AuthContextValue = {
-  token: string | null;
-  user: User | null;
-  loading: boolean;
-  signIn: (email: string, password: string, remember?: boolean) => Promise<void>;
-  signUp: (name: string, email: string, password: string) => Promise<void>;
-  updateProfile: (name: string) => Promise<void>;
-  signOut: () => void;
-};
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+import { AuthContext, type AuthContextValue } from "./auth-context";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY));
   const [rememberSession, setRememberSession] = useState(() => Boolean(localStorage.getItem(STORAGE_KEY)));
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => Boolean(localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY)));
 
   useEffect(() => {
     let active = true;
     if (!token) {
-      setUser(null);
-      setLoading(false);
       localStorage.removeItem(STORAGE_KEY);
       sessionStorage.removeItem(STORAGE_KEY);
       return;
@@ -113,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     sessionStorage.removeItem(STORAGE_KEY);
     setToken(null);
     setUser(null);
+    setLoading(false);
   };
 
   const updateProfile = async (name: string) => {
@@ -127,14 +109,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthContextValue = { token, user, loading, signIn, signUp, signOut, updateProfile };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("Contexto de autenticação não encontrado.");
-  }
-
-  return context;
 }

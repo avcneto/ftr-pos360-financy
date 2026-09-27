@@ -10,7 +10,7 @@ const authState = vi.hoisted(() => ({
   token: null as string | null,
 }));
 
-vi.mock("../../providers/AuthProvider", () => ({
+vi.mock("../../providers/useAuth", () => ({
   useAuth: () => authState,
 }));
 

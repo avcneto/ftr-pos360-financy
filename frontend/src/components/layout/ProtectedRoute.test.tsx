@@ -7,7 +7,7 @@ const protectedState = vi.hoisted(() => ({
   loading: false,
 }));
 
-vi.mock("../../providers/AuthProvider", () => ({
+vi.mock("../../providers/useAuth", () => ({
   useAuth: () => protectedState,
 }));
 

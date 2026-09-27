@@ -1,8 +1,10 @@
 import { act, cleanup, render, waitFor } from "@testing-library/react";
+import { useEffect } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { STORAGE_KEY } from "../constants/app";
-import { AuthProvider, useAuth } from "./AuthProvider";
+import { AuthProvider } from "./AuthProvider";
+import { useAuth } from "./useAuth";
 
 const { requestGraphQLMock } = vi.hoisted(() => ({
   requestGraphQLMock: vi.fn(),
@@ -15,7 +17,9 @@ vi.mock("../api/graphql", () => ({
 
 function AuthConsumer() {
   const auth = useAuth();
-  currentAuth = auth;
+  useEffect(() => {
+    currentAuth = auth;
+  }, [auth]);
 
   return (
     <div>

@@ -22,6 +22,21 @@ export type TransactionPageOptions = {
   month?: string | null;
 };
 
+function validateTransactionFields(data: { title?: string; amount?: number; type?: string; date?: Date }) {
+  if (data.title !== undefined && (typeof data.title !== "string" || data.title.trim().length < 2)) {
+    throw new Error("A descrição deve ter pelo menos 2 caracteres.");
+  }
+  if (data.amount !== undefined && (!Number.isFinite(data.amount) || data.amount <= 0)) {
+    throw new Error("O valor deve ser maior que zero.");
+  }
+  if (data.type !== undefined && data.type !== "INCOME" && data.type !== "EXPENSE") {
+    throw new Error("Tipo de transação inválido.");
+  }
+  if (data.date !== undefined && (!(data.date instanceof Date) || Number.isNaN(data.date.getTime()))) {
+    throw new Error("Data inválida.");
+  }
+}
+
 export async function listTransactionsPageByUser(userId: string, options: TransactionPageOptions) {
   const { page, pageSize } = options;
   if (!Number.isInteger(page) || page < 1) throw new Error("Página inválida.");
@@ -64,6 +79,7 @@ export async function createTransaction(data: {
   categoryId?: string | null;
   userId: string;
 }) {
+  validateTransactionFields(data);
   if (data.categoryId) {
     await assertCategoryOwnedByUser(data.categoryId, data.userId);
   }
@@ -87,6 +103,7 @@ export async function updateTransaction(
   userId: string,
 ) {
   await assertTransactionOwnedByUser(id, userId);
+  validateTransactionFields(data);
 
   if (data.categoryId) {
     await assertCategoryOwnedByUser(data.categoryId, userId);

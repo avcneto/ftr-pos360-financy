@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { requestGraphQL } from "../api/graphql";
-import { useAuth } from "../providers/AuthProvider";
+import { useAuth } from "../providers/useAuth";
 import type { Transaction } from "../types";
 import type { TransactionFormInput } from "../types/forms";
 

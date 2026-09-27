@@ -19,7 +19,7 @@ const authState = vi.hoisted(() => ({
   updateProfile: vi.fn(),
 }));
 
-vi.mock("../../providers/AuthProvider", () => ({
+vi.mock("../../providers/useAuth", () => ({
   useAuth: () => authState,
 }));
 

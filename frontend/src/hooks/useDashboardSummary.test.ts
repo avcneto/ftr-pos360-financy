@@ -6,7 +6,7 @@ const { requestGraphQLMock } = vi.hoisted(() => ({
   requestGraphQLMock: vi.fn(),
 }));
 
-vi.mock("../providers/AuthProvider", () => ({
+vi.mock("../providers/useAuth", () => ({
   useAuth: () => useAuthMock(),
 }));
 

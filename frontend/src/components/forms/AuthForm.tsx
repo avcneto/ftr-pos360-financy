@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signInSchema, signUpSchema } from "../../lib/schemas";
 import type { AuthFormInput } from "../../types/forms";
@@ -32,11 +32,12 @@ export function AuthForm({
     },
   });
 
-  useEffect(() => {
+  const handleToggleMode = () => {
     form.clearErrors();
     setSubmitError("");
     setShowPassword(false);
-  }, [form, isLogin]);
+    onToggleMode();
+  };
 
   const handleSubmit = async (values: AuthFormInput) => {
     try {
@@ -225,7 +226,7 @@ export function AuthForm({
               type="button"
               variant="ghost"
               className="h-12 w-full gap-2 border-[#cbd5e1] text-[15px] font-medium text-[#111827]"
-              onClick={onToggleMode}
+              onClick={handleToggleMode}
             >
               <img
                 src="/Icon/user-round-plus.svg"
@@ -243,7 +244,7 @@ export function AuthForm({
               type="button"
               variant="ghost"
               className="h-12 w-full gap-2 border-[#cbd5e1] text-[15px] font-medium text-[#111827]"
-              onClick={onToggleMode}
+              onClick={handleToggleMode}
             >
               <img
                 src="/Icon/log-in.svg"

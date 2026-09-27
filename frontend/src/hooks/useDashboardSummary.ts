@@ -1,8 +1,9 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { requestGraphQL } from "../api/graphql";
-import { useAuth } from "../providers/AuthProvider";
+import { useAuth } from "../providers/useAuth";
 import type { Category, Transaction } from "../types";
 import type { TransactionFormInput } from "../types/forms";
+import { isInCalendarMonth } from "../utils/formatters";
 
 export function useDashboardSummary() {
   const { token, user } = useAuth();
@@ -57,10 +58,7 @@ export function useDashboardSummary() {
 
   const balance = income - expense;
   const now = new Date();
-  const thisMonth = transactions.filter((item) => {
-    const date = new Date(item.date);
-    return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
-  });
+  const thisMonth = transactions.filter((item) => isInCalendarMonth(item.date, now));
   const monthlyIncome = thisMonth.filter((item) => item.type === "INCOME").reduce((total, item) => total + Number(item.amount), 0);
   const monthlyExpense = thisMonth.filter((item) => item.type === "EXPENSE").reduce((total, item) => total + Number(item.amount), 0);
   const recentTransactions = [...transactions]

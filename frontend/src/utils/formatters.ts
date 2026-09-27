@@ -50,6 +50,11 @@ export function formatShortDate(value: string) {
   }).format(new Date(value));
 }
 
+export function isInCalendarMonth(value: string, month: Date) {
+  const date = new Date(value);
+  return date.getUTCFullYear() === month.getFullYear() && date.getUTCMonth() === month.getMonth();
+}
+
 export function todayForDateInput() {
   const now = new Date();
   const year = now.getFullYear();
