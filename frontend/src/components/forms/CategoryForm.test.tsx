@@ -56,7 +56,7 @@ describe("CategoryForm", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Title is required")).not.toBeNull();
+      expect(getByText("Informe um título com pelo menos 2 caracteres.")).not.toBeNull();
     });
 
     fireEvent.change(container.querySelector('input[name="title"]')!, {
@@ -74,7 +74,7 @@ describe("CategoryForm", () => {
       expect(onSave).toHaveBeenCalledWith({
         title: "Food",
         description: "Meals",
-        color: "#1f6f43",
+        color: "#16a34a",
         icon: "utensils",
       });
     });
@@ -83,7 +83,7 @@ describe("CategoryForm", () => {
   it("shows submit failures when saving a category", async () => {
     const onSave = vi
       .fn()
-      .mockRejectedValue(new Error("Could not save category"));
+      .mockRejectedValue(new Error("Não foi possível salvar a categoria."));
 
     const { container, getByRole, getByText } = render(
       <CategoryForm editingCategory={null} onSave={onSave} />,
@@ -97,7 +97,7 @@ describe("CategoryForm", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Could not save category")).not.toBeNull();
+      expect(getByText("Não foi possível salvar a categoria.")).not.toBeNull();
     });
   });
 });

@@ -49,7 +49,7 @@ describe("TransactionForm", () => {
     expect(
       (container.querySelector('input[name="amount"]') as HTMLInputElement)
         .value,
-    ).toBe("2500");
+    ).toBe("2.500,00");
     expect(
       (
         container.querySelector(
@@ -76,15 +76,17 @@ describe("TransactionForm", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Title is required")).not.toBeNull();
+      expect(getByText("Informe uma descrição com pelo menos 2 caracteres.")).not.toBeNull();
     });
 
     fireEvent.change(container.querySelector('input[name="title"]')!, {
       target: { value: "Salary" },
     });
     fireEvent.change(container.querySelector('input[name="amount"]')!, {
-      target: { value: "2500" },
+      target: { value: "1.234,56" },
     });
+    fireEvent.blur(container.querySelector('input[name="amount"]')!);
+    expect((container.querySelector('input[name="amount"]') as HTMLInputElement).value).toBe("1.234,56");
     fireEvent.click(getByRole("button", { name: "Receita" }));
     fireEvent.change(container.querySelector('input[name="date"]')!, {
       target: { value: "2025-01-02" },
@@ -96,7 +98,7 @@ describe("TransactionForm", () => {
     await waitFor(() => {
       expect(onSave).toHaveBeenCalledWith({
         title: "Salary",
-        amount: 2500,
+        amount: 1234.56,
         type: "INCOME",
         date: "2025-01-02",
         description: undefined,
@@ -109,7 +111,7 @@ describe("TransactionForm", () => {
     const categories: Category[] = [{ id: "cat-1", title: "Food" } as Category];
     const onSave = vi
       .fn()
-      .mockRejectedValue(new Error("Could not save transaction"));
+      .mockRejectedValue(new Error("Não foi possível salvar a transação."));
 
     const { container, getByRole, getByText } = render(
       <TransactionForm
@@ -130,7 +132,35 @@ describe("TransactionForm", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Could not save transaction")).not.toBeNull();
+      expect(getByText("Não foi possível salvar a transação.")).not.toBeNull();
+    });
+  });
+
+  it("formats large amounts while typing and saves their numeric value", async () => {
+    const onSave = vi.fn().mockResolvedValue(undefined);
+    const { getByLabelText, getByRole } = render(
+      <TransactionForm categories={[]} editingTransaction={null} onSave={onSave} />,
+    );
+
+    fireEvent.change(getByLabelText("Descrição"), { target: { value: "Venda" } });
+    const amountInput = getByLabelText("Valor") as HTMLInputElement;
+    fireEvent.focus(amountInput);
+    for (const digit of "100000000") {
+      const start = amountInput.selectionStart ?? amountInput.value.length;
+      const end = amountInput.selectionEnd ?? start;
+      fireEvent.change(amountInput, {
+        target: {
+          value: `${amountInput.value.slice(0, start)}${digit}${amountInput.value.slice(end)}`,
+          selectionStart: start + 1,
+          selectionEnd: start + 1,
+        },
+      });
+    }
+    expect(amountInput.value).toBe("100.000.000,00");
+
+    fireEvent.click(getByRole("button", { name: "Salvar" }));
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ amount: 100000000 }));
     });
   });
 });

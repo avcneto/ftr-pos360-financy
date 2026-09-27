@@ -20,7 +20,7 @@ describe("TransactionHistoryList", () => {
             amount: 100,
             type: "INCOME",
             date: "2025-01-01",
-            category: { id: "cat-1", title: "General" },
+            category: { id: "cat-1", title: "General", color: "#16a34a", icon: "briefcase-business" },
           },
         ]}
         isLoading={false}
@@ -31,6 +31,8 @@ describe("TransactionHistoryList", () => {
 
     expect(getByText("Salary")).not.toBeNull();
     expect(getByText("General")).not.toBeNull();
+    expect(getByText("01/01/25")).not.toBeNull();
+    expect(getByText("Entrada")).not.toBeNull();
 
     fireEvent.click(getByRole("button", { name: "Editar Salary" }));
     fireEvent.click(getByRole("button", { name: "Excluir Salary" }));
@@ -86,6 +88,7 @@ describe("TransactionHistoryList", () => {
     );
 
     expect(getByText("Sem categoria")).not.toBeNull();
-    expect(getByText(/−R\$\s*120,00/)).not.toBeNull();
+    expect(getByText("Saída")).not.toBeNull();
+    expect(getByText(/−\s*R\$\s*120,00/)).not.toBeNull();
   });
 });

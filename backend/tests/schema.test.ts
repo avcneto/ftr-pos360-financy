@@ -9,6 +9,8 @@ describe("schema", () => {
 
     expect(document).toContain("type User");
     expect(document).toContain("type Transaction");
+    expect(document).toContain("type TransactionPage");
+    expect(document).toContain("transactionsPage(page: Int!, pageSize: Int!");
     expect(document).toContain("type Query");
     expect(document).toContain("createTransaction");
   });

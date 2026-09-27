@@ -22,7 +22,7 @@ describe("schemas", () => {
   it("fills defaults for category payloads", () => {
     const parsed = categorySchema.parse({ title: "Food" });
 
-    expect(parsed.color).toBe("#1f6f43");
+    expect(parsed.color).toBe("#16a34a");
     expect(parsed.icon).toBe("✦");
   });
 });

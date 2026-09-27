@@ -52,7 +52,7 @@ export function CategoriesPage() {
       <CategoryStats
         total={categories.length}
         transactionTotal={transactions.length}
-        mostUsedCategory={mostUsed && categoryCounts[mostUsed.id] > 0 ? `${mostUsed.title} (${categoryCounts[mostUsed.id]})` : "—"}
+        mostUsedCategory={mostUsed && categoryCounts[mostUsed.id] > 0 ? mostUsed : null}
       />
 
       {error && <p role="alert" className="text-[#b91c1c]">Não foi possível carregar as categorias.</p>}
@@ -69,7 +69,7 @@ export function CategoriesPage() {
         />
       </div>
       {formOpen && (
-        <Dialog title={editingCategory ? "Editar categoria" : "Nova categoria"} onClose={() => setFormOpen(false)}>
+        <Dialog title={editingCategory ? "Editar categoria" : "Nova categoria"} onClose={() => setFormOpen(false)} wide>
           <CategoryForm
             editingCategory={editingCategory}
             onSave={async (values) => {

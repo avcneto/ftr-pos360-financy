@@ -3,6 +3,18 @@ type TransactionTypeToggleProps = {
   onChange: (type: "EXPENSE" | "INCOME") => void;
 };
 
+function TypeIcon({ name }: { name: "circle-arrow-down" | "circle-arrow-up" }) {
+  const mask = `url("/Icon/${name}.svg") center / contain no-repeat`;
+
+  return (
+    <span
+      aria-hidden="true"
+      className="h-5 w-5 shrink-0 bg-current"
+      style={{ mask, WebkitMask: mask }}
+    />
+  );
+}
+
 export function TransactionTypeToggle({
   selectedType,
   onChange,
@@ -22,7 +34,7 @@ export function TransactionTypeToggle({
         }`}
         onClick={() => onChange("EXPENSE")}
       >
-        <img src="/Icon/circle-arrow-down.svg" alt="" className="h-5 w-5" />Despesa
+        <TypeIcon name="circle-arrow-down" />Despesa
       </button>
       <button
         type="button"
@@ -33,7 +45,7 @@ export function TransactionTypeToggle({
         }`}
         onClick={() => onChange("INCOME")}
       >
-        <img src="/Icon/circle-arrow-up.svg" alt="" className="h-5 w-5" />Receita
+        <TypeIcon name="circle-arrow-up" />Receita
       </button>
     </div>
   );

@@ -20,6 +20,7 @@ const {
     createTransaction: vi.fn(),
     deleteTransaction: vi.fn(),
     listTransactionsByUser: vi.fn(),
+    listTransactionsPageByUser: vi.fn(),
     updateTransaction: vi.fn(),
   },
   userServiceMocks: {
@@ -45,7 +46,7 @@ describe("resolvers", () => {
   it("rejects anonymous access to protected queries", async () => {
     await expect(
       resolvers.Query.me({}, {}, { user: null } as never),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
   });
 
   it("returns the current user and owned data for authenticated queries", async () => {
@@ -66,6 +67,17 @@ describe("resolvers", () => {
     await expect(
       resolvers.Query.transactions({}, {}, { user: { id: "user-1" } } as never),
     ).resolves.toEqual([{ id: "tx-1" }]);
+  });
+
+  it("forwards paginated transaction queries with the authenticated user", async () => {
+    const args = { page: 2, pageSize: 10, categoryId: "cat-1" };
+    transactionServiceMocks.listTransactionsPageByUser.mockResolvedValueOnce({ items: [], total: 27, page: 2 });
+
+    await expect(resolvers.Query.transactionsPage({}, args, { user: { id: "user-1" } } as never))
+      .resolves.toEqual({ items: [], total: 27, page: 2 });
+    expect(transactionServiceMocks.listTransactionsPageByUser).toHaveBeenCalledWith("user-1", args);
+    await expect(resolvers.Query.transactionsPage({}, args, { user: null } as never))
+      .rejects.toThrow("Sessão expirada. Faça login novamente.");
   });
 
   it("handles sign up and sign in flows", async () => {
@@ -103,7 +115,7 @@ describe("resolvers", () => {
   });
 
   it("rejects weak sign-up passwords", async () => {
-    await expect(resolvers.Mutation.signUp({}, { name: "Ada", email: "ada@example.com", password: "secret" })).rejects.toThrow("at least 8 characters");
+    await expect(resolvers.Mutation.signUp({}, { name: "Ada", email: "ada@example.com", password: "secret" })).rejects.toThrow("A senha deve ter pelo menos 8 caracteres.");
     expect(userServiceMocks.createUser).not.toHaveBeenCalled();
   });
 
@@ -132,7 +144,7 @@ describe("resolvers", () => {
   });
 
   it("requires authentication to update the profile", async () => {
-    await expect(resolvers.Mutation.updateProfile({}, { name: "Ada" }, { user: null } as never)).rejects.toThrow("Unauthorized");
+    await expect(resolvers.Mutation.updateProfile({}, { name: "Ada" }, { user: null } as never)).rejects.toThrow("Sessão expirada. Faça login novamente.");
     userServiceMocks.updateUserName.mockResolvedValueOnce({ id: "user-1", name: "Ada" });
     await expect(resolvers.Mutation.updateProfile({}, { name: "Ada" }, { user: { id: "user-1" } } as never)).resolves.toEqual({ id: "user-1", name: "Ada" });
     expect(userServiceMocks.updateUserName).toHaveBeenCalledWith("user-1", "Ada");

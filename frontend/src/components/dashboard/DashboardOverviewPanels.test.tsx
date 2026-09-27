@@ -20,11 +20,12 @@ describe("DashboardOverviewPanels", () => {
         amount: 2500,
         type: "INCOME",
         date: "2025-01-02",
-        category: { id: "cat-1", title: "General" },
+        categoryId: "cat-1",
+        category: { id: "cat-1", title: "Food", color: "#1f6f43", icon: "utensils" },
       },
     ];
 
-    const { getByRole, getByText } = render(
+    const { getByRole, getByText, getAllByText } = render(
       <MemoryRouter><DashboardOverviewPanels
         categories={categories}
         recentTransactions={recentTransactions}
@@ -35,7 +36,9 @@ describe("DashboardOverviewPanels", () => {
       getByRole("heading", { name: "Transações recentes" }),
     ).not.toBeNull();
     expect(getByText("Salary")).not.toBeNull();
-    expect(getByText(/Food/)).not.toBeNull();
+    expect(getAllByText(/Food/)).toHaveLength(2);
+    expect(getByText("1 item")).not.toBeNull();
+    expect(getAllByText(/R\$\s*2\.500,00/)).toHaveLength(2);
   });
 
   it("renders empty states and expense transactions", () => {
@@ -54,7 +57,7 @@ describe("DashboardOverviewPanels", () => {
       /></MemoryRouter>,
     );
 
-    expect(getByText(/−R\$\s*120,00/)).not.toBeNull();
+    expect(getByText(/−\s*R\$\s*120,00/)).not.toBeNull();
     expect(getByText("Nenhuma categoria cadastrada.")).not.toBeNull();
   });
 

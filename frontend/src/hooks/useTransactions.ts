@@ -4,20 +4,46 @@ import { useAuth } from "../providers/AuthProvider";
 import type { Transaction } from "../types";
 import type { TransactionFormInput } from "../types/forms";
 
-export function useTransactions() {
+export type TransactionsPageOptions = {
+  page: number;
+  pageSize: number;
+  search?: string;
+  type?: string;
+  categoryId?: string;
+  month?: string;
+};
+
+type TransactionsPageResult = { items: Transaction[]; total: number; page: number };
+
+export function useTransactions(pageOptions?: TransactionsPageOptions) {
   const { token, user } = useAuth();
   const queryClient = useQueryClient();
 
   const transactionsQuery = useQuery({
-    queryKey: ["transactions", user?.id],
+    queryKey: pageOptions ? ["transactions", user?.id, "page", pageOptions] : ["transactions", user?.id],
     enabled: !!token && !!user,
     queryFn: async () => {
       if (!token) {
         return [] as Transaction[];
       }
 
+      if (pageOptions) {
+        const response = await requestGraphQL<{ transactionsPage: TransactionsPageResult }>(
+          `query TransactionsPage($page: Int!, $pageSize: Int!, $search: String, $type: String, $categoryId: ID, $month: String) {
+            transactionsPage(page: $page, pageSize: $pageSize, search: $search, type: $type, categoryId: $categoryId, month: $month) {
+              total
+              page
+              items { id title amount type date description categoryId category { id title color icon } }
+            }
+          }`,
+          { ...pageOptions },
+          token,
+        );
+        return response.transactionsPage;
+      }
+
       const response = await requestGraphQL<{ transactions: Transaction[] }>(
-        `query Transactions { transactions { id title amount type date description categoryId category { id title } } }`,
+        `query Transactions { transactions { id title amount type date description categoryId category { id title color icon } } }`,
         {},
         token,
       );
@@ -33,7 +59,7 @@ export function useTransactions() {
   const createMutation = useMutation({
     mutationFn: async (values: TransactionFormInput) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Sessão expirada. Faça login novamente.");
       }
 
       return requestGraphQL(
@@ -58,7 +84,7 @@ export function useTransactions() {
       values: TransactionFormInput;
     }) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Sessão expirada. Faça login novamente.");
       }
 
       return requestGraphQL(
@@ -77,7 +103,7 @@ export function useTransactions() {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Sessão expirada. Faça login novamente.");
       }
 
       return requestGraphQL(
@@ -90,7 +116,9 @@ export function useTransactions() {
   });
 
   return {
-    transactions: transactionsQuery.data ?? [],
+    transactions: Array.isArray(transactionsQuery.data) ? transactionsQuery.data : transactionsQuery.data?.items ?? [],
+    total: Array.isArray(transactionsQuery.data) ? transactionsQuery.data.length : transactionsQuery.data?.total ?? 0,
+    currentPage: Array.isArray(transactionsQuery.data) ? 1 : transactionsQuery.data?.page ?? pageOptions?.page ?? 1,
     isLoading: transactionsQuery.isLoading,
     error: transactionsQuery.error,
     createTransaction: createMutation.mutateAsync,

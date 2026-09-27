@@ -34,7 +34,7 @@ export function useCategories() {
   const createMutation = useMutation({
     mutationFn: async (values: CategoryFormInput) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Sessão expirada. Faça login novamente.");
       }
 
       return requestGraphQL(
@@ -59,7 +59,7 @@ export function useCategories() {
       values: CategoryFormInput;
     }) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Sessão expirada. Faça login novamente.");
       }
 
       return requestGraphQL(
@@ -78,7 +78,7 @@ export function useCategories() {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Sessão expirada. Faça login novamente.");
       }
 
       return requestGraphQL(

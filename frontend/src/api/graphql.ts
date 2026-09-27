@@ -18,7 +18,7 @@ export async function requestGraphQL<T>(
   const payload = await response.json();
 
   if (!response.ok || payload.errors) {
-    throw new Error(payload.errors?.[0]?.message ?? "Request failed");
+    throw new Error(payload.errors?.[0]?.message ?? "Não foi possível concluir a solicitação.");
   }
 
   return payload.data as T;

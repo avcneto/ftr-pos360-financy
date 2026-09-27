@@ -37,9 +37,9 @@ describe("DashboardPage", () => {
   });
 
   it("renders summary cards and recent data", () => {
-    const { getByRole, getByText } = render(<MemoryRouter><DashboardPage /></MemoryRouter>);
+    const { getByText } = render(<MemoryRouter><DashboardPage /></MemoryRouter>);
 
-    expect(getByRole("heading", { name: "Dashboard" })).not.toBeNull();
+    expect(getByText("Saldo total")).not.toBeNull();
     expect(getByText("Receitas do mês")).not.toBeNull();
     expect(getByText(/Food/)).not.toBeNull();
   });

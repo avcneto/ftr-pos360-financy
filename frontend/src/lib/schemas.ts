@@ -12,17 +12,17 @@ export const signUpSchema = z.object({
 });
 
 export const categorySchema = z.object({
-  title: z.string().min(2, "Title is required"),
+  title: z.string().min(2, "Informe um título com pelo menos 2 caracteres."),
   description: z.string().optional(),
-  color: z.string().default("#1f6f43"),
+  color: z.string().default("#16a34a"),
   icon: z.string().default("✦"),
 });
 
 export const transactionSchema = z.object({
-  title: z.string().min(2, "Title is required"),
-  amount: z.coerce.number().positive("Amount must be greater than zero"),
+  title: z.string().min(2, "Informe uma descrição com pelo menos 2 caracteres."),
+  amount: z.coerce.number().positive("O valor deve ser maior que zero."),
   type: z.enum(["EXPENSE", "INCOME"]),
-  date: z.string().min(1, "Date is required"),
+  date: z.string().min(1, "Informe a data."),
   description: z.string().optional(),
   categoryId: z.string().nullable().optional(),
 });

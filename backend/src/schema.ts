@@ -36,6 +36,12 @@ export const typeDefs = gql`
     updatedAt: DateTime!
   }
 
+  type TransactionPage {
+    items: [Transaction!]!
+    total: Int!
+    page: Int!
+  }
+
   type AuthPayload {
     token: String!
     user: User!
@@ -45,6 +51,7 @@ export const typeDefs = gql`
     me: User
     categories: [Category!]!
     transactions: [Transaction!]!
+    transactionsPage(page: Int!, pageSize: Int!, search: String, type: String, categoryId: ID, month: String): TransactionPage!
   }
 
   type Mutation {

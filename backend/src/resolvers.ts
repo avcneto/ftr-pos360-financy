@@ -11,6 +11,7 @@ import {
   createTransaction,
   deleteTransaction,
   listTransactionsByUser,
+  listTransactionsPageByUser,
   updateTransaction,
 } from "./services/transaction.service";
 import {
@@ -22,7 +23,7 @@ import {
 
 const ensureAuth = (context: GraphQLContext) => {
   if (!context.user) {
-    throw new Error("Unauthorized");
+    throw new Error("Sessão expirada. Faça login novamente.");
   }
 };
 
@@ -50,6 +51,15 @@ export const resolvers = {
       ensureAuth(context);
       return listTransactionsByUser(context.user!.id);
     },
+
+    transactionsPage: async (
+      _root: unknown,
+      args: { page: number; pageSize: number; search?: string; type?: string; categoryId?: string; month?: string },
+      context: GraphQLContext,
+    ) => {
+      ensureAuth(context);
+      return listTransactionsPageByUser(context.user!.id, args);
+    },
   },
 
   Mutation: {
@@ -61,8 +71,8 @@ export const resolvers = {
       _root: unknown,
       args: { name: string; email: string; password: string },
     ) => {
-      if (args.name.trim().length < 2) throw new Error("Name must contain at least 2 characters");
-      if (args.password.length < 8) throw new Error("Password must contain at least 8 characters");
+      if (args.name.trim().length < 2) throw new Error("O nome deve ter pelo menos 2 caracteres.");
+      if (args.password.length < 8) throw new Error("A senha deve ter pelo menos 8 caracteres.");
       const existingUser = await findUserByEmail(args.email);
 
       if (existingUser) {

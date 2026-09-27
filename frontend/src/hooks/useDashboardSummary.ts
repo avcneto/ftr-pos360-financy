@@ -35,7 +35,7 @@ export function useDashboardSummary() {
       }
 
       const response = await requestGraphQL<{ transactions: Transaction[] }>(
-        `query Transactions { transactions { id title amount type date description categoryId category { id title } } }`,
+        `query Transactions { transactions { id title amount type date description categoryId category { id title color icon } } }`,
         {},
         token,
       );

@@ -58,7 +58,7 @@ describe("CategoriesPage", () => {
 
     fireEvent.click(getByRole("button", { name: "Nova categoria" }));
     fireEvent.change(getByLabelText("Título"), { target: { value: "Travel" } });
-    fireEvent.change(getByLabelText("Descrição (opcional)"), {
+    fireEvent.change(getByLabelText("Descrição"), {
       target: { value: "Trips" },
     });
     fireEvent.click(getByRole("button", { name: "Salvar" }));

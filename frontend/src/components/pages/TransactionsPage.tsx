@@ -5,7 +5,6 @@ import type { Transaction } from "../../types";
 import { PageHeader } from "../ui/PageHeader";
 import { TransactionForm } from "../forms/TransactionForm";
 import { TransactionHistoryList } from "../transactions/TransactionHistoryList";
-import { TransactionMetrics } from "../transactions/TransactionMetrics";
 import { Button } from "../ui/Button";
 import { Dialog } from "../ui/Dialog";
 import { Surface } from "../ui/Surface";
@@ -21,34 +20,26 @@ export function TransactionsPage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
   const [page, setPage] = useState(1);
+  const pageSize = 10;
   const { categories } = useCategories();
   const {
     transactions,
+    total,
+    currentPage,
     isLoading,
     error,
     createTransaction,
     updateTransaction,
     deleteTransaction,
     deletePending,
-  } = useTransactions();
-
-  const totalIncome = transactions
-    .filter((transaction) => transaction.type === "INCOME")
-    .reduce((total, transaction) => total + Number(transaction.amount), 0);
-
-  const totalExpense = transactions
-    .filter((transaction) => transaction.type === "EXPENSE")
-    .reduce((total, transaction) => total + Number(transaction.amount), 0);
-  const filteredTransactions = transactions.filter((transaction) =>
-    transaction.title.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR")) &&
-    (!typeFilter || transaction.type === typeFilter) &&
-    (!categoryFilter || transaction.categoryId === categoryFilter) &&
-    (!monthFilter || transaction.date.slice(0, 7) === monthFilter)
-  );
-  const pageSize = 8;
-  const pageCount = Math.max(1, Math.ceil(filteredTransactions.length / pageSize));
-  const currentPage = Math.min(page, pageCount);
-  const pageTransactions = filteredTransactions.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  } = useTransactions({
+    page,
+    pageSize,
+    search: search || undefined,
+    type: typeFilter || undefined,
+    categoryId: categoryFilter || undefined,
+    month: monthFilter || undefined,
+  });
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
@@ -73,7 +64,6 @@ export function TransactionsPage() {
         </Button>
       </div>
 
-      <TransactionMetrics income={totalIncome} expense={totalExpense} total={transactions.length} />
       <Surface className="p-6"><div className="grid grid-cols-4 gap-4 max-[900px]:grid-cols-2 max-[500px]:grid-cols-1">
         <label className="flex flex-col gap-2 text-sm font-medium text-[#374151]">Buscar<input className={INPUT_BASE} placeholder="Buscar descrição" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} /></label>
         <label className="flex flex-col gap-2 text-sm font-medium text-[#374151]">Tipo<select className={INPUT_BASE} value={typeFilter} onChange={(event) => { setTypeFilter(event.target.value); setPage(1); }}><option value="">Todos</option><option value="INCOME">Receitas</option><option value="EXPENSE">Despesas</option></select></label>
@@ -86,14 +76,14 @@ export function TransactionsPage() {
       {actionError && <p role="alert" className="text-[#b91c1c]">{actionError}</p>}
       <div>
         <TransactionHistoryList
-          transactions={pageTransactions}
+          transactions={transactions}
           isLoading={isLoading}
           onEdit={handleEdit}
           onDelete={(id) => void handleDelete(id)}
           deleteDisabled={deletePending}
+          pagination={{ page: currentPage, pageSize, total, onPageChange: setPage }}
         />
       </div>
-      {filteredTransactions.length > pageSize && <nav aria-label="Paginação de transações" className="flex items-center justify-center gap-2"><button type="button" className="rounded-lg border border-[#d1d5db] px-3 py-1" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>‹</button>{Array.from({ length: pageCount }, (_, index) => <button key={index} type="button" aria-current={currentPage === index + 1 ? "page" : undefined} className={`h-8 w-8 rounded-lg border ${currentPage === index + 1 ? "border-[#1f6f43] bg-[#1f6f43] text-white" : "border-[#d1d5db] bg-white"}`} onClick={() => setPage(index + 1)}>{index + 1}</button>)}<button type="button" className="rounded-lg border border-[#d1d5db] px-3 py-1" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>›</button></nav>}
       {formOpen && (
         <Dialog title={editingTransaction ? "Editar transação" : "Nova transação"} onClose={() => setFormOpen(false)}>
           <TransactionForm

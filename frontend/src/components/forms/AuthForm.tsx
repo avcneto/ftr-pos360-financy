@@ -107,12 +107,20 @@ export function AuthForm({
       >
         {!isLogin && (
           <FormField label="Nome completo" error={form.formState.errors.name?.message}>
-            <input
-              type="text"
-              placeholder="Seu nome completo"
-              className={INPUT_BASE}
-              {...form.register("name")}
-            />
+            <div className="relative">
+              <img
+                src="/Icon/user-round.svg"
+                alt=""
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-60"
+              />
+              <input
+                type="text"
+                placeholder="Seu nome completo"
+                className={`${INPUT_BASE} pl-10`}
+                {...form.register("name")}
+              />
+            </div>
           </FormField>
         )}
 
@@ -202,13 +210,11 @@ export function AuthForm({
               : "Cadastrar"}
         </Button>
 
-        {isLogin ? (
-          <div className="flex items-center gap-3 py-1">
-            <span className="h-px flex-1 bg-[#e5e7eb]" />
-            <span className="text-[14px] text-[#9ca3af]">ou</span>
-            <span className="h-px flex-1 bg-[#e5e7eb]" />
-          </div>
-        ) : null}
+        <div className="flex items-center gap-3 py-1">
+          <span className="h-px flex-1 bg-[#e5e7eb]" />
+          <span className="text-[14px] text-[#9ca3af]">ou</span>
+          <span className="h-px flex-1 bg-[#e5e7eb]" />
+        </div>
 
         {isLogin ? (
           <div className="flex flex-col items-center gap-4 pt-1">
@@ -231,14 +237,23 @@ export function AuthForm({
             </Button>
           </div>
         ) : (
-          <Button
-            type="button"
-            variant="ghost"
-            className="mt-1 h-12 w-full text-[15px] font-medium text-[#111827]"
-            onClick={onToggleMode}
-          >
-            Já tem uma conta? Fazer login
-          </Button>
+          <div className="flex flex-col items-center gap-4 pt-1">
+            <p className="text-[15px] text-[#6b7280]">Já tem uma conta?</p>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-12 w-full gap-2 border-[#cbd5e1] text-[15px] font-medium text-[#111827]"
+              onClick={onToggleMode}
+            >
+              <img
+                src="/Icon/log-in.svg"
+                alt=""
+                aria-hidden="true"
+                className="h-4 w-4"
+              />
+              Fazer login
+            </Button>
+          </div>
         )}
       </form>
     </Surface>

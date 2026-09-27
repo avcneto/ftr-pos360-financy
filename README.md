@@ -28,7 +28,7 @@ O repositório mantém as duas aplicações nas pastas `backend/` e `frontend/`,
 - Dados privados vinculados ao usuário autenticado: cada pessoa lista e gerencia somente as próprias categorias e transações. Uma transação só pode usar uma categoria da mesma pessoa.
 - Criação, edição, exclusão e listagem de categorias e transações. Categorias incluem título, descrição opcional, cor e ícone; transações incluem descrição, valor, tipo (receita ou despesa), data e categoria opcional.
 - Dashboard com saldo de todas as transações, receitas e despesas do mês atual, transações recentes e resumo de categorias.
-- Lista de transações com busca por descrição, filtros de tipo, categoria e mês, além de paginação no frontend.
+- Lista de transações com busca por descrição, filtros de tipo, categoria e mês, além de paginação no backend com 10 registros por página.
 - Perfil com edição do nome e saída da conta. O e-mail não pode ser alterado. O fluxo de recuperação de senha ainda não foi implementado.
 
 As relações do banco são `User → Category` e `User → Transaction`. A categoria de uma transação é opcional; ao excluir uma categoria, as transações permanecem cadastradas e ficam sem categoria. As regras de acesso são verificadas na API, não apenas na interface.
@@ -107,12 +107,14 @@ O schema está em `backend/src/schema.ts`. As operações principais são:
 
 | Tipo | Operações |
 | --- | --- |
-| Consultas | `me`, `categories`, `transactions` |
+| Consultas | `me`, `categories`, `transactions`, `transactionsPage` |
 | Autenticação e perfil | `signUp`, `signIn`, `updateProfile` |
 | Categorias | `createCategory`, `updateCategory`, `deleteCategory` |
 | Transações | `createTransaction`, `updateTransaction`, `deleteTransaction` |
 
 `signUp` e `signIn` são públicas. As demais operações exigem um JWT válido. O contexto GraphQL recupera o usuário a partir do token; os serviços filtram consultas por `userId` e verificam a posse antes de editar ou excluir dados. O servidor aceita a origem configurada em `CORS_ORIGIN`.
+
+`transactionsPage` recebe `page` e `pageSize` (de 1 a 100) e aceita `search`, `type`, `categoryId` e `month` (`AAAA-MM`). Retorna `items`, `total` e a página efetivamente usada; a tela usa esses dados para mostrar o intervalo de resultados e navegar entre páginas. A consulta `transactions` continua disponível para obter a lista completa, usada nos resumos.
 
 ## Organização do código
 

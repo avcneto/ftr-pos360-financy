@@ -73,6 +73,6 @@ describe("user.service", () => {
     prismaMock.user.update.mockResolvedValueOnce({ id: "user-1", name: "Ada Byron" });
     await expect(updateUserName("user-1", "  Ada Byron  ")).resolves.toEqual({ id: "user-1", name: "Ada Byron" });
     expect(prismaMock.user.update).toHaveBeenCalledWith({ where: { id: "user-1" }, data: { name: "Ada Byron" } });
-    await expect(updateUserName("user-1", "A")).rejects.toThrow("Name must contain at least 2 characters");
+    await expect(updateUserName("user-1", "A")).rejects.toThrow("O nome deve ter pelo menos 2 caracteres.");
   });
 });

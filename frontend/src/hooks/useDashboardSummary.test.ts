@@ -130,6 +130,7 @@ describe("useDashboardSummary", () => {
         category: { title: "Food" },
       },
     ]);
+    expect(requestGraphQLMock.mock.calls[1][0]).toContain("category { id title color icon }");
 
     expect(useQueryMock).toHaveBeenCalledTimes(2);
     expect(summary.categories).toHaveLength(1);

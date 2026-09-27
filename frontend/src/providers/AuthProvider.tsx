@@ -133,7 +133,7 @@ export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error("Auth context not found");
+    throw new Error("Contexto de autenticação não encontrado.");
   }
 
   return context;

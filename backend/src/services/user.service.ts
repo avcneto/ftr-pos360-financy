@@ -29,6 +29,6 @@ export async function getUserById(userId: string) {
 
 export async function updateUserName(userId: string, name: string) {
   const trimmedName = name.trim();
-  if (trimmedName.length < 2) throw new Error("Name must contain at least 2 characters");
+  if (trimmedName.length < 2) throw new Error("O nome deve ter pelo menos 2 caracteres.");
   return prisma.user.update({ where: { id: userId }, data: { name: trimmedName } });
 }

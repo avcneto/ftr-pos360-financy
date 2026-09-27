@@ -38,7 +38,7 @@ describe("AuthForm", () => {
     const onSignUp = vi.fn().mockResolvedValue(undefined);
     const onToggleMode = vi.fn();
 
-    const { getByLabelText, getByRole } = render(
+    const { getByLabelText, getByRole, getByText } = render(
       <AuthForm
         isLogin={false}
         onSignIn={vi.fn()}
@@ -68,9 +68,9 @@ describe("AuthForm", () => {
       );
     });
 
-    fireEvent.click(
-      getByRole("button", { name: "Já tem uma conta? Fazer login" }),
-    );
+    expect(getByText("ou")).not.toBeNull();
+    expect(getByText("Já tem uma conta?")).not.toBeNull();
+    fireEvent.click(getByRole("button", { name: "Fazer login" }));
 
     expect(onToggleMode).toHaveBeenCalledTimes(1);
   });

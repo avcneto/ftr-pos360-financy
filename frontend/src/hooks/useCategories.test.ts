@@ -48,7 +48,7 @@ describe("useCategories", () => {
         color: "#1f6f43",
         icon: "🍔",
       }),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
     await expect(
       useMutationMock.mock.calls[1][0].mutationFn({
         id: "cat-1",
@@ -59,10 +59,10 @@ describe("useCategories", () => {
           icon: "🍔",
         },
       }),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
     await expect(
       useMutationMock.mock.calls[2][0].mutationFn("cat-1"),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
 
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 

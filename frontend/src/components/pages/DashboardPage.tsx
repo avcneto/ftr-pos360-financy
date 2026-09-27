@@ -1,6 +1,5 @@
 import { formatCurrency } from "../../utils/formatters";
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
-import { PageHeader } from "../ui/PageHeader";
 import { DashboardOverviewPanels } from "../dashboard/DashboardOverviewPanels";
 import { DashboardStatCard } from "../dashboard/DashboardStatCard";
 import { useState } from "react";
@@ -23,14 +22,6 @@ export function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between max-[980px]:flex-col max-[980px]:items-start max-[980px]:gap-3">
-        <PageHeader
-          eyebrow="Visão geral"
-          title="Dashboard"
-          description="Acompanhe suas finanças de forma simples e organizada."
-        />
-      </div>
-
       {error ? (
         <p role="alert" className="text-[#b91c1c]">Não foi possível carregar o resumo financeiro.</p>
       ) : isLoading ? (
@@ -51,8 +42,8 @@ export function DashboardPage() {
             categories={categories}
             recentTransactions={recentTransactions}
             transactions={transactions}
+            onNewTransaction={() => setFormOpen(true)}
           />
-          <button type="button" onClick={() => setFormOpen(true)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1f6f43] px-4 py-3 text-sm font-medium text-[#1f6f43] hover:bg-[#e0fae9]"><img src="/Icon/plus.svg" alt="" className="h-4 w-4" />Nova transação</button>
         </>
       )}
       {formOpen && <Dialog title="Nova transação" onClose={() => setFormOpen(false)}><TransactionForm categories={categories} editingTransaction={null} onSave={async (values) => { await createTransaction(values); setFormOpen(false); }} /></Dialog>}

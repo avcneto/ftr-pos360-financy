@@ -7,6 +7,7 @@ const { prismaMock } = vi.hoisted(() => ({
     },
     transaction: {
       findMany: vi.fn(),
+      count: vi.fn(),
       create: vi.fn(),
       findUnique: vi.fn(),
       update: vi.fn(),
@@ -23,6 +24,7 @@ import {
   createTransaction,
   deleteTransaction,
   listTransactionsByUser,
+  listTransactionsPageByUser,
   updateTransaction,
 } from "../src/services/transaction.service";
 
@@ -43,6 +45,52 @@ describe("transaction.service", () => {
     });
   });
 
+  it("paginates and filters only the authenticated user's transactions", async () => {
+    prismaMock.transaction.count.mockResolvedValueOnce(27);
+    prismaMock.transaction.findMany.mockResolvedValueOnce([{ id: "tx-11" }]);
+
+    await expect(listTransactionsPageByUser("user-1", {
+      page: 2,
+      pageSize: 10,
+      search: "Almoço",
+      type: "EXPENSE",
+      categoryId: "cat-1",
+      month: "2025-11",
+    })).resolves.toEqual({ items: [{ id: "tx-11" }], total: 27, page: 2 });
+
+    const where = {
+      userId: "user-1",
+      title: { contains: "Almoço" },
+      type: "EXPENSE",
+      categoryId: "cat-1",
+      date: { gte: new Date("2025-11-01T00:00:00.000Z"), lt: new Date("2025-12-01T00:00:00.000Z") },
+    };
+    expect(prismaMock.transaction.count).toHaveBeenCalledWith({ where });
+    expect(prismaMock.transaction.findMany).toHaveBeenCalledWith({
+      where,
+      orderBy: [{ date: "desc" }, { id: "desc" }],
+      skip: 10,
+      take: 10,
+      include: { category: true },
+    });
+  });
+
+  it("returns the last valid page after records are removed", async () => {
+    prismaMock.transaction.count.mockResolvedValueOnce(20);
+    prismaMock.transaction.findMany.mockResolvedValueOnce([{ id: "tx-20" }]);
+
+    await expect(listTransactionsPageByUser("user-1", { page: 3, pageSize: 10 }))
+      .resolves.toEqual({ items: [{ id: "tx-20" }], total: 20, page: 2 });
+    expect(prismaMock.transaction.findMany).toHaveBeenCalledWith(expect.objectContaining({ skip: 10, take: 10 }));
+  });
+
+  it("rejects invalid pagination parameters", async () => {
+    await expect(listTransactionsPageByUser("user-1", { page: 0, pageSize: 10 })).rejects.toThrow("Página inválida.");
+    await expect(listTransactionsPageByUser("user-1", { page: 1, pageSize: 101 })).rejects.toThrow("Tamanho da página inválido.");
+    await expect(listTransactionsPageByUser("user-1", { page: 1, pageSize: 10, month: "2025-13" })).rejects.toThrow("Período inválido.");
+    expect(prismaMock.transaction.findMany).not.toHaveBeenCalled();
+  });
+
   it("rejects create when informed category belongs to another user", async () => {
     prismaMock.category.findUnique.mockResolvedValueOnce({
       id: "cat-1",
@@ -58,7 +106,7 @@ describe("transaction.service", () => {
         categoryId: "cat-1",
         userId: "user-1",
       }),
-    ).rejects.toThrow("Category not found");
+    ).rejects.toThrow("Categoria não encontrada.");
   });
 
   it("creates transaction without category", async () => {
@@ -92,7 +140,7 @@ describe("transaction.service", () => {
 
     await expect(
       updateTransaction("tx-1", { title: "Updated" }, "user-1"),
-    ).rejects.toThrow("Transaction not found");
+    ).rejects.toThrow("Transação não encontrada.");
   });
 
   it("rejects update when transaction belongs to another user", async () => {
@@ -103,7 +151,7 @@ describe("transaction.service", () => {
 
     await expect(
       updateTransaction("tx-1", { title: "Updated" }, "user-1"),
-    ).rejects.toThrow("Transaction not found");
+    ).rejects.toThrow("Transação não encontrada.");
   });
 
   it("rejects update when category is not owned by user", async () => {
@@ -118,7 +166,7 @@ describe("transaction.service", () => {
 
     await expect(
       updateTransaction("tx-1", { categoryId: "cat-2" }, "user-1"),
-    ).rejects.toThrow("Category not found");
+    ).rejects.toThrow("Categoria não encontrada.");
   });
 
   it("updates transaction and allows clearing category", async () => {
@@ -148,7 +196,7 @@ describe("transaction.service", () => {
     });
 
     await expect(deleteTransaction("tx-1", "user-1")).rejects.toThrow(
-      "Transaction not found",
+      "Transação não encontrada.",
     );
   });
 

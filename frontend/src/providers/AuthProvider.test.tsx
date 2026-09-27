@@ -38,7 +38,7 @@ describe("AuthProvider", () => {
   });
 
   it("throws when the hook is used outside the provider", () => {
-    expect(() => render(<AuthConsumer />)).toThrow("Auth context not found");
+    expect(() => render(<AuthConsumer />)).toThrow("Contexto de autenticação não encontrado.");
   });
 
   it("loads the stored user and clears invalid sessions", async () => {

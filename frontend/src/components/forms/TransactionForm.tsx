@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { transactionSchema } from "../../lib/schemas";
 import type { Category, Transaction } from "../../types";
 import type { TransactionFormInput } from "../../types/forms";
@@ -8,7 +8,7 @@ import { FormField } from "../ui/FormField";
 import { Surface } from "../ui/Surface";
 import { TransactionTypeToggle } from "../transactions/TransactionTypeToggle";
 import { INPUT_BASE } from "./formStyles";
-import { todayForDateInput } from "../../utils/formatters";
+import { formatCurrencyInput, parseCurrencyInput, todayForDateInput } from "../../utils/formatters";
 
 type TransactionFormProps = {
   categories: Category[];
@@ -16,12 +16,33 @@ type TransactionFormProps = {
   onSave: (values: TransactionFormInput) => Promise<void>;
 };
 
+function caretAfterDigits(value: string, digits: number, end: number) {
+  if (digits === 0) return 0;
+  let seen = 0;
+  for (let index = 0; index < end; index += 1) {
+    if (/\d/.test(value[index])) seen += 1;
+    if (seen === digits) return index + 1;
+  }
+  return end;
+}
+
 export function TransactionForm({
   categories,
   editingTransaction,
   onSave,
 }: TransactionFormProps) {
   const [submitError, setSubmitError] = useState("");
+  const [amountText, setAmountText] = useState(() => editingTransaction
+    ? formatCurrencyInput(Number(editingTransaction.amount))
+    : "");
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
+  const amountCaretRef = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    if (amountCaretRef.current === null || !amountInputRef.current) return;
+    amountInputRef.current.setSelectionRange(amountCaretRef.current, amountCaretRef.current);
+    amountCaretRef.current = null;
+  }, [amountText]);
 
   const form = useForm<TransactionFormInput>({
     defaultValues: {
@@ -36,6 +57,7 @@ export function TransactionForm({
 
   useEffect(() => {
     if (!editingTransaction) {
+      setAmountText("");
       form.reset({
         title: "",
         amount: 0,
@@ -47,6 +69,7 @@ export function TransactionForm({
       return;
     }
 
+    setAmountText(formatCurrencyInput(Number(editingTransaction.amount)));
     form.reset({
       title: editingTransaction.title,
       amount: Number(editingTransaction.amount),
@@ -93,9 +116,10 @@ export function TransactionForm({
         description: "",
         categoryId: "",
       });
+      setAmountText("");
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "Could not save transaction",
+        error instanceof Error ? error.message : "Não foi possível salvar a transação.",
       );
     }
   };
@@ -137,11 +161,64 @@ export function TransactionForm({
             label="Valor"
             error={form.formState.errors.amount?.message}
           >
-            <input
-              type="number"
-              step="0.01"
-              className={INPUT_BASE}
-              {...form.register("amount", { valueAsNumber: true })}
+            <Controller
+              name="amount"
+              control={form.control}
+              render={({ field }) => (
+                <div className="relative">
+                  <span aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#6b7280]">R$</span>
+                  <input
+                    ref={(node) => {
+                      field.ref(node);
+                      amountInputRef.current = node;
+                    }}
+                    name={field.name}
+                    type="text"
+                    aria-label="Valor"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    placeholder="0,00"
+                    className={`${INPUT_BASE} pl-10`}
+                    value={amountText}
+                    onChange={(event) => {
+                      const raw = event.target.value;
+                      if (!raw.trim()) {
+                        amountCaretRef.current = null;
+                        setAmountText("");
+                        field.onChange(0);
+                        return;
+                      }
+
+                      const rawCaret = event.target.selectionStart ?? raw.length;
+                      const rawComma = raw.lastIndexOf(",");
+                      const editingCents = rawComma >= 0 && rawCaret > rawComma;
+                      const digitsBeforeCaret = (editingCents
+                        ? raw.slice(rawComma + 1, rawCaret)
+                        : raw.slice(0, rawCaret)).replace(/\D/g, "").length;
+                      const amount = parseCurrencyInput(raw);
+                      const formatted = formatCurrencyInput(amount);
+                      const formattedComma = formatted.lastIndexOf(",");
+                      amountCaretRef.current = editingCents
+                        ? formattedComma + 1 + Math.min(digitsBeforeCaret, 2)
+                        : caretAfterDigits(formatted, digitsBeforeCaret, formattedComma);
+                      setAmountText(formatted);
+                      field.onChange(amount);
+                    }}
+                    onFocus={(event) => event.currentTarget.select()}
+                    onKeyDown={(event) => {
+                      if (event.key !== "," && event.key !== ".") return;
+                      event.preventDefault();
+                      const comma = event.currentTarget.value.lastIndexOf(",");
+                      if (comma >= 0) event.currentTarget.setSelectionRange(comma + 1, event.currentTarget.value.length);
+                    }}
+                    onBlur={() => {
+                      field.onBlur();
+                      amountCaretRef.current = null;
+                      setAmountText(amountText.trim() ? formatCurrencyInput(parseCurrencyInput(amountText)) : "");
+                    }}
+                  />
+                </div>
+              )}
             />
           </FormField>
         </div>

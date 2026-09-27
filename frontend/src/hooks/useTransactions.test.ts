@@ -50,7 +50,7 @@ describe("useTransactions", () => {
         description: "Monthly",
         categoryId: null,
       }),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
     await expect(
       useMutationMock.mock.calls[1][0].mutationFn({
         id: "tx-1",
@@ -63,10 +63,10 @@ describe("useTransactions", () => {
           categoryId: null,
         },
       }),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
     await expect(
       useMutationMock.mock.calls[2][0].mutationFn("tx-1"),
-    ).rejects.toThrow("Unauthorized");
+    ).rejects.toThrow("Sessão expirada. Faça login novamente.");
 
     await useMutationMock.mock.calls[0][0].onSuccess?.();
 
@@ -91,6 +91,7 @@ describe("useTransactions", () => {
     await expect(useQueryMock.mock.calls[0][0].queryFn()).resolves.toEqual([
       { id: "tx-1" },
     ]);
+    expect(requestGraphQLMock.mock.calls[0][0]).toContain("category { id title color icon }");
     await expect(
       useMutationMock.mock.calls[0][0].mutationFn({
         title: "Salary",
@@ -136,5 +137,21 @@ describe("useTransactions", () => {
       }),
       "token-1",
     );
+  });
+
+  it("requests a filtered page from GraphQL and exposes its total", async () => {
+    useAuthMock.mockReturnValue({ token: "token-1", user: { id: "user-1" } });
+    useQueryMock.mockReturnValue({ data: { items: [{ id: "tx-11" }], total: 27, page: 2 }, isLoading: false });
+    useMutationMock.mockImplementation((options: any) => ({ mutateAsync: options.mutationFn, error: null, isPending: false }));
+    requestGraphQLMock.mockResolvedValueOnce({ transactionsPage: { items: [{ id: "tx-11" }], total: 27, page: 2 } });
+
+    const options = { page: 2, pageSize: 10, search: "Almoço", type: "EXPENSE", categoryId: "cat-1", month: "2025-11" };
+    const result = useTransactions(options);
+    await expect(useQueryMock.mock.calls[0][0].queryFn()).resolves.toEqual({ items: [{ id: "tx-11" }], total: 27, page: 2 });
+
+    expect(result.transactions).toEqual([{ id: "tx-11" }]);
+    expect(result.total).toBe(27);
+    expect(result.currentPage).toBe(2);
+    expect(requestGraphQLMock).toHaveBeenCalledWith(expect.stringContaining("transactionsPage("), options, "token-1");
   });
 });

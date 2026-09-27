@@ -4,9 +4,10 @@ type DialogProps = {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  wide?: boolean;
 };
 
-export function Dialog({ title, onClose, children }: DialogProps) {
+export function Dialog({ title, onClose, children, wide = false }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export function Dialog({ title, onClose, children }: DialogProps) {
       onClick={(event) => {
         if (event.target === dialogRef.current) onClose();
       }}
-      className="w-[min(100%-2rem,448px)] max-h-[calc(100vh-2rem)] overflow-y-auto rounded-xl border-0 bg-transparent p-0 shadow-2xl backdrop:bg-[#111827]/55"
+      className={`${wide ? "w-[min(100%-2rem,492px)]" : "w-[min(100%-2rem,448px)]"} max-h-[calc(100vh-2rem)] overflow-y-auto rounded-xl border-0 bg-transparent p-0 shadow-2xl backdrop:bg-[#111827]/55`}
     >
       <div className="relative">
         <button

@@ -60,7 +60,7 @@ describe("category.service", () => {
 
     await expect(
       updateCategory("cat-1", { title: "Updated" }, "user-1"),
-    ).rejects.toThrow("Category not found");
+    ).rejects.toThrow("Categoria não encontrada.");
   });
 
   it("rejects update when category belongs to another user", async () => {
@@ -71,7 +71,7 @@ describe("category.service", () => {
 
     await expect(
       updateCategory("cat-1", { title: "Updated" }, "user-1"),
-    ).rejects.toThrow("Category not found");
+    ).rejects.toThrow("Categoria não encontrada.");
   });
 
   it("updates category when ownership is valid", async () => {
@@ -99,7 +99,7 @@ describe("category.service", () => {
     });
 
     await expect(deleteCategory("cat-1", "user-1")).rejects.toThrow(
-      "Category not found",
+      "Categoria não encontrada.",
     );
   });
 

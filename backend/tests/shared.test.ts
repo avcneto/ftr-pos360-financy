@@ -43,7 +43,7 @@ describe("shared service guards", () => {
     prismaMock.category.findUnique.mockResolvedValueOnce(null);
 
     await expect(assertCategoryOwnedByUser("cat-1", "user-1")).rejects.toThrow(
-      "Category not found",
+      "Categoria não encontrada.",
     );
   });
 
@@ -66,6 +66,6 @@ describe("shared service guards", () => {
 
     await expect(
       assertTransactionOwnedByUser("tx-1", "user-1"),
-    ).rejects.toThrow("Transaction not found");
+    ).rejects.toThrow("Transação não encontrada.");
   });
 });

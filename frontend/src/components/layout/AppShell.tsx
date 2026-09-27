@@ -2,10 +2,10 @@ import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../providers/AuthProvider";
 
-const NAV_LINK_BASE = "text-sm text-[#4b5563] transition hover:text-[#1f6f43]";
+const NAV_LINK_BASE = "text-sm transition";
 
 function getLinkClassName(isActive: boolean) {
-  return `${NAV_LINK_BASE} ${isActive ? "font-semibold text-[#1f6f43]" : ""}`;
+  return `${NAV_LINK_BASE} ${isActive ? "font-semibold text-[#1f6f43]" : "text-[#4b5563] hover:text-[#1f6f43]"}`;
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -20,7 +20,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
           <nav
             className="absolute left-1/2 flex -translate-x-1/2 items-center gap-5 max-[700px]:static max-[700px]:order-3 max-[700px]:w-full max-[700px]:translate-x-0 max-[700px]:justify-center"
-            aria-label="Main navigation"
+            aria-label="Navegação principal"
           >
             <NavLink
               to="/"
