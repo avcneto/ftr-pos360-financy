@@ -33,6 +33,7 @@ export function DashboardPage() {
               label="Saldo total"
               value={formatCurrency(balance)}
               tone="neutral"
+              negative={balance < 0}
             />
             <DashboardStatCard label="Receitas do mês" value={formatCurrency(monthlyIncome)} tone="income" />
             <DashboardStatCard label="Despesas do mês" value={formatCurrency(monthlyExpense)} tone="expense" />

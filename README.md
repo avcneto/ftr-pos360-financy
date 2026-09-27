@@ -2,8 +2,6 @@
 
 # Financy — Gestão de finanças pessoais
 
-
-
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)
 ![Node.js 24](https://img.shields.io/badge/Node.js-24-339933)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6)
@@ -24,6 +22,7 @@ O projeto segue o [design Financy no Figma](https://www.figma.com/design/LSzoaX4
 - [Como o projeto funciona](#como-o-projeto-funciona)
 - [Funcionalidades e regras](#funcionalidades-e-regras)
 - [Telas](#telas)
+- [Capturas de tela](#capturas-de-tela)
 - [Pré-requisitos](#pré-requisitos)
 - [Executar localmente](#executar-localmente)
 - [Scripts disponíveis](#scripts-disponíveis)
@@ -96,6 +95,36 @@ O backend exige autenticação para consultas e alterações de dados privados. 
 As rotas de transações, categorias e perfil exigem autenticação. O cadastro e o login retornam um JWT; as demais operações enviam esse token no cabeçalho `Authorization: Bearer ...`. A opção “Lembrar-me” mantém a sessão em `localStorage`; sem ela, o login usa `sessionStorage`.
 
 Login e cadastro são dois estados do mesmo formulário. Há dois diálogos principais: formulário de transação e formulário de categoria, usados tanto para criar quanto para editar.
+
+## Capturas de tela
+
+As imagens abaixo mostram o Financy em execução local com dados de teste. Os valores exibidos representam o momento das capturas e podem mudar conforme as transações cadastradas.
+
+### Acesso à conta
+
+| Login | Criar conta |
+| :---: | :---: |
+| ![Tela de login do Financy](docs/login.png) | ![Tela de criação de conta do Financy](docs/create.png) |
+
+### Dashboard
+
+![Dashboard do Financy com saldo, receitas, despesas e transações recentes](docs/financy-dash.png)
+
+### Transações
+
+| Listagem e filtros | Editar transação |
+| :---: | :---: |
+| ![Lista de transações com filtros e paginação](docs/transactions.png) | ![Modal para editar uma transação](docs/edit-transactions.png) |
+
+### Categorias
+
+| Resumo e categorias cadastradas | Editar categoria |
+| :---: | :---: |
+| ![Resumo e cartões de categorias](docs/categories.png) | ![Modal para editar uma categoria](docs/edit-categories.png) |
+
+### Perfil
+
+![Tela de perfil com dados da conta e formulário para alterar o nome](docs/profile.png)
 
 ## Pré-requisitos
 
@@ -299,6 +328,7 @@ O schema completo está em `backend/src/schema.ts`. A data enviada nos formulár
 │   │   ├── hooks/              # Consultas, mutações e cache
 │   │   └── components/         # Páginas, formulários, listas e UI
 │   └── .env.example           # URL da API para o Vite
+├── docs/                      # Capturas de tela da aplicação em execução
 ├── .nvmrc                     # Versão recomendada do Node.js
 ├── LICENSE                    # Licença MIT
 └── README.md
