@@ -14,8 +14,6 @@ O **Financy** é uma aplicação full stack para organizar finanças pessoais, d
 
 O projeto segue o [design Financy no Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809) e mantém as duas aplicações exigidas pelo desafio em pastas independentes: `backend/` e `frontend/`.
 
-> 🎨 **Design:** [abrir o arquivo Financy no Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809).
-
 ## Conteúdo
 
 - [Tecnologias](#tecnologias)
