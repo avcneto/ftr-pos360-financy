@@ -148,29 +148,23 @@ Os passos a seguir começam na raiz do repositório. Mantenha backend e frontend
 ```bash
 cd backend
 npm ci
-cp .env.example .env
-```
-
-Edite `.env` e substitua `JWT_SECRET` por uma chave própria. O arquivo de exemplo contém todas as variáveis necessárias:
-
-```env
-JWT_SECRET=defina_uma_chave_longa_e_secreta
-DATABASE_URL="file:./dev.db"
-PORT=4000
-CORS_ORIGIN=http://localhost:5173
-```
-
-Na primeira execução, gere o cliente Prisma e crie as tabelas. Depois, inicie a API:
-
-```bash
-npx prisma generate
-npx prisma db push
 npm run dev
 ```
 
-A API fica em [http://localhost:4000/graphql](http://localhost:4000/graphql). O SQLite é um **arquivo**, em `backend/prisma/dev.db`; não existe um servidor de banco para iniciar. `npm run dev` sobe apenas a API e não executa `prisma db push` automaticamente.
+Na primeira execução, o script cria `.env` a partir de `.env.example`, gera um `JWT_SECRET` aleatório e prepara o SQLite. Se `.env` já existir, ele é preservado para não sobrescrever suas configurações.
 
-Em execuções posteriores, com dependências, `.env` e banco já configurados, basta executar `npm run dev` dentro de `backend/`.
+| Variável | Configuração local inicial |
+| --- | --- |
+| `JWT_SECRET` | Gerado automaticamente no primeiro início. |
+| `DATABASE_URL` | `file:./dev.db`, definido em `.env.example`. |
+| `PORT` | `4000`, definido em `.env.example`. |
+| `CORS_ORIGIN` | `http://localhost:5173`, definido em `.env.example`. |
+
+Você pode editar `.env` depois, se precisar de outra porta, origem ou banco. O arquivo não é enviado ao Git. Se já existir um `.env` criado manualmente com o valor de exemplo para `JWT_SECRET`, substitua esse valor por uma chave própria.
+
+A API fica em [http://localhost:4000/graphql](http://localhost:4000/graphql). O SQLite é um **arquivo**, em `backend/prisma/dev.db`; não existe um servidor de banco para iniciar. A cada início, `npm run dev` executa `prisma db push` para criar ou sincronizar as tabelas sem apagar os dados existentes. Se uma alteração do schema exigir perda de dados, o Prisma interrompe a operação para revisão. Após mudar o schema com a API já aberta, reinicie `npm run dev`.
+
+Em execuções posteriores, basta executar `npm run dev` dentro de `backend/`.
 
 ### 2. Frontend
 
@@ -179,11 +173,10 @@ Em outro terminal:
 ```bash
 cd frontend
 npm ci
-cp .env.example .env
 npm run dev
 ```
 
-O valor padrão de `VITE_BACKEND_URL` em `.env.example` é `http://localhost:4000/graphql`. Abra [http://localhost:5173](http://localhost:5173) no navegador. Se alterar a porta do frontend, atualize também `CORS_ORIGIN` no backend.
+O frontend usa `http://localhost:4000/graphql` por padrão e não precisa de `.env` para a execução local. Se a API estiver em outro endereço, crie `frontend/.env` a partir de `.env.example` e ajuste `VITE_BACKEND_URL`. Abra [http://localhost:5173](http://localhost:5173) no navegador. Se alterar a porta do frontend, atualize também `CORS_ORIGIN` no backend.
 
 > **Primeiro acesso:** use **Criar conta** na tela de login. Não há usuário de teste nem senha pré-cadastrados.
 
@@ -201,7 +194,9 @@ Depois abra [http://localhost:5555](http://localhost:5555). Se a página mostrar
 
 | Pasta | Comando | O que faz |
 | --- | --- | --- |
-| `backend/` | `npm run dev` | Inicia a API com reinício automático ao alterar o código. |
+| `backend/` | `npm run dev` | Prepara o SQLite e inicia a API com reinício automático ao alterar o código. |
+| `backend/` | `npm run env:setup` | Cria `.env` com segredo aleatório, somente se ainda não existir. |
+| `backend/` | `npm run db:setup` | Garante o `.env`, sincroniza o schema do Prisma e gera o cliente, sem iniciar a API. |
 | `backend/` | `npm run build` | Compila o TypeScript. |
 | `backend/` | `npm start` | Executa o servidor compilado. Rode `npm run build` antes. |
 | `backend/` | `npm test` / `npm run test:watch` | Executa os testes uma vez / em modo de observação. |
@@ -210,7 +205,7 @@ Depois abra [http://localhost:5555](http://localhost:5555). Se a página mostrar
 | `frontend/` | `npm run lint` | Executa o Oxlint. |
 | `frontend/` | `npm test` / `npm run test:watch` | Executa os testes uma vez / em modo de observação. |
 
-`prisma generate`, `prisma db push` e `prisma studio` são executados com `npx` dentro de `backend/`; eles não são scripts do `package.json`.
+`npm run dev` chama `db:setup` automaticamente. O Prisma Studio continua sendo opcional e é iniciado separadamente com `npx prisma studio` dentro de `backend/`.
 
 ## API GraphQL
 
@@ -316,6 +311,7 @@ O schema completo está em `backend/src/schema.ts`. A data enviada nos formulár
 │   │   ├── resolvers.ts        # Entrada das operações GraphQL
 │   │   └── services/           # Regras de negócio e acesso aos dados
 │   ├── tests/                 # Testes do backend
+│   ├── scripts/ensure-env.mjs # Configuração inicial do .env
 │   └── .env.example           # Variáveis necessárias à API
 ├── frontend/
 │   ├── public/                # Logo e ícones usados nas telas
@@ -397,7 +393,7 @@ Na revisão de manutenção, ficaram estes pontos para uma próxima refatoraçã
 | `EADDRINUSE` na porta 4000 | Execute `lsof -i :4000` para identificar o processo. Encerre a instância anterior ou altere `PORT` e ajuste `VITE_BACKEND_URL`. |
 | Erro de conexão com a API | Confirme que backend e frontend estão rodando, que `VITE_BACKEND_URL` aponta para `/graphql` e que `CORS_ORIGIN` permite a origem do frontend. |
 | Erro de CORS no navegador | Confira a origem exata do Vite, incluindo a porta, em `CORS_ORIGIN`. Reinicie a API após alterar `.env`. |
-| Tabelas ainda não existem | Execute `npx prisma generate` e `npx prisma db push` em `backend/`. `npm run dev` não cria o schema automaticamente. |
+| Tabelas ainda não existem | Confira `DATABASE_URL` e execute `npm run db:setup` em `backend/`. `npm run dev` também executa essa preparação antes de iniciar a API. |
 | Prisma Studio não abre na porta 5555 | Rode `npx prisma studio` em outro terminal; `npm run dev` inicia a API, não o Studio. |
 | Dados sumiram ou aparecem em outro banco | Confira `DATABASE_URL` no `.env` do backend. O SQLite usa o arquivo apontado por essa variável; reiniciar a API não apaga os dados. |
 | Login recusado em instalação nova | Crie uma conta na tela de cadastro. O projeto não inclui seed de usuários e senhas não podem ser consultadas em texto puro. |

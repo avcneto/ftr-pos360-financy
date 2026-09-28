@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "npm run db:setup && tsx watch src/server.ts",
+    "db:setup": "npm run env:setup && prisma db push",
+    "env:setup": "node scripts/ensure-env.mjs",
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "vitest run",
