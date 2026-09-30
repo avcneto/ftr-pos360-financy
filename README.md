@@ -1,4 +1,5 @@
 ![Logo do Financy](./frontend/public/Logo.svg)
+
 # 💸 Financy — Gestão de Finanças Pessoais
 
 **Uma aplicação Full Stack moderna para organização, planejamento e controle de finanças pessoais.**
@@ -49,14 +50,14 @@ O repositório mantém as aplicações `backend` e `frontend` separadas, conform
 [![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![JWT](https://img.shields.io/badge/JWT-9-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-| Tecnologia | Responsabilidade |
-| --- | --- |
-| **Node.js 24 + TypeScript 5.9** | Ambiente de execução e tipagem da API. |
-| **GraphQL Yoga 3** | Servidor HTTP GraphQL, schema, queries e mutations. |
-| **Prisma ORM 5** | Modelagem, acesso tipado e sincronização do banco. |
-| **SQLite** | Persistência em arquivo local, sem serviço externo. |
-| **JSON Web Token + bcryptjs** | Sessões autenticadas e armazenamento seguro das senhas. |
-| **CORS + dotenv** | Controle da origem do frontend e configuração por ambiente. |
+| Tecnologia                      | Responsabilidade                                            |
+| ------------------------------- | ----------------------------------------------------------- |
+| **Node.js 24 + TypeScript 5.9** | Ambiente de execução e tipagem da API.                      |
+| **GraphQL Yoga 3**              | Servidor HTTP GraphQL, schema, queries e mutations.         |
+| **Prisma ORM 5**                | Modelagem, acesso tipado e sincronização do banco.          |
+| **SQLite**                      | Persistência em arquivo local, sem serviço externo.         |
+| **JSON Web Token + bcryptjs**   | Sessões autenticadas e armazenamento seguro das senhas.     |
+| **CORS + dotenv**               | Controle da origem do frontend e configuração por ambiente. |
 
 ### Frontend e interface
 
@@ -69,14 +70,14 @@ O repositório mantém as aplicações `backend` e `frontend` separadas, conform
 [![Zod 4](https://img.shields.io/badge/Zod-4-3E67B1?style=flat-square&logo=zod&logoColor=white)](https://zod.dev/)
 [![Tailwind CSS 3](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-| Tecnologia | Responsabilidade |
-| --- | --- |
-| **React 19 + TypeScript 7** | Componentes, páginas, estado da interface e tipagem. |
-| **Vite 8** | Servidor de desenvolvimento e build de produção. |
-| **React Router 7** | Navegação SPA e proteção das páginas autenticadas. |
-| **TanStack Query 5** | Cache por usuário, consultas, mutações e atualização dos dados. |
-| **React Hook Form 7 + Zod 4** | Controle dos formulários e validação em português. |
-| **Tailwind CSS 3** | Estilos responsivos e reprodução do layout do Figma. |
+| Tecnologia                    | Responsabilidade                                                |
+| ----------------------------- | --------------------------------------------------------------- |
+| **React 19 + TypeScript 7**   | Componentes, páginas, estado da interface e tipagem.            |
+| **Vite 8**                    | Servidor de desenvolvimento e build de produção.                |
+| **React Router 7**            | Navegação SPA e proteção das páginas autenticadas.              |
+| **TanStack Query 5**          | Cache por usuário, consultas, mutações e atualização dos dados. |
+| **React Hook Form 7 + Zod 4** | Controle dos formulários e validação em português.              |
+| **Tailwind CSS 3**            | Estilos responsivos e reprodução do layout do Figma.            |
 
 ### Qualidade e desenvolvimento
 
@@ -84,11 +85,11 @@ O repositório mantém as aplicações `backend` e `frontend` separadas, conform
 [![Testing Library](https://img.shields.io/badge/Testing_Library-E33332?style=flat-square&logo=testinglibrary&logoColor=white)](https://testing-library.com/)
 [![Oxlint](https://img.shields.io/badge/Oxlint-1-7C3AED?style=flat-square)](https://oxc.rs/docs/guide/usage/linter)
 
-| Ferramenta | Responsabilidade |
-| --- | --- |
-| **Vitest 5 + Testing Library** | Testes unitários e de componentes, com cobertura V8. |
-| **Oxlint 1** | Análise estática e padronização do frontend. |
-| **tsx** | Execução e reinicialização automática do backend durante o desenvolvimento. |
+| Ferramenta                     | Responsabilidade                                                            |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| **Vitest 5 + Testing Library** | Testes unitários e de componentes, com cobertura V8.                        |
+| **Oxlint 1**                   | Análise estática e padronização do frontend.                                |
+| **tsx**                        | Execução e reinicialização automática do backend durante o desenvolvimento. |
 
 Todas as versões acima refletem os arquivos `package.json` atuais. O projeto usa **GraphQL** para todas as consultas e alterações feitas pelo frontend. **Docker não é necessário**: o SQLite persiste os dados em um arquivo local.
 
@@ -104,16 +105,15 @@ flowchart LR
     Prisma --> DB[(SQLite)]
 ```
 
-
 ## Funcionalidades e regras
 
-| Área | O que a pessoa pode fazer |
-| --- | --- |
-| Conta | Criar conta e entrar com e-mail e senha de no mínimo 8 caracteres, manter a sessão e sair. Um login inválido recebe mensagem amigável. |
-| Dashboard | Consultar saldo acumulado, receitas e despesas do mês, últimas cinco transações e resumo das categorias. |
+| Área       | O que a pessoa pode fazer                                                                                                                     |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Conta      | Criar conta e entrar com e-mail e senha de no mínimo 8 caracteres, manter a sessão e sair. Um login inválido recebe mensagem amigável.        |
+| Dashboard  | Consultar saldo acumulado, receitas e despesas do mês, últimas cinco transações e resumo das categorias.                                      |
 | Transações | Criar, listar, buscar, filtrar por tipo/categoria/mês, paginar, editar e excluir receitas ou despesas. O valor é digitado e exibido em reais. |
-| Categorias | Criar, listar, editar e excluir categorias com título, descrição opcional, cor e ícone. Consultar totais e categoria mais utilizada. |
-| Perfil | Consultar nome e e-mail e alterar o nome. |
+| Categorias | Criar, listar, editar e excluir categorias com título, descrição opcional, cor e ícone. Consultar totais e categoria mais utilizada.          |
+| Perfil     | Consultar nome e e-mail e alterar o nome.                                                                                                     |
 
 As relações do banco são `User → Category` e `User → Transaction`. A categoria de uma transação é opcional; ao excluir uma categoria, as transações permanecem cadastradas e ficam sem categoria. A senha é armazenada como hash, e o e-mail do perfil não pode ser alterado. A recuperação de senha ainda não foi implementada.
 
@@ -128,13 +128,13 @@ O backend exige autenticação para consultas e alterações de dados privados. 
 
 ## Telas
 
-| Rota | Comportamento |
-| --- | --- |
-| `/` | Login para visitantes; dashboard para usuários autenticados. |
-| `/auth` | Login e criação de conta. |
-| `/transactions` | Listagem, filtros e modal para criar ou editar transações. |
-| `/categories` | Resumo, listagem e modal para criar ou editar categorias. |
-| `/profile` | Dados da conta, edição do nome e saída. |
+| Rota            | Comportamento                                                |
+| --------------- | ------------------------------------------------------------ |
+| `/`             | Login para visitantes; dashboard para usuários autenticados. |
+| `/auth`         | Login e criação de conta.                                    |
+| `/transactions` | Listagem, filtros e modal para criar ou editar transações.   |
+| `/categories`   | Resumo, listagem e modal para criar ou editar categorias.    |
+| `/profile`      | Dados da conta, edição do nome e saída.                      |
 
 As rotas de transações, categorias e perfil exigem autenticação. O cadastro e o login retornam um JWT; as demais operações enviam esse token no cabeçalho `Authorization: Bearer ...`. A opção “Lembrar-me” mantém a sessão em `localStorage`; sem ela, o login usa `sessionStorage`.
 
@@ -146,8 +146,8 @@ As imagens abaixo mostram o Financy em execução local com dados de teste. Os v
 
 ### Acesso à conta
 
-| Login | Criar conta |
-| :---: | :---: |
+|                    Login                    |                       Criar conta                       |
+| :-----------------------------------------: | :-----------------------------------------------------: |
 | ![Tela de login do Financy](docs/login.png) | ![Tela de criação de conta do Financy](docs/create.png) |
 
 ### Dashboard
@@ -156,14 +156,14 @@ As imagens abaixo mostram o Financy em execução local com dados de teste. Os v
 
 ### Transações
 
-| Listagem e filtros | Editar transação |
-| :---: | :---: |
+|                          Listagem e filtros                           |                        Editar transação                        |
+| :-------------------------------------------------------------------: | :------------------------------------------------------------: |
 | ![Lista de transações com filtros e paginação](docs/transactions.png) | ![Modal para editar uma transação](docs/edit-transactions.png) |
 
 ### Categorias
 
-| Resumo e categorias cadastradas | Editar categoria |
-| :---: | :---: |
+|            Resumo e categorias cadastradas             |                       Editar categoria                       |
+| :----------------------------------------------------: | :----------------------------------------------------------: |
 | ![Resumo e cartões de categorias](docs/categories.png) | ![Modal para editar uma categoria](docs/edit-categories.png) |
 
 ### Perfil
@@ -199,12 +199,12 @@ npm run dev
 
 Na primeira execução, o script cria `.env` a partir de `.env.example`, gera um `JWT_SECRET` aleatório e prepara o SQLite. Se `.env` já existir, ele é preservado para não sobrescrever suas configurações.
 
-| Variável | Configuração local inicial |
-| --- | --- |
-| `JWT_SECRET` | Gerado automaticamente no primeiro início. |
-| `DATABASE_URL` | `file:./dev.db`, definido em `.env.example`. |
-| `PORT` | `4000`, definido em `.env.example`. |
-| `CORS_ORIGIN` | `http://localhost:5173`, definido em `.env.example`. |
+| Variável       | Configuração local inicial                           |
+| -------------- | ---------------------------------------------------- |
+| `JWT_SECRET`   | Gerado automaticamente no primeiro início.           |
+| `DATABASE_URL` | `file:./dev.db`, definido em `.env.example`.         |
+| `PORT`         | `4000`, definido em `.env.example`.                  |
+| `CORS_ORIGIN`  | `http://localhost:5173`, definido em `.env.example`. |
 
 Você pode editar `.env` depois, se precisar de outra porta, origem ou banco. O arquivo não é enviado ao Git. Se já existir um `.env` criado manualmente com o valor de exemplo para `JWT_SECRET`, substitua esse valor por uma chave própria.
 
@@ -238,19 +238,19 @@ Depois abra [http://localhost:5555](http://localhost:5555). Se a página mostrar
 
 ## Scripts disponíveis
 
-| Pasta | Comando | O que faz |
-| --- | --- | --- |
-| `backend/` | `npm run dev` | Prepara o SQLite e inicia a API com reinício automático ao alterar o código. |
-| `backend/` | `npm run env:setup` | Cria `.env` com segredo aleatório, somente se ainda não existir. |
-| `backend/` | `npm run db:setup` | Garante o `.env` e sincroniza o schema do Prisma sem regenerar o cliente. |
-| `backend/` | `npm run db:generate` | Regenera o Prisma Client após alterações em `prisma/schema.prisma`. |
-| `backend/` | `npm run build` | Compila o TypeScript. |
-| `backend/` | `npm start` | Executa o servidor compilado. Rode `npm run build` antes. |
-| `backend/` | `npm test` / `npm run test:watch` | Executa os testes uma vez / em modo de observação. |
-| `frontend/` | `npm run dev` | Inicia o Vite em desenvolvimento. |
-| `frontend/` | `npm run build` / `npm run preview` | Gera o build de produção / abre a prévia do build. |
-| `frontend/` | `npm run lint` | Executa o Oxlint. |
-| `frontend/` | `npm test` / `npm run test:watch` | Executa os testes uma vez / em modo de observação. |
+| Pasta       | Comando                             | O que faz                                                                    |
+| ----------- | ----------------------------------- | ---------------------------------------------------------------------------- |
+| `backend/`  | `npm run dev`                       | Prepara o SQLite e inicia a API com reinício automático ao alterar o código. |
+| `backend/`  | `npm run env:setup`                 | Cria `.env` com segredo aleatório, somente se ainda não existir.             |
+| `backend/`  | `npm run db:setup`                  | Garante o `.env` e sincroniza o schema do Prisma sem regenerar o cliente.    |
+| `backend/`  | `npm run db:generate`               | Regenera o Prisma Client após alterações em `prisma/schema.prisma`.          |
+| `backend/`  | `npm run build`                     | Compila o TypeScript.                                                        |
+| `backend/`  | `npm start`                         | Executa o servidor compilado. Rode `npm run build` antes.                    |
+| `backend/`  | `npm test` / `npm run test:watch`   | Executa os testes uma vez / em modo de observação.                           |
+| `frontend/` | `npm run dev`                       | Inicia o Vite em desenvolvimento.                                            |
+| `frontend/` | `npm run build` / `npm run preview` | Gera o build de produção / abre a prévia do build.                           |
+| `frontend/` | `npm run lint`                      | Executa o Oxlint.                                                            |
+| `frontend/` | `npm test` / `npm run test:watch`   | Executa os testes uma vez / em modo de observação.                           |
 
 `npm run dev` chama `db:setup` automaticamente. A sincronização usa `--skip-generate` para reduzir o trabalho na inicialização; use `npm run db:generate` somente após alterar o schema do Prisma. O Prisma Studio continua sendo opcional e é iniciado separadamente com `npx prisma studio` dentro de `backend/`.
 
@@ -262,13 +262,13 @@ O schema está em `backend/src/schema.ts`. As operações principais são:
 
 `transactionsPage` recebe `page` e `pageSize` (de 1 a 100) e aceita `search`, `type`, `categoryId` e `month` (`AAAA-MM`). Retorna `items`, `total` e a página efetivamente usada; a tela usa esses dados para mostrar o intervalo de resultados e navegar entre páginas. A consulta `transactions` continua disponível para obter a lista completa, usada nos resumos.
 
-| Operação | Acesso | Finalidade |
-| --- | --- | --- |
-| `signUp`, `signIn` | Público | Cadastro e autenticação; retornam JWT e usuário. |
-| `me`, `updateProfile` | JWT | Consultar a conta e alterar o nome. |
-| `categories`, `createCategory`, `updateCategory`, `deleteCategory` | JWT | Listar e gerenciar categorias próprias. |
-| `transactions`, `transactionsPage` | JWT | Consultar transações próprias, com ou sem paginação. |
-| `createTransaction`, `updateTransaction`, `deleteTransaction` | JWT | Gerenciar receitas e despesas próprias. |
+| Operação                                                           | Acesso  | Finalidade                                           |
+| ------------------------------------------------------------------ | ------- | ---------------------------------------------------- |
+| `signUp`, `signIn`                                                 | Público | Cadastro e autenticação; retornam JWT e usuário.     |
+| `me`, `updateProfile`                                              | JWT     | Consultar a conta e alterar o nome.                  |
+| `categories`, `createCategory`, `updateCategory`, `deleteCategory` | JWT     | Listar e gerenciar categorias próprias.              |
+| `transactions`, `transactionsPage`                                 | JWT     | Consultar transações próprias, com ou sem paginação. |
+| `createTransaction`, `updateTransaction`, `deleteTransaction`      | JWT     | Gerenciar receitas e despesas próprias.              |
 
 ### Exemplos de operações
 
@@ -276,9 +276,17 @@ Crie uma conta ou entre com uma já cadastrada. Não há usuário de teste criad
 
 ```graphql
 mutation CriarConta {
-  signUp(name: "Pessoa Exemplo", email: "pessoa@example.com", password: "senha-segura-123") {
+  signUp(
+    name: "Pessoa Exemplo"
+    email: "pessoa@example.com"
+    password: "senha-segura-123"
+  ) {
     token
-    user { id name email }
+    user {
+      id
+      name
+      email
+    }
   }
 }
 ```
@@ -287,7 +295,11 @@ mutation CriarConta {
 mutation Entrar {
   signIn(email: "pessoa@example.com", password: "senha-segura-123") {
     token
-    user { id name email }
+    user {
+      id
+      name
+      email
+    }
   }
 }
 ```
@@ -305,7 +317,12 @@ query ListarTransacoes {
       amount
       type
       date
-      category { id title color icon }
+      category {
+        id
+        title
+        color
+        icon
+      }
     }
   }
 }
@@ -336,7 +353,9 @@ mutation CriarDespesa($categoryId: ID) {
     id
     title
     amount
-    category { title }
+    category {
+      title
+    }
   }
 }
 ```
@@ -398,10 +417,10 @@ npm run build
 
 Medição local em **27/09/2026**, com o provedor V8 do Vitest e inclusão dos arquivos TypeScript/TSX de `src/`. Os percentuais são uma fotografia do código nesta data, não uma garantia de ausência de defeitos nem uma medição de testes de ponta a ponta.
 
-| Aplicação | Testes | Statements | Branches | Functions | Lines |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Backend | 50 | **97,88%** (139/142) | 92,22% (83/90) | 100% (39/39) | 100% (131/131) |
-| Frontend | 69 | **89,05%** (488/548) | 81,18% (371/457) | 85,53% (136/159) | 92,76% (449/484) |
+| Aplicação | Testes |           Statements |         Branches |        Functions |            Lines |
+| --------- | -----: | -------------------: | ---------------: | ---------------: | ---------------: |
+| Backend   |     50 | **97,88%** (139/142) |   92,22% (83/90) |     100% (39/39) |   100% (131/131) |
+| Frontend  |     69 | **89,05%** (488/548) | 81,18% (371/457) | 85,53% (136/159) | 92,76% (449/484) |
 
 Para reproduzir a medição e gerar `coverage/coverage-summary.json` em cada aplicação:
 
@@ -421,30 +440,18 @@ Arquivos de teste, CSS, imagens e tipos sem código executável não compõem es
 
 O lint do frontend terminou com **0 erros e 0 avisos**. Os formulários usam `useWatch` para acompanhar campos, os arquivos de componentes exportam apenas componentes e os efeitos de autenticação e perfil não fazem atualizações síncronas de estado. Não há script de lint configurado para o backend. O build TypeScript passou nas duas aplicações; `noUnusedLocals` e `noUnusedParameters` estão habilitados no frontend, mas não no backend. Essas opções não detectam exports e arquivos usados somente por testes.
 
-## Decisões técnicas e pontos de melhoria
-
-O projeto já separa API, persistência, hooks, páginas, formulários e componentes básicos. `Button`, `Dialog`, `FormField` e `Surface` são compartilhados, enquanto os serviços do backend impõem as regras de acesso independentemente da interface. Isso atende aos requisitos principais do desafio e deixa as responsabilidades centrais identificáveis.
-
-Na revisão de manutenção, ficaram estes pontos para uma próxima refatoração:
-
-1. `AuthForm.tsx` e `TransactionForm.tsx` concentram apresentação, estado e tratamento de entrada. O campo de moeda e partes comuns do formulário podem ser extraídos para arquivos menores com responsabilidades mais claras.
-2. `useDashboardSummary.ts` repete consultas GraphQL e a criação de transação já implementadas em `useCategories.ts` e `useTransactions.ts`. Reaproveitar os hooks ou as operações GraphQL reduziria duplicação sem mudar a interface.
-3. A aparência das etiquetas de categoria é reproduzida em listas e no dashboard; um componente visual compartilhado pode manter cores e espaçamento consistentes.
-4. `TransactionMetrics.tsx` não é usado pela aplicação atual, pois os três cartões foram removidos da tela de transações. `formatDate` também não é usado fora dos testes. Os arquivos de exemplo `hero.png`, `react.svg` e `vite.svg` não têm referências no produto. Eles podem ser removidos após confirmar que não serão reaproveitados.
-5. A ausência de lint no backend ainda é uma melhoria de qualidade aberta. O projeto não possui testes de navegador que comparem as telas com o Figma; a cobertura apresentada mede execução de código, não fidelidade visual.
-
 ## Problemas comuns
 
-| Sintoma | Verificação |
-| --- | --- |
-| `EADDRINUSE` na porta 4000 | Execute `lsof -i :4000` para identificar o processo. Encerre a instância anterior ou altere `PORT` e ajuste `VITE_BACKEND_URL`. |
-| Erro de conexão com a API | Confirme que backend e frontend estão rodando, que `VITE_BACKEND_URL` aponta para `/graphql` e que `CORS_ORIGIN` permite a origem do frontend. |
-| Erro de CORS no navegador | Confira a origem exata do Vite, incluindo a porta, em `CORS_ORIGIN`. Reinicie a API após alterar `.env`. |
-| Tabelas ainda não existem | Confira `DATABASE_URL` e execute `npm run db:setup` em `backend/`. `npm run dev` também executa essa preparação antes de iniciar a API. |
-| Prisma Studio não abre na porta 5555 | Rode `npx prisma studio` em outro terminal; `npm run dev` inicia a API, não o Studio. |
-| Dados sumiram ou aparecem em outro banco | Confira `DATABASE_URL` no `.env` do backend. O SQLite usa o arquivo apontado por essa variável; reiniciar a API não apaga os dados. |
-| Login recusado em instalação nova | Crie uma conta na tela de cadastro. O projeto não inclui seed de usuários e senhas não podem ser consultadas em texto puro. |
-| Mudanças no frontend não aparecem | Confirme que o Vite está em execução na porta mostrada no terminal e recarregue a página. |
+| Sintoma                                  | Verificação                                                                                                                                    |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EADDRINUSE` na porta 4000               | Execute `lsof -i :4000` para identificar o processo. Encerre a instância anterior ou altere `PORT` e ajuste `VITE_BACKEND_URL`.                |
+| Erro de conexão com a API                | Confirme que backend e frontend estão rodando, que `VITE_BACKEND_URL` aponta para `/graphql` e que `CORS_ORIGIN` permite a origem do frontend. |
+| Erro de CORS no navegador                | Confira a origem exata do Vite, incluindo a porta, em `CORS_ORIGIN`. Reinicie a API após alterar `.env`.                                       |
+| Tabelas ainda não existem                | Confira `DATABASE_URL` e execute `npm run db:setup` em `backend/`. `npm run dev` também executa essa preparação antes de iniciar a API.        |
+| Prisma Studio não abre na porta 5555     | Rode `npx prisma studio` em outro terminal; `npm run dev` inicia a API, não o Studio.                                                          |
+| Dados sumiram ou aparecem em outro banco | Confira `DATABASE_URL` no `.env` do backend. O SQLite usa o arquivo apontado por essa variável; reiniciar a API não apaga os dados.            |
+| Login recusado em instalação nova        | Crie uma conta na tela de cadastro. O projeto não inclui seed de usuários e senhas não podem ser consultadas em texto puro.                    |
+| Mudanças no frontend não aparecem        | Confirme que o Vite está em execução na porta mostrada no terminal e recarregue a página.                                                      |
 
 ## Entrega
 
