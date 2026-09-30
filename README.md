@@ -438,7 +438,7 @@ Arquivos de teste, CSS, imagens e tipos sem código executável não compõem es
 
 ### Resultado do lint
 
-O lint do frontend terminou com **0 erros e 0 avisos**. Os formulários usam `useWatch` para acompanhar campos, os arquivos de componentes exportam apenas componentes e os efeitos de autenticação e perfil não fazem atualizações síncronas de estado. Não há script de lint configurado para o backend. O build TypeScript passou nas duas aplicações; `noUnusedLocals` e `noUnusedParameters` estão habilitados no frontend, mas não no backend. Essas opções não detectam exports e arquivos usados somente por testes.
+O lint do frontend terminou com **0 erros e 0 avisos**.
 
 ## Problemas comuns
 
