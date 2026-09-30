@@ -1,76 +1,96 @@
-<div align="center">
-
 ![Logo do Financy](./frontend/public/Logo.svg)
-  # 💸 Financy — Gestão de Finanças Pessoais
+# 💸 Financy — Gestão de Finanças Pessoais
 
-  **Uma aplicação Full Stack moderna para organização, planejamento e controle de finanças pessoais.**
+**Uma aplicação Full Stack moderna para organização, planejamento e controle de finanças pessoais.**
 
-  [![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue?style=for-the-badge)](LICENSE)
-  [![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)](https://graphql.org/)
-  [![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue?style=for-the-badge)](LICENSE)
+[![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=111827)](https://react.dev/)
+[![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)](https://graphql.org/)
+[![Prisma 5](https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
-  [📌 Sobre o Projeto](#-sobre-o-projeto) •
-  [🛠️ Tecnologias](#️-tecnologias) •
-  [⚙️ Como Funciona](#-como-o-projeto-funciona) •
-  [✨ Funcionalidades](#-funcionalidades-e-regras) •
-  [🎨 Telas](#-telas) •
-  [🖼️️ Capturas de Tela](#%EF%B8%8F-capturas-de-tela) •
-  [🚀 Como Executar](#-executar-localmente) •
-  [📜 Scripts](#-scripts-dispon%C3%ADveis) •
-  [📊 Testes & Cobertura](#-testes-cobertura-e-lint)
+[📌 Sobre o Projeto](#-sobre-o-projeto) •
+[🛠️ Tecnologias](#️-tecnologias) •
+[⚙️ Como Funciona](#-como-o-projeto-funciona) •
+[✨ Funcionalidades](#-funcionalidades-e-regras) •
+[🎨 Telas](#-telas) •
+[🖼️ Capturas de Tela](#%EF%B8%8F-capturas-de-tela) •
+[🚀 Como Executar](#-executar-localmente) •
+[📜 Scripts](#-scripts-dispon%C3%ADveis) •
+[📊 Testes & Cobertura](#-testes-cobertura-e-lint)
 
-</div>
+## 📌 Sobre o projeto
 
+O **Financy** é uma aplicação full stack para organização e acompanhamento de finanças pessoais. O projeto foi desenvolvido como desafio da pós-graduação **Full-Stack 360º com Inteligência Artificial** da [Rocketseat](https://www.rocketseat.com.br/faculdade), reunindo em uma única experiência o controle de receitas, despesas e categorias.
 
-O **Financy** é uma aplicação full stack para organizar finanças pessoais, desenvolvida como desafio da pós-graduação **Full-Stack 360º com Inteligência Artificial** da [Rocketseat](https://www.rocketseat.com.br/faculdade). Cada pessoa pode criar uma conta, cadastrar categorias e registrar receitas ou despesas. O dashboard reúne saldo, totais do mês e movimentações recentes.
+Cada pessoa possui uma conta protegida por JWT e acessa somente os próprios dados. O dashboard apresenta saldo acumulado, movimentações do mês, transações recentes e um resumo por categoria. A área de transações oferece busca, filtros e paginação; categorias e perfil também podem ser gerenciados pela interface.
 
-O projeto segue o [design do Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809) e mantém as duas aplicações exigidas pelo desafio em pastas independentes: `backend` e `frontend`.
+O repositório mantém as aplicações `backend` e `frontend` separadas, conforme os requisitos do desafio. A comunicação ocorre exclusivamente por uma API GraphQL, enquanto o SQLite armazena os dados em arquivo local. A interface foi construída a partir do [design do Financy no Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809), com atenção aos componentes, cores, ícones e estados de interação.
 
-## Capturas de tela
+### Destaques
 
-As imagens abaixo mostram o Financy em execução local com dados de teste. Os valores exibidos representam o momento das capturas e podem mudar conforme as transações cadastradas.
+- 🔐 Autenticação com JWT, senha protegida por hash e isolamento de dados por usuário.
+- 📊 Dashboard com saldo, totais mensais, transações recentes e resumo de categorias.
+- 🔎 Listagem de transações com busca, filtros combinados e paginação no backend.
+- 🎨 Categorias personalizadas com cor e ícone refletidos em toda a interface.
+- 💾 Persistência local com SQLite, sem necessidade de instalar um servidor de banco.
+- 🧪 Testes automatizados, cobertura, lint e verificação de build.
 
-### Acesso à conta
+## 🛠️ Tecnologias
 
-| Login | Criar conta |
-| :---: | :---: |
-| ![Tela de login do Financy](docs/login.png) | ![Tela de criação de conta do Financy](docs/create.png) |
+### Backend e banco de dados
 
-### Dashboard
+[![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![TypeScript 5.9](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![GraphQL Yoga 3](https://img.shields.io/badge/GraphQL_Yoga-3-E10098?style=flat-square&logo=graphql&logoColor=white)](https://the-guild.dev/graphql/yoga-server)
+[![Prisma 5](https://img.shields.io/badge/Prisma-5-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![JWT](https://img.shields.io/badge/JWT-9-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-![Dashboard do Financy com saldo, receitas, despesas e transações recentes](docs/financy-dash.png)
+| Tecnologia | Responsabilidade |
+| --- | --- |
+| **Node.js 24 + TypeScript 5.9** | Ambiente de execução e tipagem da API. |
+| **GraphQL Yoga 3** | Servidor HTTP GraphQL, schema, queries e mutations. |
+| **Prisma ORM 5** | Modelagem, acesso tipado e sincronização do banco. |
+| **SQLite** | Persistência em arquivo local, sem serviço externo. |
+| **JSON Web Token + bcryptjs** | Sessões autenticadas e armazenamento seguro das senhas. |
+| **CORS + dotenv** | Controle da origem do frontend e configuração por ambiente. |
 
-### Transações
+### Frontend e interface
 
-| Listagem e filtros | Editar transação |
-| :---: | :---: |
-| ![Lista de transações com filtros e paginação](docs/transactions.png) | ![Modal para editar uma transação](docs/edit-transactions.png) |
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=111827)](https://react.dev/)
+[![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
+[![TypeScript 7](https://img.shields.io/badge/TypeScript-7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React Router 7](https://img.shields.io/badge/React_Router-7-CA4245?style=flat-square&logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![TanStack Query 5](https://img.shields.io/badge/TanStack_Query-5-FF4154?style=flat-square&logo=reactquery&logoColor=white)](https://tanstack.com/query/latest)
+[![React Hook Form 7](https://img.shields.io/badge/React_Hook_Form-7-EC5990?style=flat-square&logo=reacthookform&logoColor=white)](https://react-hook-form.com/)
+[![Zod 4](https://img.shields.io/badge/Zod-4-3E67B1?style=flat-square&logo=zod&logoColor=white)](https://zod.dev/)
+[![Tailwind CSS 3](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-### Categorias
+| Tecnologia | Responsabilidade |
+| --- | --- |
+| **React 19 + TypeScript 7** | Componentes, páginas, estado da interface e tipagem. |
+| **Vite 8** | Servidor de desenvolvimento e build de produção. |
+| **React Router 7** | Navegação SPA e proteção das páginas autenticadas. |
+| **TanStack Query 5** | Cache por usuário, consultas, mutações e atualização dos dados. |
+| **React Hook Form 7 + Zod 4** | Controle dos formulários e validação em português. |
+| **Tailwind CSS 3** | Estilos responsivos e reprodução do layout do Figma. |
 
-| Resumo e categorias cadastradas | Editar categoria |
-| :---: | :---: |
-| ![Resumo e cartões de categorias](docs/categories.png) | ![Modal para editar uma categoria](docs/edit-categories.png) |
+### Qualidade e desenvolvimento
 
-### Perfil
+[![Vitest 5](https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Testing Library](https://img.shields.io/badge/Testing_Library-E33332?style=flat-square&logo=testinglibrary&logoColor=white)](https://testing-library.com/)
+[![Oxlint](https://img.shields.io/badge/Oxlint-1-7C3AED?style=flat-square)](https://oxc.rs/docs/guide/usage/linter)
 
-![Tela de perfil com dados da conta e formulário para alterar o nome](docs/profile.png)
+| Ferramenta | Responsabilidade |
+| --- | --- |
+| **Vitest 5 + Testing Library** | Testes unitários e de componentes, com cobertura V8. |
+| **Oxlint 1** | Análise estática e padronização do frontend. |
+| **tsx** | Execução e reinicialização automática do backend durante o desenvolvimento. |
 
-
-## 🚀 Tecnologias
-
-| Área | Ferramentas | Papel no projeto |
-| --- | --- | --- |
-| Backend | Node.js, TypeScript, GraphQL Yoga, JWT, bcryptjs | API GraphQL, autenticação e regras de acesso. |
-| Persistência | Prisma ORM, SQLite | Modelagem e armazenamento local em arquivo. |
-| Frontend | React, TypeScript, Vite, React Router | Interface e navegação sem framework SSR. |
-| Dados e formulários | TanStack Query, React Hook Form, Zod | Cache, mutações e validação de entrada. |
-| Interface | Tailwind CSS, componentes próprios | Layout responsivo baseado no Figma. |
-| Qualidade | Vitest, Testing Library, Oxlint | Testes automatizados, cobertura e lint do frontend. |
-
-O projeto usa **GraphQL** para todas as consultas e alterações feitas pelo frontend. **Docker não é necessário**: o SQLite persiste os dados em um arquivo local.
+Todas as versões acima refletem os arquivos `package.json` atuais. O projeto usa **GraphQL** para todas as consultas e alterações feitas pelo frontend. **Docker não é necessário**: o SQLite persiste os dados em um arquivo local.
 
 ## Como o projeto funciona
 
@@ -121,6 +141,35 @@ As rotas de transações, categorias e perfil exigem autenticação. O cadastro 
 
 Login e cadastro são dois estados do mesmo formulário. Há dois diálogos principais: formulário de transação e formulário de categoria, usados tanto para criar quanto para editar.
 
+## 🖼️ Capturas de tela
+
+As imagens abaixo mostram o Financy em execução local com dados de teste. Os valores exibidos representam o momento das capturas e podem mudar conforme as transações cadastradas.
+
+### Acesso à conta
+
+| Login | Criar conta |
+| :---: | :---: |
+| ![Tela de login do Financy](docs/login.png) | ![Tela de criação de conta do Financy](docs/create.png) |
+
+### Dashboard
+
+![Dashboard do Financy com saldo, receitas, despesas e transações recentes](docs/financy-dash.png)
+
+### Transações
+
+| Listagem e filtros | Editar transação |
+| :---: | :---: |
+| ![Lista de transações com filtros e paginação](docs/transactions.png) | ![Modal para editar uma transação](docs/edit-transactions.png) |
+
+### Categorias
+
+| Resumo e categorias cadastradas | Editar categoria |
+| :---: | :---: |
+| ![Resumo e cartões de categorias](docs/categories.png) | ![Modal para editar uma categoria](docs/edit-categories.png) |
+
+### Perfil
+
+![Tela de perfil com dados da conta e formulário para alterar o nome](docs/profile.png)
 
 ## Pré-requisitos
 
@@ -414,8 +463,4 @@ O repositório contém uma [licença MIT](LICENSE). Para dúvidas ou sugestões 
 
 ---
 
-<div align="center">
-
-Desenvolvido com 💜 por [Anderson Neto](https://github.com/avcneto) · Pós-graduação Full-Stack 360º com Inteligência Artificial
-
-</div>
+**Desenvolvido com 💜 por [Anderson Neto](https://github.com/avcneto) · Pós-graduação Full-Stack 360º com Inteligência Artificial**
