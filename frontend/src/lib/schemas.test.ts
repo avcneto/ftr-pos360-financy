@@ -1,11 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { categorySchema, signInSchema, transactionSchema } from "./schemas";
+import { categorySchema, signInSchema, signUpSchema, transactionSchema } from "./schemas";
 
 describe("schemas", () => {
   it("validates sign in payloads", () => {
     expect(
-      signInSchema.safeParse({ email: "a@b.com", password: "123456" }).success,
+      signInSchema.safeParse({ email: "a@b.com", password: "12345678" }).success,
     ).toBe(true);
+    expect(
+      signInSchema.safeParse({ email: "a@b.com", password: "1234567" }).success,
+    ).toBe(false);
+    expect(
+      signUpSchema.safeParse({ name: "Ada", email: "a@b.com", password: "1234567" }).success,
+    ).toBe(false);
   });
 
   it("rejects invalid transaction payloads", () => {

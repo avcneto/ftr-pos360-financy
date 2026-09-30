@@ -29,7 +29,7 @@ describe("AuthForm", () => {
       expect(getByText("Informe um e-mail válido")).not.toBeNull();
     });
     expect(
-      getByText("A senha deve ter no mínimo 6 caracteres"),
+      getByText("A senha deve ter no mínimo 8 caracteres"),
     ).not.toBeNull();
     expect(onSignIn).not.toHaveBeenCalled();
   });

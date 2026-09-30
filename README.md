@@ -63,7 +63,7 @@ O frontend mantém consultas em cache por usuário. Os resolvers encaminham as o
 
 | Área | O que a pessoa pode fazer |
 | --- | --- |
-| Conta | Criar conta, entrar com e-mail e senha, manter a sessão e sair. Um login inválido recebe mensagem amigável. |
+| Conta | Criar conta e entrar com e-mail e senha de no mínimo 8 caracteres, manter a sessão e sair. Um login inválido recebe mensagem amigável. |
 | Dashboard | Consultar saldo acumulado, receitas e despesas do mês, últimas cinco transações e resumo das categorias. |
 | Transações | Criar, listar, buscar, filtrar por tipo/categoria/mês, paginar, editar e excluir receitas ou despesas. O valor é digitado e exibido em reais. |
 | Categorias | Criar, listar, editar e excluir categorias com título, descrição opcional, cor e ícone. Consultar totais e categoria mais utilizada. |

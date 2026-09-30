@@ -1,14 +1,16 @@
 import { z } from "zod";
 
+const passwordSchema = z.string().min(8, "A senha deve ter no mínimo 8 caracteres");
+
 export const signInSchema = z.object({
   email: z.email("Informe um e-mail válido"),
-  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
+  password: passwordSchema,
 });
 
 export const signUpSchema = z.object({
   name: z.string().min(2, "Informe um nome com pelo menos 2 caracteres"),
   email: z.email("Informe um e-mail válido"),
-  password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+  password: passwordSchema,
 });
 
 export const categorySchema = z.object({
