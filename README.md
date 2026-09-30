@@ -12,15 +12,15 @@
 [![Prisma 5](https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
-[📌 Sobre o Projeto](#-sobre-o-projeto) •
-[🛠️ Tecnologias](#️-tecnologias) •
-[⚙️ Como Funciona](#-como-o-projeto-funciona) •
-[✨ Funcionalidades](#-funcionalidades-e-regras) •
-[🎨 Telas](#-telas) •
-[🖼️ Capturas de Tela](#%EF%B8%8F-capturas-de-tela) •
-[🚀 Como Executar](#-executar-localmente) •
-[📜 Scripts](#-scripts-dispon%C3%ADveis) •
-[📊 Testes & Cobertura](#-testes-cobertura-e-lint)
+[📌 Sobre o Projeto](#sobre-o-projeto) •
+[🛠️ Tecnologias](#tecnologias) •
+[⚙️ Como Funciona](#como-o-projeto-funciona) •
+[✨ Funcionalidades](#funcionalidades-e-regras) •
+[🎨 Telas](#telas) •
+[🖼️ Capturas de Tela](#capturas-de-tela) •
+[🚀 Como Executar](#executar-localmente) •
+[📜 Scripts](#scripts-dispon%C3%ADveis) •
+[📊 Testes & Cobertura](#testes-cobertura-e-lint)
 
 ## 📌 Sobre o projeto
 
