@@ -1,5 +1,4 @@
 ![Logo do Financy](./frontend/public/Logo.svg)
-
 # Financy — Gestão de finanças pessoais
 
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)
@@ -12,7 +11,7 @@
 
 O **Financy** é uma aplicação full stack para organizar finanças pessoais, desenvolvida como desafio da pós-graduação **Full-Stack 360º com Inteligência Artificial** da [Rocketseat](https://www.rocketseat.com.br/faculdade). Cada pessoa pode criar uma conta, cadastrar categorias e registrar receitas ou despesas. O dashboard reúne saldo, totais do mês e movimentações recentes.
 
-O projeto segue o [design Financy no Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809) e mantém as duas aplicações exigidas pelo desafio em pastas independentes: `backend/` e `frontend/`.
+O projeto segue o [design do Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809) e mantém as duas aplicações exigidas pelo desafio em pastas independentes: `backend` e `frontend`.
 
 ## Conteúdo
 
@@ -32,7 +31,7 @@ O projeto segue o [design Financy no Figma](https://www.figma.com/design/LSzoaX4
 - [Entrega](#entrega)
 - [Referências e licença](#referências-e-licença)
 
-## Tecnologias
+## 🚀 Tecnologias
 
 | Área | Ferramentas | Papel no projeto |
 | --- | --- | --- |
