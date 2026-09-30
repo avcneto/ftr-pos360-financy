@@ -22,7 +22,7 @@
 [📜 Scripts](#scripts-dispon%C3%ADveis) •
 [📊 Testes & Cobertura](#testes-cobertura-e-lint)
 
-## 📌 Sobre o projeto
+## Sobre o projeto
 
 O **Financy** é uma aplicação full stack para organização e acompanhamento de finanças pessoais. O projeto foi desenvolvido como desafio da pós-graduação **Full-Stack 360º com Inteligência Artificial** da [Rocketseat](https://www.rocketseat.com.br/faculdade), reunindo em uma única experiência o controle de receitas, despesas e categorias.
 
@@ -39,7 +39,7 @@ O repositório mantém as aplicações `backend` e `frontend` separadas, conform
 - 💾 Persistência local com SQLite, sem necessidade de instalar um servidor de banco.
 - 🧪 Testes automatizados, cobertura, lint e verificação de build.
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 ### Backend e banco de dados
 
@@ -140,7 +140,7 @@ As rotas de transações, categorias e perfil exigem autenticação. O cadastro 
 
 Login e cadastro são dois estados do mesmo formulário. Há dois diálogos principais: formulário de transação e formulário de categoria, usados tanto para criar quanto para editar.
 
-## 🖼️ Capturas de tela
+## Capturas de tela
 
 As imagens abaixo mostram o Financy em execução local com dados de teste. Os valores exibidos representam o momento das capturas e podem mudar conforme as transações cadastradas.
 
