@@ -455,7 +455,7 @@ O lint do frontend terminou com **0 erros e 0 avisos**.
 
 ## Entrega
 
-O desafio solicita um repositório GitHub **público** com `backend/` e `frontend/` na raiz. Antes de enviar o link à plataforma, confirme a visibilidade do repositório e execute testes e builds nas duas pastas. Funcionalidades opcionais, como upload de avatar e recuperação de senha, não fazem parte da implementação atual.
+O desafio solicita um repositório GitHub **público** com `backend/` e `frontend/` na raiz. Execute testes e builds nas duas pastas. Funcionalidades opcionais, como upload de avatar e recuperação de senha, não fazem parte da implementação atual.
 
 O banco local, os arquivos `.env`, as dependências e as saídas de build não devem ser enviados ao repositório. Para testar o login em uma instalação nova, crie uma conta pela própria tela de cadastro; o projeto não depende de um usuário pré-cadastrado.
 
