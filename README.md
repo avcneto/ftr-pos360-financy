@@ -162,7 +162,7 @@ Na primeira execução, o script cria `.env` a partir de `.env.example`, gera um
 
 Você pode editar `.env` depois, se precisar de outra porta, origem ou banco. O arquivo não é enviado ao Git. Se já existir um `.env` criado manualmente com o valor de exemplo para `JWT_SECRET`, substitua esse valor por uma chave própria.
 
-A API fica em [http://localhost:4000/graphql](http://localhost:4000/graphql). O SQLite é um **arquivo**, em `backend/prisma/dev.db`; não existe um servidor de banco para iniciar. A cada início, `npm run dev` executa `prisma db push` para criar ou sincronizar as tabelas sem apagar os dados existentes. Se uma alteração do schema exigir perda de dados, o Prisma interrompe a operação para revisão. Após mudar o schema com a API já aberta, reinicie `npm run dev`.
+A API fica em [http://localhost:4000/graphql](http://localhost:4000/graphql). O SQLite é um **arquivo**, em `backend/prisma/dev.db`; não existe um servidor de banco para iniciar. A cada início, `npm run dev` executa `prisma db push --skip-generate` para criar ou sincronizar as tabelas sem apagar os dados existentes. A opção `--skip-generate` evita regravar o Prisma Client e acionar trabalho desnecessário de indexação no editor em todas as inicializações. Se uma alteração do schema exigir perda de dados, o Prisma interrompe a operação para revisão. Após alterar `prisma/schema.prisma`, execute `npm run db:generate` e reinicie `npm run dev`.
 
 Em execuções posteriores, basta executar `npm run dev` dentro de `backend/`.
 
@@ -196,7 +196,8 @@ Depois abra [http://localhost:5555](http://localhost:5555). Se a página mostrar
 | --- | --- | --- |
 | `backend/` | `npm run dev` | Prepara o SQLite e inicia a API com reinício automático ao alterar o código. |
 | `backend/` | `npm run env:setup` | Cria `.env` com segredo aleatório, somente se ainda não existir. |
-| `backend/` | `npm run db:setup` | Garante o `.env`, sincroniza o schema do Prisma e gera o cliente, sem iniciar a API. |
+| `backend/` | `npm run db:setup` | Garante o `.env` e sincroniza o schema do Prisma sem regenerar o cliente. |
+| `backend/` | `npm run db:generate` | Regenera o Prisma Client após alterações em `prisma/schema.prisma`. |
 | `backend/` | `npm run build` | Compila o TypeScript. |
 | `backend/` | `npm start` | Executa o servidor compilado. Rode `npm run build` antes. |
 | `backend/` | `npm test` / `npm run test:watch` | Executa os testes uma vez / em modo de observação. |
@@ -205,7 +206,7 @@ Depois abra [http://localhost:5555](http://localhost:5555). Se a página mostrar
 | `frontend/` | `npm run lint` | Executa o Oxlint. |
 | `frontend/` | `npm test` / `npm run test:watch` | Executa os testes uma vez / em modo de observação. |
 
-`npm run dev` chama `db:setup` automaticamente. O Prisma Studio continua sendo opcional e é iniciado separadamente com `npx prisma studio` dentro de `backend/`.
+`npm run dev` chama `db:setup` automaticamente. A sincronização usa `--skip-generate` para reduzir o trabalho na inicialização; use `npm run db:generate` somente após alterar o schema do Prisma. O Prisma Studio continua sendo opcional e é iniciado separadamente com `npx prisma studio` dentro de `backend/`.
 
 ## API GraphQL
 

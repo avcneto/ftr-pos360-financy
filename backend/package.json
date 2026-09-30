@@ -5,7 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "npm run db:setup && tsx watch src/server.ts",
-    "db:setup": "npm run env:setup && prisma db push",
+    "db:setup": "npm run env:setup && prisma db push --skip-generate",
+    "db:generate": "prisma generate",
     "env:setup": "node scripts/ensure-env.mjs",
     "build": "tsc",
     "start": "node dist/server.js",
