@@ -1,35 +1,63 @@
+<div align="center">
+
 ![Logo do Financy](./frontend/public/Logo.svg)
-# Financy — Gestão de finanças pessoais
+  # 💸 Financy — Gestão de Finanças Pessoais
 
-![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)
-![Node.js 24](https://img.shields.io/badge/Node.js-24-339933)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6)
-![GraphQL](https://img.shields.io/badge/GraphQL-E10098)
-![SQLite](https://img.shields.io/badge/SQLite-003B57)
+  **Uma aplicação Full Stack moderna para organização, planejamento e controle de finanças pessoais.**
 
----
+  [![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue?style=for-the-badge)](LICENSE)
+  [![Node.js 24](https://img.shields.io/badge/Node.js-24-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)](https://graphql.org/)
+  [![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+
+  [📌 Sobre o Projeto](#-sobre-o-projeto) •
+  [🛠️ Tecnologias](#️-tecnologias) •
+  [⚙️ Como Funciona](#-como-o-projeto-funciona) •
+  [✨ Funcionalidades](#-funcionalidades-e-regras) •
+  [🎨 Telas](#-telas) •
+  [🖼️️ Capturas de Tela](#%EF%B8%8F-capturas-de-tela) •
+  [🚀 Como Executar](#-executar-localmente) •
+  [📜 Scripts](#-scripts-dispon%C3%ADveis) •
+  [📊 Testes & Cobertura](#-testes-cobertura-e-lint)
+
+</div>
+
 
 O **Financy** é uma aplicação full stack para organizar finanças pessoais, desenvolvida como desafio da pós-graduação **Full-Stack 360º com Inteligência Artificial** da [Rocketseat](https://www.rocketseat.com.br/faculdade). Cada pessoa pode criar uma conta, cadastrar categorias e registrar receitas ou despesas. O dashboard reúne saldo, totais do mês e movimentações recentes.
 
 O projeto segue o [design do Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809) e mantém as duas aplicações exigidas pelo desafio em pastas independentes: `backend` e `frontend`.
 
-## Conteúdo
+## Capturas de tela
 
-- [Tecnologias](#tecnologias)
-- [Como o projeto funciona](#como-o-projeto-funciona)
-- [Funcionalidades e regras](#funcionalidades-e-regras)
-- [Telas](#telas)
-- [Capturas de tela](#capturas-de-tela)
-- [Pré-requisitos](#pré-requisitos)
-- [Executar localmente](#executar-localmente)
-- [Scripts disponíveis](#scripts-disponíveis)
-- [API GraphQL](#api-graphql)
-- [Organização do código](#organização-do-código)
-- [Testes, cobertura e lint](#testes-cobertura-e-lint)
-- [Decisões técnicas e pontos de melhoria](#decisões-técnicas-e-pontos-de-melhoria)
-- [Problemas comuns](#problemas-comuns)
-- [Entrega](#entrega)
-- [Referências e licença](#referências-e-licença)
+As imagens abaixo mostram o Financy em execução local com dados de teste. Os valores exibidos representam o momento das capturas e podem mudar conforme as transações cadastradas.
+
+### Acesso à conta
+
+| Login | Criar conta |
+| :---: | :---: |
+| ![Tela de login do Financy](docs/login.png) | ![Tela de criação de conta do Financy](docs/create.png) |
+
+### Dashboard
+
+![Dashboard do Financy com saldo, receitas, despesas e transações recentes](docs/financy-dash.png)
+
+### Transações
+
+| Listagem e filtros | Editar transação |
+| :---: | :---: |
+| ![Lista de transações com filtros e paginação](docs/transactions.png) | ![Modal para editar uma transação](docs/edit-transactions.png) |
+
+### Categorias
+
+| Resumo e categorias cadastradas | Editar categoria |
+| :---: | :---: |
+| ![Resumo e cartões de categorias](docs/categories.png) | ![Modal para editar uma categoria](docs/edit-categories.png) |
+
+### Perfil
+
+![Tela de perfil com dados da conta e formulário para alterar o nome](docs/profile.png)
+
 
 ## 🚀 Tecnologias
 
@@ -93,35 +121,6 @@ As rotas de transações, categorias e perfil exigem autenticação. O cadastro 
 
 Login e cadastro são dois estados do mesmo formulário. Há dois diálogos principais: formulário de transação e formulário de categoria, usados tanto para criar quanto para editar.
 
-## Capturas de tela
-
-As imagens abaixo mostram o Financy em execução local com dados de teste. Os valores exibidos representam o momento das capturas e podem mudar conforme as transações cadastradas.
-
-### Acesso à conta
-
-| Login | Criar conta |
-| :---: | :---: |
-| ![Tela de login do Financy](docs/login.png) | ![Tela de criação de conta do Financy](docs/create.png) |
-
-### Dashboard
-
-![Dashboard do Financy com saldo, receitas, despesas e transações recentes](docs/financy-dash.png)
-
-### Transações
-
-| Listagem e filtros | Editar transação |
-| :---: | :---: |
-| ![Lista de transações com filtros e paginação](docs/transactions.png) | ![Modal para editar uma transação](docs/edit-transactions.png) |
-
-### Categorias
-
-| Resumo e categorias cadastradas | Editar categoria |
-| :---: | :---: |
-| ![Resumo e cartões de categorias](docs/categories.png) | ![Modal para editar uma categoria](docs/edit-categories.png) |
-
-### Perfil
-
-![Tela de perfil com dados da conta e formulário para alterar o nome](docs/profile.png)
 
 ## Pré-requisitos
 
@@ -405,7 +404,7 @@ O desafio solicita um repositório GitHub **público** com `backend/` e `fronten
 
 O banco local, os arquivos `.env`, as dependências e as saídas de build não devem ser enviados ao repositório. Para testar o login em uma instalação nova, crie uma conta pela própria tela de cadastro; o projeto não depende de um usuário pré-cadastrado.
 
-## Referências e licença
+## 📚 Referências e licença
 
 - [Design Financy no Figma](https://www.figma.com/design/LSzoaX4lcjOkdxHkadkUeq/Financy--Community-?node-id=3-809).
 - [Rocketseat — Faculdade](https://www.rocketseat.com.br/faculdade).
@@ -415,4 +414,8 @@ O repositório contém uma [licença MIT](LICENSE). Para dúvidas ou sugestões 
 
 ---
 
-Desenvolvido por [Anderson Neto](https://github.com/avcneto) · Pós-graduação Full-Stack 360º com Inteligência Artificial
+<div align="center">
+
+Desenvolvido com 💜 por [Anderson Neto](https://github.com/avcneto) · Pós-graduação Full-Stack 360º com Inteligência Artificial
+
+</div>
