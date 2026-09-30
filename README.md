@@ -104,7 +104,6 @@ flowchart LR
     Prisma --> DB[(SQLite)]
 ```
 
-O frontend mantém consultas em cache por usuário. Os resolvers encaminham as operações aos serviços, responsáveis pela validação e pelas regras de propriedade antes de acessar o Prisma.
 
 ## Funcionalidades e regras
 
